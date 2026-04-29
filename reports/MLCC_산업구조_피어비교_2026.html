@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MLCC 산업구조·스팟사이클 역사·글로벌 피어그룹 비교 (2026.04)</title>
+<style>
+  :root {
+    --bg: #f8fafc; --bg2: #ffffff; --bg3: #f1f5f9; --bg4: #e2e8f0;
+    --border: #e2e8f0; --text: #1e293b; --text2: #475569; --text3: #94a3b8;
+    --blue: #2563eb; --green: #16a34a; --red: #dc2626; --orange: #ea580c;
+    --purple: #7c3aed; --amber: #d97706; --cyan: #0891b2; --rose: #e11d48;
+    --sem: #2563eb;    /* 삼성전기 = 블루 */
+    --mura: #dc2626;   /* 무라타 = 레드 */
+    --tdk: #7c3aed;    /* TDK = 퍼플 */
+    --yag: #16a34a;    /* 야게오 = 그린 */
+    --tay: #ea580c;    /* 다이오유덴 = 오렌지 */
+    --sam: #0891b2;    /* 삼화콘덴서 = 시안 */
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 28px 60px; }
+
+  .hero {
+    background: linear-gradient(135deg, #eff6ff 0%, #fef2f2 50%, #f5f3ff 100%);
+    padding: 64px 28px 48px; text-align: center; margin-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-badge {
+    display: inline-block; background: rgba(37,99,235,.1); color: var(--blue);
+    font-size: 24px; font-weight: 700; padding: 8px 24px; border-radius: 28px;
+    margin-bottom: 18px; letter-spacing: 1px;
+  }
+  .hero h1 { font-size: 46px; font-weight: 800; margin-bottom: 12px; color: var(--text); line-height: 1.25; }
+  .hero .sub { font-size: 26px; color: var(--text2); margin-bottom: 18px; }
+  .hero-stats {
+    display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-top: 16px;
+  }
+  .hero-stat {
+    display: inline-flex; flex-direction: column; align-items: center;
+    padding: 14px 28px; border-radius: 14px; background: var(--bg2);
+    border: 1px solid var(--border);
+  }
+  .hero-stat .v { font-size: 32px; font-weight: 800; color: var(--blue); }
+  .hero-stat .l { font-size: 20px; color: var(--text3); margin-top: 4px; }
+
+  .section { margin-bottom: 48px; }
+  .section-title {
+    font-size: 36px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px;
+    border-bottom: 3px solid var(--blue); color: var(--text);
+  }
+  .section-desc { font-size: 24px; color: var(--text2); margin-bottom: 22px; line-height: 1.65; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .kpi-card {
+    background: var(--bg2); border-radius: 12px; padding: 22px; text-align: center;
+    border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(15,23,42,.04);
+  }
+  .kpi-card.blue { border-top: 5px solid var(--blue); }
+  .kpi-card.red { border-top: 5px solid var(--red); }
+  .kpi-card.green { border-top: 5px solid var(--green); }
+  .kpi-card.orange { border-top: 5px solid var(--orange); }
+  .kpi-label { font-size: 22px; color: var(--text3); font-weight: 600; margin-bottom: 8px; }
+  .kpi-value { font-size: 38px; font-weight: 800; color: var(--text); }
+  .kpi-value.blue { color: var(--blue); }
+  .kpi-value.red { color: var(--red); }
+  .kpi-value.green { color: var(--green); }
+  .kpi-value.orange { color: var(--orange); }
+  .kpi-sub { font-size: 20px; color: var(--text2); margin-top: 6px; }
+
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  .compare-grid.three { grid-template-columns: repeat(3, 1fr); }
+  .comp-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px; box-shadow: 0 1px 3px rgba(15,23,42,.04);
+  }
+  .comp-card.blue { border-top: 5px solid var(--blue); }
+  .comp-card.red  { border-top: 5px solid var(--red); }
+  .comp-card.green{ border-top: 5px solid var(--green); }
+  .comp-card.purple{ border-top: 5px solid var(--purple); }
+  .comp-card.orange{ border-top: 5px solid var(--orange); }
+  .comp-card.cyan { border-top: 5px solid var(--cyan); }
+  .comp-card-head {
+    font-size: 28px; font-weight: 700; margin-bottom: 16px;
+    padding-bottom: 10px; border-bottom: 1px solid var(--border);
+  }
+  .comp-card-head.blue { color: var(--blue); }
+  .comp-card-head.red  { color: var(--red); }
+  .comp-card-head.green { color: var(--green); }
+  .comp-card-head.purple { color: var(--purple); }
+  .comp-card-head.orange { color: var(--orange); }
+  .comp-card-head.cyan { color: var(--cyan); }
+  .comp-card-row { font-size: 22px; color: var(--text2); padding: 6px 0; line-height: 1.55; }
+  .comp-card-row b { color: var(--text); }
+
+  .chart-container {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+    padding: 28px 22px 22px; margin-bottom: 28px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.04);
+  }
+  .chart-title { font-size: 30px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+  .chart-subtitle { font-size: 22px; color: var(--text3); margin-bottom: 18px; }
+  .chart-svg { width: 100%; height: auto; display: block; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 22px; justify-content: center; margin-top: 16px; }
+  .legend-item { display: flex; align-items: center; gap: 10px; font-size: 22px; color: var(--text2); }
+  .legend-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; }
+
+  table { width: 100%; border-collapse: collapse; background: var(--bg2); font-size: 22px; }
+  th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: var(--bg3); font-weight: 700; color: var(--text); }
+  td { color: var(--text2); }
+  td b { color: var(--text); }
+  td.right { text-align: right; }
+  th.right { text-align: right; }
+  .col-win  { background: rgba(22,163,74,.08); }
+  .col-lose { background: rgba(220,38,38,.06); }
+
+  .panel {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.04);
+  }
+  .panel.bull { border-left: 6px solid var(--green); background: linear-gradient(90deg, rgba(22,163,74,.06), var(--bg2) 30%); }
+  .panel.bear { border-left: 6px solid var(--red); background: linear-gradient(90deg, rgba(220,38,38,.06), var(--bg2) 30%); }
+  .panel.think { border-left: 6px solid var(--purple); background: linear-gradient(90deg, rgba(124,58,237,.06), var(--bg2) 30%); }
+  .panel.macro { border-left: 6px solid var(--blue); background: linear-gradient(90deg, rgba(37,99,235,.06), var(--bg2) 30%); }
+  .panel-title { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+  .panel-title.bull { color: var(--green); }
+  .panel-title.bear { color: var(--red); }
+  .panel-title.think { color: var(--purple); }
+  .panel-title.macro { color: var(--blue); }
+  .panel-body { font-size: 22px; color: var(--text2); line-height: 1.7; }
+  .panel-body b { color: var(--text); }
+
+  .badge { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 18px; font-weight: 700; margin-right: 6px; }
+  .badge.green { background: rgba(22,163,74,.12); color: var(--green); }
+  .badge.red { background: rgba(220,38,38,.12); color: var(--red); }
+  .badge.amber { background: rgba(245,158,11,.14); color: var(--amber); }
+  .badge.blue { background: rgba(37,99,235,.12); color: var(--blue); }
+  .badge.gray { background: rgba(100,116,139,.14); color: var(--text2); }
+
+  @media (max-width: 900px) {
+    .hero h1 { font-size: 32px; }
+    .hero .sub { font-size: 20px; }
+    .compare-grid, .compare-grid.three { grid-template-columns: 1fr; }
+    .section-title { font-size: 26px; }
+    .panel-title { font-size: 22px; }
+    table { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="hero-badge">MLCC INDUSTRY · SUPER CYCLE · PEER GROUP</span>
+  <h1>MLCC, DRAM처럼 고정비 산업인가 — 스팟 슈퍼사이클의 역사와 글로벌 피어 정밀 비교</h1>
+  <p class="sub">2017–18 슈퍼사이클(삼성전기 OPM 42%) · 2024–26 AI/전장 사이클 · Murata · Samsung EM · TDK · Yageo · Taiyo Yuden · 삼화콘덴서</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="v">~40%</span><span class="l">무라타 글로벌 점유율</span></div>
+    <div class="hero-stat"><span class="v">23–25%</span><span class="l">삼성전기 점유율</span></div>
+    <div class="hero-stat"><span class="v">99%</span><span class="l">삼성전기 가동률</span></div>
+    <div class="hero-stat"><span class="v">+20%</span><span class="l">2025–26 고용량 스팟가</span></div>
+    <div class="hero-stat"><span class="v">24주</span><span class="l">현재 리드타임 (정상 8주의 3배)</span></div>
+  </div>
+  <p style="font-size:18px;color:var(--text3);margin-top:18px;">2026.04.29 기준 yfinance · 본 자료는 정보 제공 목적이며 매수·매도 추천이 아님</p>
+</div>
+
+<div class="container">
+
+  <!-- 0. 30초 결론 -->
+  <div class="section">
+    <h2 class="section-title">0. 30초 결론</h2>
+    <div class="panel macro">
+      <div class="panel-body" style="font-size:24px;">
+        <p style="margin-bottom:14px;">
+          <b>① MLCC도 고정비 산업이지만 DRAM보다는 약하다.</b> CapEx/매출 비중 10–15%(DRAM 30–40%), 고정비 비중 60–70%(DRAM 80%+). 그러나 <b>가동률 95%를 넘기면 영업레버리지가 폭발</b>한다 — 삼성전기는 2018년 슈퍼사이클에 MLCC 사업부 OPM 42%를 기록한 적이 있다.
+        </p>
+        <p style="margin-bottom:14px;">
+          <b>② 스팟가격 급등은 약 7년 주기로 반복</b>됐다. 2017–18(품목별 5–10배·리드타임 24주), 2020–21(코로나·5G 단기 상승), <b>2024–26(AI 서버·전장 — 고용량 스팟 +20%·리드타임 24주 재현)</b>. 이번 사이클의 특징은 <b>"용량 양극화"</b>: 일반 commodity MLCC는 평탄, AI 서버용 고용량 MLCC만 무라타·삼성전기가 사실상 과점 공급.
+        </p>
+        <p>
+          <b>③ 피어 밸류 정리:</b> 무라타 시총 82조원·점유율 40%로 압도적 1위, 삼성전기 시총 62조원·점유율 25%로 <b>"AI 서버 MLCC 점유율 40%"</b>라는 차별 포인트가 있어 점유율 대비 시총이 가장 후하다. <b>야게오는 OPM 24.6%로 마진이 가장 좋고, TDK는 OPM 12.3%로 매출 1위(22조원)</b>이지만 MLCC 비중이 작다. 삼화콘덴서는 매출·OPM 모두 가장 약하지만 한국 코스피 동행 베타로 의미 있다.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. MLCC vs DRAM 산업구조 -->
+  <div class="section">
+    <h2 class="section-title">1. MLCC는 DRAM처럼 고정비 산업인가</h2>
+    <p class="section-desc">MLCC와 DRAM은 둘 다 자본집약 + 가동률 민감 산업이지만 사이클 진폭과 사이클 주기가 다르다. <b>"같은 고정비 산업, 다른 사이클 패턴"</b>이라는 점을 먼저 정리한다.</p>
+
+    <table>
+      <thead>
+        <tr><th>비교 축</th><th>DRAM</th><th>MLCC</th><th>해석</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>한 라인 셋업 비용</b></td><td>약 5–7조원 (300mm 팹 1개)</td><td>약 1,000–3,000억원 (적층·소결 라인)</td><td>MLCC는 진입장벽 比 자본집약도 ↓</td></tr>
+        <tr><td><b>CapEx/매출</b></td><td>30–40%</td><td>10–15%</td><td>MLCC는 감가상각 부담이 가벼움</td></tr>
+        <tr><td><b>고정비 비중</b></td><td>약 80%+</td><td>약 60–70%</td><td>가동률 변동성 동일 → DRAM 이익 진폭이 더 큼</td></tr>
+        <tr><td><b>제품 SKU</b></td><td>5–10개 (DDR4·DDR5·HBM·LPDDR…)</td><td>1만 개 이상 (사이즈·용량·전압·온도)</td><td>MLCC는 commodity와 high-end가 같은 산업 안에 공존</td></tr>
+        <tr><td><b>고객 집중도</b></td><td>top 5 고객 = 80%</td><td>top 100 고객 = 70%</td><td>MLCC는 단일 고객 충격이 작음</td></tr>
+        <tr><td><b>미세화 압박</b></td><td>무한(EUV·HBM4)</td><td>이미 0.05mm 단계 → 한계 근접</td><td>MLCC는 신규 진입 障壁이 누적된 상태</td></tr>
+        <tr><td><b>사이클 주기</b></td><td>3–4년</td><td>5–7년 (더 짧지만 더 잦음 가능)</td><td>MLCC는 사이클이 더 빈번·짧다</td></tr>
+        <tr><td class="col-win"><b>슈퍼사이클 OPM 피크</b></td><td>50%+ (2017 SK하이닉스/삼성)</td><td>42% (2018 삼성전기)</td><td>피크 마진은 동급</td></tr>
+        <tr><td class="col-lose"><b>저점 OPM</b></td><td>대규모 적자 (감가↑)</td><td>한자리 또는 흑자 유지</td><td>MLCC는 다운사이클 방어력이 더 강함</td></tr>
+      </tbody>
+    </table>
+
+    <!-- DRAM vs MLCC 사이클 진폭 SVG -->
+    <div class="chart-container" style="margin-top:24px;">
+      <div class="chart-title">사이클 진폭 비교 — DRAM vs MLCC OPM 추정</div>
+      <div class="chart-subtitle">DRAM은 진폭이 크고 짧고, MLCC는 진폭이 비교적 좁고 사이클이 더 자주 온다</div>
+      <svg class="chart-svg" viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg">
+        <line x1="80" y1="320" x2="860" y2="320" stroke="#cbd5e1" stroke-width="1.5"/>
+        <line x1="80" y1="40" x2="80" y2="320" stroke="#cbd5e1" stroke-width="1.5"/>
+        <!-- y axis labels: -20% ~ +50% -->
+        <g font-size="16" fill="#64748b">
+          <text x="74" y="324" text-anchor="end">-20%</text>
+          <text x="74" y="284" text-anchor="end">-10%</text>
+          <text x="74" y="244" text-anchor="end">0%</text>
+          <text x="74" y="204" text-anchor="end">+10%</text>
+          <text x="74" y="164" text-anchor="end">+20%</text>
+          <text x="74" y="124" text-anchor="end">+30%</text>
+          <text x="74" y="84" text-anchor="end">+40%</text>
+          <text x="74" y="44" text-anchor="end">+50%</text>
+        </g>
+        <g stroke="#e2e8f0" stroke-dasharray="3 3">
+          <line x1="80" y1="244" x2="860" y2="244" stroke="#94a3b8" stroke-dasharray="0"/>
+          <line x1="80" y1="284" x2="860" y2="284"/>
+          <line x1="80" y1="204" x2="860" y2="204"/>
+          <line x1="80" y1="164" x2="860" y2="164"/>
+          <line x1="80" y1="124" x2="860" y2="124"/>
+          <line x1="80" y1="84" x2="860" y2="84"/>
+        </g>
+        <!-- year labels (2014~2026) -->
+        <g font-size="16" fill="#64748b" text-anchor="middle">
+          <text x="140" y="340">2015</text>
+          <text x="220" y="340">2017</text>
+          <text x="300" y="340">2019</text>
+          <text x="380" y="340">2021</text>
+          <text x="460" y="340">2023</text>
+          <text x="540" y="340">2025</text>
+          <text x="620" y="340">2026E</text>
+          <text x="700" y="340">2027E</text>
+        </g>
+        <!-- DRAM OPM line: 2015:25, 2017:50, 2019:25, 2021:35, 2023:-15, 2025:30, 2026:40, 2027:35 -->
+        <polyline points="140,144 220,44 300,144 380,104 460,304 540,124 620,84 700,104"
+          fill="none" stroke="#dc2626" stroke-width="3"/>
+        <!-- MLCC OPM line: 2015:15, 2017:30, 2018:42 → 2019:20, 2021:18, 2023:8, 2025:18, 2026:30, 2027:32 -->
+        <polyline points="140,184 220,124 260,76 300,164 380,172 460,212 540,172 620,124 700,116"
+          fill="none" stroke="#2563eb" stroke-width="3"/>
+        <!-- annotations -->
+        <text x="260" y="68" font-size="16" font-weight="700" fill="#2563eb">42% (2018 삼성전기)</text>
+        <text x="220" y="36" font-size="16" font-weight="700" fill="#dc2626">~50% (2017 메모리)</text>
+        <text x="460" y="324" font-size="16" font-weight="700" fill="#dc2626">DRAM 적자</text>
+        <text x="620" y="116" font-size="16" font-weight="700" fill="#2563eb">AI 사이클 30%+</text>
+      </svg>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background:#dc2626;"></span>DRAM 통상 OPM (예시·개념)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#2563eb;"></span>MLCC 통상 OPM (예시·삼성전기 컴포넌트 기준)</div>
+      </div>
+    </div>
+
+    <div class="panel think" style="margin-top:18px;">
+      <div class="panel-title think">1-1. 핵심 직관 — "MLCC는 부드러운 DRAM"</div>
+      <div class="panel-body">
+        <p style="margin-bottom:10px;">DRAM은 적자→폭리→적자를 큰 진폭으로 반복한다. MLCC는 같은 고정비 산업이지만 <b>SKU 분산·고객 분산·일부 시설의 commodity와 high-end 구분</b> 덕분에 다운사이클에도 흑자를 유지한다.</p>
+        <p>그러나 가동률 95%를 넘기면 ASP·믹스 동시 개선이 작동하여 <b>이익 레버리지가 DRAM에 견줄 수준</b>이 된다. 2018년 삼성전기 컴포넌트 OPM 42%, 2026E 30%대 전망이 그 증거다. 따라서 투자 관점에서는 <b>"가동률 90% 돌파 → 95% → 사실상 100%"</b>의 단계 진행을 트래킹하면 된다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 스팟사이클 역사 -->
+  <div class="section">
+    <h2 class="section-title">2. MLCC 스팟가격 슈퍼사이클의 역사</h2>
+    <p class="section-desc">2010년 이후 MLCC 시장은 세 차례의 가격 급등 국면을 거쳤다. 패턴을 알면 2024–26 현재 사이클의 위치가 보인다.</p>
+
+    <div class="compare-grid three">
+      <div class="comp-card red">
+        <div class="comp-card-head red">① 2017–18 슈퍼사이클 (대표 사례)</div>
+        <div class="comp-card-row"><b>트리거:</b> 스마트폰 카메라 다중화·자동차 전장화·5G 초기 동시 발생</div>
+        <div class="comp-card-row"><b>스팟가격:</b> 일부 품목 <b>5–10배 급등</b>, 0603 0.1uF 등 commodity까지 상승</div>
+        <div class="comp-card-row"><b>리드타임:</b> 24주 (정상 8주의 3배)</div>
+        <div class="comp-card-row"><b>실적:</b> <b>삼성전기 컴포넌트 OPM 42%</b>, 무라타 OPM 22% → 영업이익 사상 최대</div>
+        <div class="comp-card-row"><b>종료:</b> 2018 하반기 차량용 부진 + 중화권 commodity 스팟 정상화</div>
+      </div>
+      <div class="comp-card orange">
+        <div class="comp-card-head orange">② 2020–21 미니사이클</div>
+        <div class="comp-card-row"><b>트리거:</b> 코로나 IT 붐(노트북·게임기·5G 폰)</div>
+        <div class="comp-card-row"><b>스팟가격:</b> 부분 상승 +10–30%, 사이클 길이 짧음</div>
+        <div class="comp-card-row"><b>리드타임:</b> 16–20주</div>
+        <div class="comp-card-row"><b>실적:</b> 삼성전기 OPM 15–18%</div>
+        <div class="comp-card-row"><b>종료:</b> 2022 IT 수요 둔화 + 중국 commodity 캐파 증설로 빠른 정상화</div>
+      </div>
+      <div class="comp-card blue">
+        <div class="comp-card-head blue">③ 2024–26 AI/전장 사이클 (현재)</div>
+        <div class="comp-card-row"><b>트리거:</b> AI 서버 가속기당 MLCC 1만 개+ · EV/ADAS 전장화 · 산업용 전장</div>
+        <div class="comp-card-row"><b>스팟가격:</b> 고용량/산업·전장 <b>+20%</b>(중화권 유통가) — 무라타·다이오유덴 공식 인상</div>
+        <div class="comp-card-row"><b>리드타임:</b> 24주 재현 (정상 8주의 3배)</div>
+        <div class="comp-card-row"><b>가동률:</b> 삼성전기 99%, 무라타 95%, 다이오유덴 90%</div>
+        <div class="comp-card-row"><b>특징:</b> 양극화 — <b>commodity는 평탄, AI/전장 고용량만 폭등</b></div>
+      </div>
+    </div>
+
+    <!-- 스팟 가격 인덱스 SVG -->
+    <div class="chart-container" style="margin-top:18px;">
+      <div class="chart-title">고용량 MLCC 스팟가격 인덱스 추정 (2015 = 100, 개념)</div>
+      <div class="chart-subtitle">2018 피크에서 정상화 → 2024부터 재가속, 2026 현재 100 대비 약 200 수준</div>
+      <svg class="chart-svg" viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg">
+        <line x1="80" y1="280" x2="860" y2="280" stroke="#cbd5e1" stroke-width="1.5"/>
+        <line x1="80" y1="40" x2="80" y2="280" stroke="#cbd5e1" stroke-width="1.5"/>
+        <g font-size="16" fill="#64748b">
+          <text x="74" y="284" text-anchor="end">0</text>
+          <text x="74" y="232" text-anchor="end">100</text>
+          <text x="74" y="184" text-anchor="end">200</text>
+          <text x="74" y="136" text-anchor="end">300</text>
+          <text x="74" y="88" text-anchor="end">400</text>
+          <text x="74" y="44" text-anchor="end">500</text>
+        </g>
+        <g stroke="#e2e8f0" stroke-dasharray="3 3">
+          <line x1="80" y1="232" x2="860" y2="232"/>
+          <line x1="80" y1="184" x2="860" y2="184"/>
+          <line x1="80" y1="136" x2="860" y2="136"/>
+          <line x1="80" y1="88" x2="860" y2="88"/>
+          <line x1="80" y1="44" x2="860" y2="44"/>
+        </g>
+        <g font-size="16" fill="#64748b" text-anchor="middle">
+          <text x="120" y="300">2015</text>
+          <text x="220" y="300">2017</text>
+          <text x="280" y="300">2018</text>
+          <text x="380" y="300">2020</text>
+          <text x="460" y="300">2022</text>
+          <text x="560" y="300">2024</text>
+          <text x="660" y="300">2025</text>
+          <text x="760" y="300">2026E</text>
+        </g>
+        <!-- index polyline: 2015=100, 2017=180, 2018=480, 2019=220, 2020=180, 2021=240, 2022=180, 2023=140, 2024=160, 2025=180, 2026=215 -->
+        <polyline points="120,232 220,148 280,52 340,178 380,184 420,156 460,184 500,212 560,200 660,184 760,158"
+          fill="none" stroke="#dc2626" stroke-width="3"/>
+        <circle cx="280" cy="52" r="6" fill="#dc2626"/>
+        <text x="290" y="42" font-size="16" font-weight="700" fill="#dc2626">2018 피크 480 (5x)</text>
+        <circle cx="760" cy="158" r="6" fill="#2563eb"/>
+        <text x="770" y="148" font-size="16" font-weight="700" fill="#2563eb">2026E ~215 (+20% YoY)</text>
+        <line x1="80" y1="232" x2="860" y2="232" stroke="#94a3b8" stroke-dasharray="0"/>
+        <text x="84" y="226" font-size="14" fill="#64748b">2015 기준 100</text>
+      </svg>
+    </div>
+
+    <div class="panel macro" style="margin-top:18px;">
+      <div class="panel-title macro">2-1. 사이클 패턴 — 7년 주기 + 2년 미니사이클의 중첩</div>
+      <div class="panel-body">
+        2017 → 2024 사이클 간격이 정확히 7년이다. 그 사이 2020–21 미니사이클이 1차례. 이번 2024–26 사이클은 <b>"AI라는 새로운 수요 동인 + 일본 무라타의 캐파 증설 보수성 + 중국 commodity 캐파 디스카운트(IRA·전장 인증 미흡)"</b>의 3중 구조로 과거보다 길게 갈 가능성이 있다. 증권가는 2027년까지 견조 전망을 제시 중.
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 글로벌 시장점유율 -->
+  <div class="section">
+    <h2 class="section-title">3. 글로벌 MLCC 시장점유율 — 일본 1·한국 2·대만 3</h2>
+    <p class="section-desc">MLCC 산업은 일본 무라타가 압도적 1위(점유율 약 40%)를 30년 이상 유지하고, 한국 삼성전기가 25% 수준에서 추격하는 <b>"무라타·삼성전기 양강"</b> + 그 뒤를 일본 다이요유덴·TDK·대만 야게오가 각 10–15%로 둘러싼 구조다.</p>
+
+    <!-- 도넛 SVG -->
+    <div class="chart-container">
+      <div class="chart-title">글로벌 MLCC 시장점유율 (2025E)</div>
+      <div class="chart-subtitle">출처: 디일렉·아시아경제·Trendforce 등 종합 추정</div>
+      <svg class="chart-svg" viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg">
+        <!-- donut center 250,180, r=140, inner r=80 -->
+        <!-- segments: Murata 40, Samsung EM 25, Taiyo 12, TDK 11, Yageo 8, Others 4 -->
+        <!-- start at top (270deg). Use stroke-dasharray on circle? Use path arcs. -->
+        <g transform="translate(220,180)">
+          <!-- helper: each segment as path. circumference radius 110 mid -->
+          <!-- I'll draw as arcs with path "Mr large-arc-flag sweep r r 0..." -->
+          <!-- Murata 40% -->
+          <path d="M 0 -140 A 140 140 0 0 1 133.16 -43.27 L 76.09 -24.73 A 80 80 0 0 0 0 -80 Z" fill="#dc2626"/>
+          <!-- Samsung EM 25% (40~65%) -->
+          <path d="M 133.16 -43.27 A 140 140 0 0 1 109.54 87.18 L 62.6 49.81 A 80 80 0 0 0 76.09 -24.73 Z" fill="#2563eb"/>
+          <!-- Taiyo Yuden 12% (65~77%) -->
+          <path d="M 109.54 87.18 A 140 140 0 0 1 28.54 137.06 L 16.31 78.32 A 80 80 0 0 0 62.6 49.81 Z" fill="#ea580c"/>
+          <!-- TDK 11% (77~88%) -->
+          <path d="M 28.54 137.06 A 140 140 0 0 1 -77.91 116.34 L -44.52 66.48 A 80 80 0 0 0 16.31 78.32 Z" fill="#7c3aed"/>
+          <!-- Yageo 8% (88~96%) -->
+          <path d="M -77.91 116.34 A 140 140 0 0 1 -132.97 43.78 L -75.98 25.02 A 80 80 0 0 0 -44.52 66.48 Z" fill="#16a34a"/>
+          <!-- Others 4% (96~100%) -->
+          <path d="M -132.97 43.78 A 140 140 0 0 1 0 -140 L 0 -80 A 80 80 0 0 0 -75.98 25.02 Z" fill="#94a3b8"/>
+          <!-- center text -->
+          <text x="0" y="-4" text-anchor="middle" font-size="22" font-weight="700" fill="#1e293b">글로벌 MLCC</text>
+          <text x="0" y="22" text-anchor="middle" font-size="18" fill="#64748b">~16조엔 시장</text>
+        </g>
+        <!-- legend -->
+        <g font-size="20" fill="#1e293b">
+          <rect x="500" y="60" width="20" height="20" fill="#dc2626"/>
+          <text x="528" y="76">무라타 (Murata) — 약 40%</text>
+          <rect x="500" y="100" width="20" height="20" fill="#2563eb"/>
+          <text x="528" y="116">삼성전기 — 23–25%</text>
+          <rect x="500" y="140" width="20" height="20" fill="#ea580c"/>
+          <text x="528" y="156">다이오유덴 (Taiyo Yuden) — 약 12%</text>
+          <rect x="500" y="180" width="20" height="20" fill="#7c3aed"/>
+          <text x="528" y="196">TDK — 약 11%</text>
+          <rect x="500" y="220" width="20" height="20" fill="#16a34a"/>
+          <text x="528" y="236">야게오 (Yageo) — 약 8%</text>
+          <rect x="500" y="260" width="20" height="20" fill="#94a3b8"/>
+          <text x="528" y="276">기타 (왈신·삼화·중국 다수) — 약 4%</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="panel think">
+      <div class="panel-title think">3-1. AI 서버 MLCC만 따로 보면 점유율이 다르다</div>
+      <div class="panel-body">
+        <b>AI 서버용 고용량 MLCC 시장</b>은 사실상 <b>무라타 45% + 삼성전기 40%로 양사 과점</b>(디일렉). 다이오유덴은 일부, TDK는 비중 낮음, 야게오는 commodity 위주로 거의 미참여. 이 점이 <b>"삼성전기 점유율 25%지만 AI 사이클 베타가 가장 높은 이유"</b>다. 무라타 capa 부족(top-end MLCC 문의 = capa의 2배)이 삼성전기로 트래픽 분산을 일으키고 있다.
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 피어 매출 / 영업이익 -->
+  <div class="section">
+    <h2 class="section-title">4. 피어그룹 매출·영업이익 비교</h2>
+    <p class="section-desc">통화 환산 기준 2026.04 시점 (JPY/KRW 9.3, TWD/KRW 43). 매출·EBITDA는 yfinance TTM. <b>OPM은 yfinance 회사 전사 기준</b>이므로, MLCC 단품 OPM이 아닌 <b>회사 전체 마진</b>이라는 점에 유의 (예: 삼성전기 전사 OPM 8.2%이지만 컴포넌트 사업부 OPM은 25% 내외).</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>회사</th>
+          <th>국가</th>
+          <th class="right">시총 (조원)</th>
+          <th class="right">매출 TTM (조원)</th>
+          <th class="right">EBITDA (조원)</th>
+          <th class="right">전사 OPM</th>
+          <th class="right">P/Sales</th>
+          <th class="right">EV/EBITDA</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><b>무라타</b></td><td>JP</td><td class="right">81.9</td><td class="right">16.6</td><td class="right">4.12</td><td class="right">8.1%</td><td class="right">4.94x</td><td class="right">19.9x</td></tr>
+        <tr class="col-win"><td><b>삼성전기</b></td><td>KR</td><td class="right">62.5</td><td class="right">11.3</td><td class="right">1.79</td><td class="right">8.2%*</td><td class="right">5.52x</td><td class="right">35.0x*</td></tr>
+        <tr><td><b>TDK</b></td><td>JP</td><td class="right">47.3</td><td class="right">22.3</td><td class="right">3.93</td><td class="right">12.3%</td><td class="right">2.12x</td><td class="right">12.0x</td></tr>
+        <tr><td><b>야게오</b></td><td>TW</td><td class="right">28.5</td><td class="right">6.0</td><td class="right">1.82</td><td class="right">24.6%</td><td class="right">4.74x</td><td class="right">15.7x</td></tr>
+        <tr><td><b>다이오유덴</b></td><td>JP</td><td class="right">7.7</td><td class="right">3.3</td><td class="right">0.65</td><td class="right">8.3%</td><td class="right">2.33x</td><td class="right">11.8x</td></tr>
+        <tr><td><b>삼화콘덴서</b></td><td>KR</td><td class="right">0.7</td><td class="right">0.29</td><td class="right">0.03</td><td class="right">-0.2%</td><td class="right">2.47x</td><td class="right">24.1x</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:18px;color:var(--text3);margin-top:8px;">
+      * 삼성전기 EV/EBITDA가 35x로 보이는 것은 결산 시점 차이 + 사이클 초입 EBITDA 미반영 효과. 2026E EBITDA(컨센서스 약 2.5조 추정) 기준으로는 25x 안팎.
+    </p>
+
+    <!-- 매출/EBITDA 막대 차트 -->
+    <div class="chart-container" style="margin-top:24px;">
+      <div class="chart-title">피어그룹 매출·EBITDA·시총 (단위: 조원, KRW 환산)</div>
+      <div class="chart-subtitle">절대 규모는 무라타·TDK가 가장 크고, 이익률은 야게오가 압도적</div>
+      <svg class="chart-svg" viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg">
+        <line x1="80" y1="320" x2="860" y2="320" stroke="#cbd5e1" stroke-width="1.5"/>
+        <line x1="80" y1="40" x2="80" y2="320" stroke="#cbd5e1" stroke-width="1.5"/>
+        <g font-size="16" fill="#64748b">
+          <text x="74" y="324" text-anchor="end">0</text>
+          <text x="74" y="264" text-anchor="end">20</text>
+          <text x="74" y="208" text-anchor="end">40</text>
+          <text x="74" y="152" text-anchor="end">60</text>
+          <text x="74" y="96" text-anchor="end">80</text>
+          <text x="74" y="44" text-anchor="end">100</text>
+        </g>
+        <g stroke="#e2e8f0" stroke-dasharray="3 3">
+          <line x1="80" y1="264" x2="860" y2="264"/>
+          <line x1="80" y1="208" x2="860" y2="208"/>
+          <line x1="80" y1="152" x2="860" y2="152"/>
+          <line x1="80" y1="96" x2="860" y2="96"/>
+          <line x1="80" y1="44" x2="860" y2="44"/>
+        </g>
+        <!-- For each company three bars: 시총, 매출, EBITDA -->
+        <!-- scale: y=320 - val*2.8 -->
+        <!-- companies x: 무라타 130, 삼성전기 250, TDK 370, 야게오 490, 다이오 610, 삼화 730 -->
+        <!-- 무라타 시총82, 매출16.6, ebitda4.12 -->
+        <g>
+          <rect x="105" y="89.4" width="22" height="230.6" fill="#dc2626"/>
+          <rect x="129" y="273.5" width="22" height="46.5" fill="#fb923c"/>
+          <rect x="153" y="308.5" width="22" height="11.5" fill="#fde68a"/>
+          <text x="140" y="340" text-anchor="middle" font-size="16" fill="#1e293b" font-weight="700">무라타</text>
+        </g>
+        <!-- 삼성전기 62.5, 11.3, 1.79 -->
+        <g>
+          <rect x="225" y="145" width="22" height="175" fill="#dc2626"/>
+          <rect x="249" y="288.4" width="22" height="31.6" fill="#fb923c"/>
+          <rect x="273" y="315" width="22" height="5" fill="#fde68a"/>
+          <text x="260" y="340" text-anchor="middle" font-size="16" fill="#1e293b" font-weight="700">삼성전기</text>
+        </g>
+        <!-- TDK 47.3, 22.3, 3.93 -->
+        <g>
+          <rect x="345" y="187.6" width="22" height="132.4" fill="#dc2626"/>
+          <rect x="369" y="257.6" width="22" height="62.4" fill="#fb923c"/>
+          <rect x="393" y="309" width="22" height="11" fill="#fde68a"/>
+          <text x="380" y="340" text-anchor="middle" font-size="16" fill="#1e293b" font-weight="700">TDK</text>
+        </g>
+        <!-- 야게오 28.5, 6.0, 1.82 -->
+        <g>
+          <rect x="465" y="240.2" width="22" height="79.8" fill="#dc2626"/>
+          <rect x="489" y="303.2" width="22" height="16.8" fill="#fb923c"/>
+          <rect x="513" y="314.9" width="22" height="5.1" fill="#fde68a"/>
+          <text x="500" y="340" text-anchor="middle" font-size="16" fill="#1e293b" font-weight="700">야게오</text>
+        </g>
+        <!-- 다이오유덴 7.7, 3.3, 0.65 -->
+        <g>
+          <rect x="585" y="298.4" width="22" height="21.6" fill="#dc2626"/>
+          <rect x="609" y="310.8" width="22" height="9.2" fill="#fb923c"/>
+          <rect x="633" y="318.2" width="22" height="1.8" fill="#fde68a"/>
+          <text x="620" y="340" text-anchor="middle" font-size="16" fill="#1e293b" font-weight="700">다이오유덴</text>
+        </g>
+        <!-- 삼화콘덴서 0.7, 0.29, 0.03 -->
+        <g>
+          <rect x="705" y="318" width="22" height="2" fill="#dc2626"/>
+          <rect x="729" y="319.2" width="22" height="0.8" fill="#fb923c"/>
+          <rect x="753" y="319.9" width="22" height="0.1" fill="#fde68a"/>
+          <text x="740" y="340" text-anchor="middle" font-size="16" fill="#1e293b" font-weight="700">삼화콘덴서</text>
+        </g>
+        <text x="470" y="20" text-anchor="middle" font-size="20" font-weight="700" fill="#1e293b">시총·매출·EBITDA (조원)</text>
+      </svg>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background:#dc2626;"></span>시가총액</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#fb923c;"></span>매출 TTM</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#fde68a;"></span>EBITDA TTM</div>
+      </div>
+    </div>
+
+    <!-- OPM 비교 차트 -->
+    <div class="chart-container" style="margin-top:18px;">
+      <div class="chart-title">전사 영업이익률(OPM) 비교</div>
+      <div class="chart-subtitle">야게오의 OPM 24.6%는 KEMET 인수 이후의 product mix와 commodity 강세 효과 — MLCC 사업부만 보면 비슷</div>
+      <svg class="chart-svg" viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg">
+        <line x1="220" y1="40" x2="220" y2="240" stroke="#cbd5e1" stroke-width="1.5"/>
+        <line x1="220" y1="240" x2="860" y2="240" stroke="#cbd5e1" stroke-width="1.5"/>
+        <g font-size="16" fill="#64748b" text-anchor="middle">
+          <text x="220" y="260">0%</text>
+          <text x="348" y="260">5%</text>
+          <text x="476" y="260">10%</text>
+          <text x="604" y="260">15%</text>
+          <text x="732" y="260">20%</text>
+          <text x="860" y="260">25%</text>
+        </g>
+        <!-- 야게오 24.6 -->
+        <text x="210" y="64" text-anchor="end" font-size="20" font-weight="700" fill="#16a34a">야게오</text>
+        <rect x="220" y="48" width="630" height="28" fill="#16a34a" rx="3"/>
+        <text x="864" y="68" font-size="20" font-weight="700" fill="#16a34a">24.6%</text>
+        <!-- TDK 12.3 -->
+        <text x="210" y="104" text-anchor="end" font-size="20" font-weight="700" fill="#7c3aed">TDK</text>
+        <rect x="220" y="88" width="315" height="28" fill="#7c3aed" rx="3"/>
+        <text x="549" y="108" font-size="20" font-weight="700" fill="#7c3aed">12.3%</text>
+        <!-- 다이오유덴 8.3 -->
+        <text x="210" y="144" text-anchor="end" font-size="20" font-weight="700" fill="#ea580c">다이오유덴</text>
+        <rect x="220" y="128" width="212" height="28" fill="#ea580c" rx="3"/>
+        <text x="446" y="148" font-size="20" font-weight="700" fill="#ea580c">8.3%</text>
+        <!-- 삼성전기 8.2 (전사) -->
+        <text x="210" y="184" text-anchor="end" font-size="20" font-weight="700" fill="#2563eb">삼성전기</text>
+        <rect x="220" y="168" width="210" height="28" fill="#2563eb" rx="3"/>
+        <text x="444" y="188" font-size="20" font-weight="700" fill="#2563eb">8.2% (전사) · ~25% (컴포넌트)</text>
+        <!-- 무라타 8.1 -->
+        <text x="210" y="224" text-anchor="end" font-size="20" font-weight="700" fill="#dc2626">무라타</text>
+        <rect x="220" y="208" width="207" height="28" fill="#dc2626" rx="3"/>
+        <text x="441" y="228" font-size="20" font-weight="700" fill="#dc2626">8.1% (전사) · ~22% (MLCC)</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 5. 밸류에이션 -->
+  <div class="section">
+    <h2 class="section-title">5. 밸류에이션 — 점유율·이익으로 본 상대 가치</h2>
+    <p class="section-desc">시총을 점유율·매출·EBITDA로 나눠 "1% 점유율당, 1조원 매출당, 1조원 EBITDA당" 가격을 비교한다.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>회사</th>
+          <th class="right">시총 (조원)</th>
+          <th class="right">글로벌 점유율</th>
+          <th class="right">시총/점유율 (조원/%)</th>
+          <th class="right">P/Sales</th>
+          <th class="right">EV/EBITDA</th>
+          <th>해석</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><b>무라타</b></td><td class="right">81.9</td><td class="right">40%</td><td class="right">2.05</td><td class="right">4.94x</td><td class="right">19.9x</td><td>점유율 1위 프리미엄, 그러나 캐파 부족</td></tr>
+        <tr class="col-win"><td><b>삼성전기</b></td><td class="right">62.5</td><td class="right">25%</td><td class="right">2.50</td><td class="right">5.52x</td><td class="right">25–35x*</td><td><b>AI 서버 MLCC 40% 점유</b>라는 별도 프리미엄 반영</td></tr>
+        <tr><td><b>TDK</b></td><td class="right">47.3</td><td class="right">11%</td><td class="right">4.30</td><td class="right">2.12x</td><td class="right">12.0x</td><td>MLCC 비중 작고 자성·HDD가 큼 → 수치 왜곡 큼</td></tr>
+        <tr><td><b>야게오</b></td><td class="right">28.5</td><td class="right">8%</td><td class="right">3.56</td><td class="right">4.74x</td><td class="right">15.7x</td><td>commodity·KEMET 효과로 OPM 24.6%</td></tr>
+        <tr><td><b>다이오유덴</b></td><td class="right">7.7</td><td class="right">12%</td><td class="right">0.64</td><td class="right">2.33x</td><td class="right">11.8x</td><td>4사 중 절대 평가 가장 저렴</td></tr>
+        <tr><td><b>삼화콘덴서</b></td><td class="right">0.7</td><td class="right">~0.5%</td><td class="right">1.46</td><td class="right">2.47x</td><td class="right">24.1x</td><td>한국 코스피 동행 베타 종목</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:18px;color:var(--text3);margin-top:8px;">* 삼성전기 35x는 yfinance TTM EBITDA 기준이며 사이클 초입 EPS 미반영. 컨센서스 2026E EBITDA 약 2.5조 적용 시 EV/EBITDA 약 25x로 정상화. </p>
+
+    <div class="chart-container" style="margin-top:24px;">
+      <div class="chart-title">시총 / 글로벌 점유율 1%당 가격 (조원/%)</div>
+      <div class="chart-subtitle">점유율 1%를 사기 위해 얼마를 지불하는가 — 다이오유덴이 가장 싸고 TDK가 가장 비쌈(MLCC 외 비중 영향)</div>
+      <svg class="chart-svg" viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg">
+        <line x1="220" y1="40" x2="220" y2="280" stroke="#cbd5e1" stroke-width="1.5"/>
+        <line x1="220" y1="280" x2="860" y2="280" stroke="#cbd5e1" stroke-width="1.5"/>
+        <g font-size="16" fill="#64748b" text-anchor="middle">
+          <text x="220" y="300">0</text>
+          <text x="348" y="300">1</text>
+          <text x="476" y="300">2</text>
+          <text x="604" y="300">3</text>
+          <text x="732" y="300">4</text>
+          <text x="860" y="300">5</text>
+        </g>
+        <!-- TDK 4.30 -->
+        <text x="210" y="64" text-anchor="end" font-size="20" font-weight="700" fill="#7c3aed">TDK</text>
+        <rect x="220" y="48" width="551" height="28" fill="#7c3aed" rx="3"/>
+        <text x="785" y="68" font-size="20" font-weight="700" fill="#7c3aed">4.30</text>
+        <!-- 야게오 3.56 -->
+        <text x="210" y="104" text-anchor="end" font-size="20" font-weight="700" fill="#16a34a">야게오</text>
+        <rect x="220" y="88" width="455" height="28" fill="#16a34a" rx="3"/>
+        <text x="689" y="108" font-size="20" font-weight="700" fill="#16a34a">3.56</text>
+        <!-- 삼성전기 2.50 -->
+        <text x="210" y="144" text-anchor="end" font-size="20" font-weight="700" fill="#2563eb">삼성전기</text>
+        <rect x="220" y="128" width="320" height="28" fill="#2563eb" rx="3"/>
+        <text x="554" y="148" font-size="20" font-weight="700" fill="#2563eb">2.50</text>
+        <!-- 무라타 2.05 -->
+        <text x="210" y="184" text-anchor="end" font-size="20" font-weight="700" fill="#dc2626">무라타</text>
+        <rect x="220" y="168" width="262" height="28" fill="#dc2626" rx="3"/>
+        <text x="496" y="188" font-size="20" font-weight="700" fill="#dc2626">2.05</text>
+        <!-- 삼화콘덴서 1.46 -->
+        <text x="210" y="224" text-anchor="end" font-size="20" font-weight="700" fill="#0891b2">삼화콘덴서</text>
+        <rect x="220" y="208" width="187" height="28" fill="#0891b2" rx="3"/>
+        <text x="421" y="228" font-size="20" font-weight="700" fill="#0891b2">1.46</text>
+        <!-- 다이오유덴 0.64 -->
+        <text x="210" y="264" text-anchor="end" font-size="20" font-weight="700" fill="#ea580c">다이오유덴</text>
+        <rect x="220" y="248" width="82" height="28" fill="#ea580c" rx="3"/>
+        <text x="316" y="268" font-size="20" font-weight="700" fill="#ea580c">0.64</text>
+        <text x="540" y="20" text-anchor="middle" font-size="20" font-weight="700" fill="#1e293b">시총 / 점유율 1% (조원/%)</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 6. 종합 정리 -->
+  <div class="section">
+    <h2 class="section-title">6. 종합 — "MLCC = 부드러운 DRAM, 그러나 사이클은 더 자주 온다"</h2>
+
+    <div class="panel bull">
+      <div class="panel-title bull">6-1. 사이클 베타가 가장 높은 종목 — 삼성전기</div>
+      <div class="panel-body">
+        <p style="margin-bottom:10px;">전사 OPM 8.2%이지만 컴포넌트(MLCC 90%) 사업부 OPM은 25% 내외이며, 2018년 슈퍼사이클에서 42%까지 갔던 트랙 레코드가 있다. <b>가동률 99% + AI 서버 MLCC 40% 점유 + 무라타 캐파 부족 트래픽 분산 수혜</b>의 3중 호재. 컴포넌트 영업이익 가이드는 2025 6,000억 → 2026 9,000억 → 2027 1.2조+. 다만 시총 62조원으로 이미 사이클 초입 가격은 일부 반영.</p>
+      </div>
+    </div>
+
+    <div class="panel macro">
+      <div class="panel-title macro">6-2. 점유율·캐시플로 디펜시브 — 무라타</div>
+      <div class="panel-body">
+        시총 82조원·점유율 40%로 안정적 1위. 캐파 부족(top-end MLCC 문의 = 캐파 2배)은 단기적으론 매출 캡이지만 중장기적으로는 가격 결정력으로 작용. PER 47배·forward 30.5배는 비싸 보이지만 사이클 정점에서 EPS 60–80% 점프 시 정상화 가능.
+      </div>
+    </div>
+
+    <div class="panel think">
+      <div class="panel-title think">6-3. 절대 평가가 가장 싼 종목 — 다이오유덴</div>
+      <div class="panel-body">
+        시총 7.7조원·점유율 12%로 점유율 1%당 가격(0.64)이 압도적으로 저렴. 5월 1일부 가격 인상을 공식 발표했고, 가동률 90%로 추가 여력도 있음. 매출 절대규모(3.3조원)가 작아 전체 포트폴리오 비중은 작게 가는 전술 종목.
+      </div>
+    </div>
+
+    <div class="panel bear">
+      <div class="panel-title bear">6-4. 주의해야 할 함정</div>
+      <div class="panel-body">
+        <p style="margin-bottom:10px;"><b>① TDK는 MLCC 회사가 아니다.</b> MLCC 점유율 11%이지만 매출 22조원의 60%+가 자성·HDD·이차전지·센서. 따라서 P/Sales 2.12배·EV/EBITDA 12배가 싸 보여도 MLCC 베타는 가장 약하다.</p>
+        <p style="margin-bottom:10px;"><b>② 야게오 OPM 24.6%는 commodity·KEMET 인수·전해 콘덴서 등 mix 효과로 다른 회사와 직접 비교 불가.</b> MLCC 단품 OPM은 무라타·삼성과 유사한 수준.</p>
+        <p><b>③ 삼화콘덴서는 매출 2,945억으로 글로벌 피어 대비 너무 작아 연결 비교가 무리.</b> 한국 코스피 모멘텀 동행 + 정부 국가핵심기술 지정 베타로만 사용 권장.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. 사용자 질문에 대한 한 줄 답변 -->
+  <div class="section">
+    <h2 class="section-title">7. 사용자 질문에 대한 한 줄 답변</h2>
+    <div class="panel macro">
+      <div class="panel-body" style="font-size:24px;">
+        <p style="margin-bottom:14px;"><b>Q1. MLCC도 디램처럼 고정비 산업인가?</b></p>
+        <p style="margin-bottom:14px;">→ <b>고정비 산업은 맞지만 DRAM보다 진폭은 작다.</b> CapEx/매출 10–15%(DRAM 30–40%), 고정비 비중 60–70%(DRAM 80%+). 단 가동률 95% 돌파 시 MLCC도 OPM 40% 이상으로 점프할 수 있다 (2018 삼성전기 컴포넌트 OPM 42% 사례).</p>
+        <p style="margin-bottom:14px;"><b>Q2. 스팟가격 급등 역사가 있나?</b></p>
+        <p style="margin-bottom:14px;">→ <b>2017–18에 5–10배 급등(품목별)</b>한 슈퍼사이클이 있었고, 리드타임이 24주까지 늘었다. 2020–21은 미니사이클(+10–30%). 현재 <b>2024–26 AI/전장 사이클은 고용량 +20%·리드타임 24주 재현</b> 중이며, 무라타 캐파의 2배 주문이 들어오고 있다 → 2027년까지 길게 갈 가능성 큼.</p>
+        <p style="margin-bottom:14px;"><b>Q3. 피어그룹 매출/영업이익/시장점유율/주식 밸류는?</b></p>
+        <p>→ 무라타(시총 82조·점유율 40%·OPM 8.1%) · <b>삼성전기(62조·25%·전사 8.2% / 컴포넌트 25%)</b> · TDK(47조·11%·12.3%) · 야게오(28.5조·8%·24.6%) · 다이오유덴(7.7조·12%·8.3%) · 삼화콘덴서(0.7조·~0.5%·-0.2%). <b>"점유율 1%당 가격"</b>으로는 다이오유덴(0.64) < 삼화콘덴서(1.46) < 무라타(2.05) < 삼성전기(2.50) < 야게오(3.56) < TDK(4.30) 순. 사이클 베타는 <b>삼성전기 → 다이오유덴 → 무라타 → 야게오 → TDK</b> 순이 합리적.</p>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:16px;color:var(--text3);text-align:center;margin-top:30px;line-height:1.55;">
+    Sources: 디일렉(THE ELEC) · 인사이트코리아 · 글로벌이코노믹 · 파이낸셜뉴스 · 시사저널e · 아시아경제 · 이투데이 · CEO스코어데일리 · 디지털투데이 · 데일리안 · 삼성전기 IR · yfinance.<br>
+    작성일: 2026-04-29 · 본 자료는 정보 제공 목적이며 매수·매도 추천이 아니다.
+  </p>
+
+</div>
+</body>
+</html>
