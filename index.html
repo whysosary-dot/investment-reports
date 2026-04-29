@@ -145,7 +145,6 @@ const REPORTS = [
     "summary": "사업보고서 6개년치(2020~2025) 매출·캐파·가동률·영업이익·사업장 비교. ESS·EV·각통·원통 4개 시나리오별 수혜 분석. 같은 삼성SDI 협력사이지만 부품 포지션이 정반대.",
     "tags": ["KR", "Sector", "2차전지"],
     "pc": "reports/2차전지부품_상신vs신흥_사이클분석_PC.html",
-    "ipad": "reports/2차전지부품_상신vs신흥_사이클분석_iPad.html",
     "new": true
   }
 ];
@@ -197,9 +196,7 @@ function renderList(){
       const cls = t==='KR'?'kr':t==='Sector'?'sec':t==='Macro'?'macro':'';
       return `<span class="item-tag ${cls}">${t}</span>`;
     }).join('');
-    // Choose default link: if user agent suggests iPad/touch, use ipad; else PC
-    const isTouchLike = /(iPad|iPhone|Android|Mobile)/i.test(navigator.userAgent);
-    const href = isTouchLike && r.ipad ? r.ipad : (r.pc || r.ipad);
+    const href = r.pc;
     return `
       <a class="item ${r.new?'new':''}" href="${href}">
         <div style="flex:1;min-width:0;">
