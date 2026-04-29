@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Investment Reports">
+<title>📈 Investment Reports — 리송</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#e8ecf1; --card:#fff; --border:#e2e8f0; --text:#0f172a; --text2:#475569; --text3:#7a8a9e;
+    --accent:#2563eb; --accent2:#dc2626; --good:#16a34a; --warn:#d97706;
+  }
+  body.dark{
+    --bg:#0d1117; --card:#161b22; --border:#30363d; --text:#e6edf3; --text2:#9ca3af; --text3:#6b7280;
+    --accent:#60a5fa; --accent2:#f87171; --good:#34d399; --warn:#fbbf24;
+  }
+  body{
+    font-family:'Noto Sans KR',-apple-system,sans-serif;
+    background:var(--bg);color:var(--text);min-height:100vh;
+    display:flex;justify-content:center;padding:32px 16px;transition:background .2s;
+  }
+  .wrap{
+    max-width:880px;width:100%;background:var(--card);border-radius:16px;
+    box-shadow:0 4px 24px rgba(0,0,0,.08);padding:36px 40px 32px;
+    display:flex;flex-direction:column;
+  }
+  .header{text-align:center;padding-bottom:22px;margin-bottom:22px;border-bottom:3px solid var(--text);}
+  .header h1{font-size:28px;font-weight:900;letter-spacing:-.5px;}
+  .header p{font-size:13px;color:var(--text3);margin-top:8px;}
+  .top-bar{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+  .search{
+    flex:1;min-width:200px;padding:10px 14px;border:1px solid var(--border);
+    border-radius:8px;font-size:14px;background:var(--card);color:var(--text);
+    font-family:inherit;
+  }
+  .search:focus{outline:none;border-color:var(--accent);}
+  .theme-toggle{
+    background:var(--card);border:1px solid var(--border);border-radius:8px;
+    padding:8px 14px;cursor:pointer;font-size:13px;color:var(--text2);
+    font-family:inherit;
+  }
+  .theme-toggle:hover{border-color:var(--accent);}
+  .filter-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+  .filter-btn{
+    padding:6px 12px;border:1px solid var(--border);border-radius:16px;
+    background:var(--card);color:var(--text2);font-size:12px;cursor:pointer;
+    font-family:inherit;transition:all .15s;
+  }
+  .filter-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  body.dark .filter-btn.active{color:#0d1117;}
+  #report-list{flex:1;}
+  .item{
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--bg);border:1px solid var(--border);border-radius:8px;
+    padding:14px 18px;margin-bottom:10px;text-decoration:none;color:inherit;
+    transition:background .2s,border-color .2s,box-shadow .2s;
+  }
+  body.dark .item{background:var(--card);}
+  .item:hover{border-color:var(--accent);box-shadow:0 2px 8px rgba(37,99,235,.08);}
+  .item.new{border-left:3px solid var(--accent2);}
+  .item-title{font-size:15px;font-weight:700;color:var(--text);}
+  .item-tags{margin-top:5px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+  .item-tag{
+    font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;
+    background:rgba(37,99,235,.1);color:var(--accent);
+  }
+  .item-tag.kr{background:rgba(220,38,38,.1);color:var(--accent2);}
+  .item-tag.sec{background:rgba(22,163,74,.12);color:var(--good);}
+  .item-tag.macro{background:rgba(217,119,6,.12);color:var(--warn);}
+  body.dark .item-tag{background:rgba(96,165,250,.18);}
+  body.dark .item-tag.kr{background:rgba(248,113,113,.18);}
+  body.dark .item-tag.sec{background:rgba(52,211,153,.18);}
+  body.dark .item-tag.macro{background:rgba(251,191,36,.18);}
+  .item-sub{font-size:11px;color:var(--text3);margin-top:5px;line-height:1.5;}
+  .item-date{font-size:11px;color:var(--text3);margin-left:8px;}
+  .badge-new{
+    background:var(--accent2);color:#fff;font-size:9px;font-weight:800;
+    padding:2px 8px;border-radius:4px;letter-spacing:.5px;
+  }
+  .badge-link{color:var(--accent);font-size:12px;font-weight:700;white-space:nowrap;}
+  .right-col{display:flex;align-items:center;gap:10px;}
+  .footer{text-align:center;margin-top:24px;font-size:10px;color:var(--text3);line-height:1.6;}
+  .stats{display:flex;justify-content:center;gap:18px;font-size:12px;color:var(--text3);margin-bottom:14px;}
+  .stats span strong{color:var(--text);font-weight:700;}
+  .empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:14px;}
+  @media(max-width:600px){
+    .wrap{padding:24px 20px;}
+    .header h1{font-size:22px;}
+    .item{padding:12px 14px;}
+    .item-title{font-size:13px;}
+    .item-sub{font-size:10px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="header">
+  <h1>📈 Investment Reports</h1>
+  <p>사업보고서·시나리오 분석 · 한국/해외 종목 리서치 모음</p>
+</div>
+
+<div class="stats">
+  <span>전체 <strong id="stat-total">0</strong></span>
+  <span>한국 <strong id="stat-kr">0</strong></span>
+  <span>해외 <strong id="stat-us">0</strong></span>
+  <span>섹터 <strong id="stat-sec">0</strong></span>
+</div>
+
+<div class="top-bar">
+  <input id="search" class="search" type="text" placeholder="🔍 종목명·테마·키워드 검색...">
+  <button class="theme-toggle" onclick="toggleTheme()">🌓 테마</button>
+</div>
+
+<div class="filter-bar" id="filter-bar"></div>
+
+<div id="report-list"></div>
+
+<div class="footer">
+  ⚠️ 자동 생성 분석 — 투자 권유가 아닙니다 &nbsp;|&nbsp; Source: DART 사업보고서 + yfinance
+</div>
+
+</div>
+
+<script>
+// === REPORTS DATA (auto-managed) === //
+const REPORTS = [
+  {
+    id: "20260429-sangshin-vs-shinheung",
+    date: "2026-04-29",
+    title: "상신이디피 vs 신흥에스이씨 — 2차전지 사이클 수혜 비교분석",
+    summary: "사업보고서 6개년치(2020~2025) 매출·캐파·가동률·영업이익·사업장 비교. ESS·EV·각통·원통 4개 시나리오별 수혜 분석. 같은 삼성SDI 협력사이지만 부품 포지션이 정반대.",
+    tags: ["KR", "Sector", "2차전지"],
+    pc: "reports/2차전지부품_상신vs신흥_사이클분석_PC.html",
+    ipad: "reports/2차전지부품_상신vs신흥_사이클분석_iPad.html",
+    new: true
+  }
+];
+// === END DATA === //
+
+const FILTERS = [
+  { key: "all", label: "전체" },
+  { key: "KR", label: "🇰🇷 한국", cls: "kr" },
+  { key: "US", label: "🇺🇸 해외" },
+  { key: "Sector", label: "섹터분석", cls: "sec" },
+  { key: "Macro", label: "매크로", cls: "macro" }
+];
+
+let activeFilter = "all";
+let activeSearch = "";
+
+function toggleTheme(){
+  document.body.classList.toggle('dark');
+  localStorage.setItem('reportsTheme', document.body.classList.contains('dark') ? 'dark' : 'light');
+}
+if(localStorage.getItem('reportsTheme')==='dark'){document.body.classList.add('dark');}
+
+function renderFilters(){
+  const bar = document.getElementById('filter-bar');
+  bar.innerHTML = FILTERS.map(f =>
+    `<button class="filter-btn ${activeFilter===f.key?'active':''}" onclick="setFilter('${f.key}')">${f.label}</button>`
+  ).join('');
+}
+function setFilter(k){activeFilter=k;renderFilters();renderList();}
+
+function renderList(){
+  const list = document.getElementById('report-list');
+  const q = activeSearch.toLowerCase();
+  let items = REPORTS.filter(r => {
+    if(activeFilter!=='all' && !r.tags.includes(activeFilter)) return false;
+    if(q && !(r.title+' '+r.summary+' '+r.tags.join(' ')).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  // Sort newest first
+  items.sort((a,b)=> b.date.localeCompare(a.date));
+
+  if(items.length===0){
+    list.innerHTML = '<div class="empty">조건에 맞는 리포트가 없습니다.</div>';
+    return;
+  }
+
+  list.innerHTML = items.map(r => {
+    const tags = r.tags.map(t => {
+      const cls = t==='KR'?'kr':t==='Sector'?'sec':t==='Macro'?'macro':'';
+      return `<span class="item-tag ${cls}">${t}</span>`;
+    }).join('');
+    // Choose default link: if user agent suggests iPad/touch, use ipad; else PC
+    const isTouchLike = /(iPad|iPhone|Android|Mobile)/i.test(navigator.userAgent);
+    const href = isTouchLike && r.ipad ? r.ipad : (r.pc || r.ipad);
+    return `
+      <a class="item ${r.new?'new':''}" href="${href}">
+        <div style="flex:1;min-width:0;">
+          <div class="item-title">${r.title}</div>
+          <div class="item-tags">${tags}<span class="item-date">${r.date}</span></div>
+          <div class="item-sub">${r.summary}</div>
+        </div>
+        <div class="right-col">
+          ${r.new ? '<span class="badge-new">NEW</span>' : ''}
+          <span class="badge-link">보기 →</span>
+        </div>
+      </a>`;
+  }).join('');
+}
+
+function renderStats(){
+  document.getElementById('stat-total').textContent = REPORTS.length;
+  document.getElementById('stat-kr').textContent = REPORTS.filter(r=>r.tags.includes('KR')).length;
+  document.getElementById('stat-us').textContent = REPORTS.filter(r=>r.tags.includes('US')).length;
+  document.getElementById('stat-sec').textContent = REPORTS.filter(r=>r.tags.includes('Sector')).length;
+}
+
+document.getElementById('search').addEventListener('input', e => {
+  activeSearch = e.target.value;
+  renderList();
+});
+
+renderFilters();
+renderList();
+renderStats();
+</script>
+</body>
+</html>
