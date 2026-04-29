@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2차전지·ESS 국내 수혜 Top 5 피어그룹 — IRA + 데이터센터 PPA 사이클</title>
+<style>
+  :root {
+    --bg: #f8fafc; --bg2: #ffffff; --bg3: #f1f5f9; --bg4: #e2e8f0;
+    --border: #e2e8f0; --text: #1e293b; --text2: #475569; --text3: #94a3b8;
+    --blue: #2563eb; --green: #16a34a; --red: #dc2626; --orange: #ea580c;
+    --purple: #7c3aed; --amber: #d97706; --cyan: #0891b2; --indigo:#4f46e5;
+    --pink:#db2777;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 28px 60px; }
+
+  .hero {
+    background: linear-gradient(135deg, #ecfdf5 0%, #dbeafe 50%, #ede9fe 100%);
+    padding: 60px 28px 44px; text-align: center; margin-bottom: 36px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-badge { display:inline-block; background:rgba(16,163,74,.12); color:var(--green); font-size:22px; font-weight:600; padding:8px 22px; border-radius:28px; margin-bottom:16px; letter-spacing:1px; }
+  .hero h1 { font-size: 46px; font-weight: 800; margin-bottom: 12px; color: var(--text); line-height:1.25; }
+  .hero .sub { font-size: 26px; color: var(--text2); }
+  .hero .meta { font-size:20px; color:var(--text3); margin-top:14px; }
+
+  .section { margin-bottom: 44px; }
+  .section-title { font-size: 34px; font-weight: 700; margin-bottom: 22px; padding-bottom: 12px; border-bottom: 3px solid var(--green); color: var(--text); }
+  .sub-title { font-size: 26px; font-weight:700; color:var(--text); margin: 18px 0 10px; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .kpi-card { background: var(--bg2); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(15,23,42,.04); }
+  .kpi-label { font-size: 20px; color: var(--text3); font-weight: 600; margin-bottom: 6px; }
+  .kpi-value { font-size: 36px; font-weight: 800; }
+  .kpi-sub { font-size: 18px; color: var(--text2); margin-top: 6px; }
+
+  .peer-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+  .peer-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 18px; box-shadow: 0 1px 3px rgba(15,23,42,.04); }
+  .peer-card .ph { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .peer-card .pc { font-size: 18px; color: var(--text3); margin-bottom: 12px; }
+  .peer-card .pr { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed var(--border); font-size:18px; }
+  .peer-card .pr:last-child { border-bottom:0; }
+  .peer-card .pr .l { color:var(--text3); }
+  .peer-card .pr .v { font-weight:600; }
+
+  .chart-container { background: var(--bg2); border:1px solid var(--border); border-radius:14px; padding:28px 22px 22px; margin-bottom:24px; box-shadow:0 1px 3px rgba(15,23,42,.04); }
+  .chart-title { font-size: 28px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+  .chart-subtitle { font-size: 22px; color: var(--text3); margin-bottom: 16px; }
+  .chart-svg { width: 100%; height: auto; display: block; max-width:100%; }
+  .legend { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; margin-top:14px; }
+  .legend-item { display:flex; align-items:center; gap:8px; font-size:20px; color:var(--text2); }
+  .legend-dot { width:16px; height:16px; border-radius:50%; flex-shrink:0; }
+
+  .data-table { width: 100%; border-collapse: collapse; font-size: 22px; margin-bottom: 18px; }
+  .data-table th { background: var(--bg3); color: var(--text2); font-weight: 600; padding: 13px 12px; text-align: right; border: 1px solid var(--border); }
+  .data-table th:first-child { text-align: left; }
+  .data-table td { padding: 13px 12px; text-align: right; border: 1px solid var(--border); }
+  .data-table td:first-child { text-align: left; font-weight: 600; color: var(--text2); }
+  .data-table tr:nth-child(even) { background: var(--bg3); }
+  .pos { color: var(--green); font-weight: 600; }
+  .neg { color: var(--red); font-weight: 600; }
+
+  .insight-box { background: var(--bg3); border-left: 5px solid var(--blue); border-radius: 0 10px 10px 0; padding: 22px 26px; margin-bottom: 16px; font-size: 24px; color: var(--text2); line-height: 1.7; }
+  .insight-box strong { color: var(--text); }
+  .insight-box.warn { border-left-color: var(--red); background: #fef2f2; }
+  .insight-box.note { border-left-color: var(--amber); background: #fffbeb; }
+  .insight-box.success { border-left-color: var(--green); background: #f0fdf4; }
+  .insight-box.purple { border-left-color: var(--purple); background: #faf5ff; }
+  .insight-box.cyan { border-left-color: var(--cyan); background: #ecfeff; }
+
+  ul.clean { list-style: none; padding-left: 0; }
+  ul.clean li { font-size: 24px; color: var(--text2); line-height: 1.7; padding-left: 22px; position: relative; margin-bottom: 8px; }
+  ul.clean li:before { content: "▸"; position: absolute; left: 0; color: var(--green); font-weight: bold; }
+
+  .flow-grid { display:grid; grid-template-columns: repeat(7, 1fr); gap:8px; align-items:center; margin: 16px 0 22px; }
+  .flow-step { background: var(--bg2); border:2px solid var(--border); border-radius:10px; padding:12px 8px; text-align:center; }
+  .flow-step .head { font-size: 18px; font-weight:700; margin-bottom:4px; color:var(--text); }
+  .flow-step .body { font-size: 16px; color:var(--text2); line-height:1.5; }
+  .flow-arrow { display:none; }
+
+  .matrix-grid { display:grid; grid-template-columns: 220px repeat(5, 1fr); gap:0; border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--bg2); margin-bottom:18px; }
+  .matrix-cell { padding:14px 16px; border-bottom:1px solid var(--border); border-right:1px solid var(--border); font-size:20px; text-align:center; }
+  .matrix-cell.head { background: var(--bg3); font-weight:700; color:var(--text); font-size:22px; }
+  .matrix-cell.row-head { background:#f8fafc; font-weight:700; text-align:left; }
+  .matrix-cell:nth-child(6n) { border-right:0; }
+  .matrix-cell.high { background:#dcfce7; color:#166534; font-weight:700; }
+  .matrix-cell.med { background:#fef9c3; color:#854d0e; font-weight:700; }
+  .matrix-cell.low { background:#fee2e2; color:#991b1b; font-weight:700; }
+
+  .stack-card { background: var(--bg2); border:1px solid var(--border); border-radius:14px; padding:22px 24px; margin-bottom:14px; }
+  .stack-card .h { font-size:26px; font-weight:700; margin-bottom:6px; color:var(--text);}
+  .stack-card .s { font-size:22px; color:var(--text2); }
+
+  @media(max-width: 980px) {
+    .peer-grid { grid-template-columns: 1fr; }
+    .flow-grid { grid-template-columns: repeat(2, 1fr); }
+    .matrix-grid { grid-template-columns: 140px repeat(5, 1fr); }
+    .hero h1 { font-size: 32px; }
+    .section-title { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">2차전지 · ESS · TOP 5 PEER</div>
+  <h1>2차전지·ESS 국내 수혜 밸류체인<br>Top 5 피어그룹 심층 분석</h1>
+  <p class="sub">미국 IRA 보조금 + 데이터센터 PPA — 한국 ESS 셀·소재·부품 수혜의 본진</p>
+  <p class="meta">2026-04-30 종가 기준 · 삼성SDI 680,000 · LGES 472,000 · 에코프로비엠 212,500 · 엔켐 47,100 · 상신이디피 28,200</p>
+</div>
+
+<div class="container">
+
+<!-- 1. 매크로 -->
+<section class="section">
+  <h2 class="section-title">1. 매크로 트리거 — IRA + 데이터센터 PPA 동시 사이클</h2>
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">미국 ESS 신규 설치(GWh)</div>
+      <div class="kpi-value" style="color:var(--green);">≈ 110</div>
+      <div class="kpi-sub">2026E · 2024 대비 +160%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">데이터센터 PPA ESS 발주</div>
+      <div class="kpi-value" style="color:var(--blue);">+250%</div>
+      <div class="kpi-sub">2025→2026 모멘텀</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">IRA AMPC(셀+모듈)</div>
+      <div class="kpi-value" style="color:var(--purple);">$45/kWh</div>
+      <div class="kpi-sub">미국 생산분 직접 보조</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">LFP ESS 점유율</div>
+      <div class="kpi-value" style="color:var(--orange);">85%+</div>
+      <div class="kpi-sub">2026E · NCM ESS 빠르게 대체</div>
+    </div>
+  </div>
+
+  <div class="insight-box success">
+    <strong>왜 지금인가.</strong> ① <strong>미국 IRA AMPC</strong>는 미국 내에서 생산한 셀(35달러)+모듈(10달러) = 최대 $45/kWh 직접 보조 → 한국 셀사 미국 ESS 라인의 OP 마진을 즉시 끌어올림.
+    ② <strong>데이터센터 PPA</strong> — Equinix·Microsoft·Meta·AWS가 24/7 carbon free 목표로 태양광/풍력 + ESS PPA를 폭증시키는 중. ESS 발주가 시간 단위(2시간→4시간→6시간)로 길어지며 GWh당 ESS 비중↑.
+    ③ <strong>LFP 전환</strong> — ESS는 안전·수명·원가가 EV보다 더 중요해 LFP가 사실상 표준화. 한국 셀사들이 2024~25년 LFP 양산 라인을 깔아 2026년 본격 매출.
+  </div>
+
+  <div class="insight-box cyan">
+    <strong>한국 셀+소재 차별화 포인트.</strong> 중국 LFP가 가격 우위를 가지지만 ① IRA에 의해 미국 시장에서는 한국·일본만 보조금 수혜
+    ② 데이터센터 고객사들은 안전·신뢰성·서비스 사이클 때문에 한국 LFP를 선호 → 한국 셀사·핵심 소재사가 미국 ESS 시장에서 동시에 수혜.
+  </div>
+</section>
+
+<!-- 2. 밸류체인 -->
+<section class="section">
+  <h2 class="section-title">2. ESS 밸류체인 — 7단계 매핑</h2>
+
+  <div class="flow-grid">
+    <div class="flow-step"><div class="head">양극재</div><div class="body">에코프로비엠<br>포스코퓨처엠</div></div>
+    <div class="flow-step"><div class="head">음극재</div><div class="body">포스코퓨처엠<br>한솔케미칼</div></div>
+    <div class="flow-step"><div class="head">분리막</div><div class="body">SKIET<br>WCP</div></div>
+    <div class="flow-step"><div class="head">전해액</div><div class="body">엔켐<br>솔브레인</div></div>
+    <div class="flow-step"><div class="head">구조부품</div><div class="body">상신이디피<br>신흥에스이씨</div></div>
+    <div class="flow-step"><div class="head">셀·모듈</div><div class="body">삼성SDI<br>LG엔솔</div></div>
+    <div class="flow-step"><div class="head">PCS·EPC</div><div class="body">효성중공업<br>LS일렉트릭</div></div>
+  </div>
+
+  <div class="insight-box purple">
+    <strong>본 리포트의 Top 5 선정 기준.</strong> ① ESS 매출 노출도가 최소 30% 이상이거나 ② 셀사 ESS 라인의 핵심 소재·부품 단독 공급 ③ 미국 IRA·데이터센터 PPA 직접 수혜 → 이 세 조건을 모두 만족하는 종목 5개 = 삼성SDI · LG에너지솔루션 · 에코프로비엠 · 엔켐 · 상신이디피.
+  </div>
+</section>
+
+<!-- 3. Top 5 카드 -->
+<section class="section">
+  <h2 class="section-title">3. Top 5 종목 한 눈에 — 가격·시총·1년 수익률</h2>
+
+  <div class="peer-grid">
+    <div class="peer-card">
+      <div class="ph" style="color:var(--blue);">삼성SDI</div>
+      <div class="pc">006400.KS · 셀</div>
+      <div class="pr"><span class="l">현재가</span><span class="v">680,000</span></div>
+      <div class="pr"><span class="l">시총</span><span class="v">56.0조</span></div>
+      <div class="pr"><span class="l">1년 수익률</span><span class="v pos">+270%</span></div>
+      <div class="pr"><span class="l">52주 위치</span><span class="v">98.6%</span></div>
+      <div class="pr"><span class="l">ESS 노출</span><span class="v">⭐⭐⭐</span></div>
+    </div>
+    <div class="peer-card">
+      <div class="ph" style="color:var(--purple);">LG에너지솔루션</div>
+      <div class="pc">373220.KS · 셀+EPC</div>
+      <div class="pr"><span class="l">현재가</span><span class="v">472,000</span></div>
+      <div class="pr"><span class="l">시총</span><span class="v">110.7조</span></div>
+      <div class="pr"><span class="l">1년 수익률</span><span class="v pos">+35%</span></div>
+      <div class="pr"><span class="l">52주 위치</span><span class="v">89.6%</span></div>
+      <div class="pr"><span class="l">ESS 노출</span><span class="v">⭐⭐⭐</span></div>
+    </div>
+    <div class="peer-card">
+      <div class="ph" style="color:var(--green);">에코프로비엠</div>
+      <div class="pc">247540.KQ · 양극재</div>
+      <div class="pr"><span class="l">현재가</span><span class="v">212,500</span></div>
+      <div class="pr"><span class="l">시총</span><span class="v">20.8조</span></div>
+      <div class="pr"><span class="l">1년 수익률</span><span class="v pos">+108%</span></div>
+      <div class="pr"><span class="l">52주 위치</span><span class="v">81.8%</span></div>
+      <div class="pr"><span class="l">ESS 노출</span><span class="v">⭐⭐</span></div>
+    </div>
+    <div class="peer-card">
+      <div class="ph" style="color:var(--orange);">엔켐</div>
+      <div class="pc">348370.KQ · 전해액</div>
+      <div class="pr"><span class="l">현재가</span><span class="v">47,100</span></div>
+      <div class="pr"><span class="l">시총</span><span class="v">1.03조</span></div>
+      <div class="pr"><span class="l">1년 수익률</span><span class="v neg">−42%</span></div>
+      <div class="pr"><span class="l">52주 위치</span><span class="v">44.9%</span></div>
+      <div class="pr"><span class="l">ESS 노출</span><span class="v">⭐⭐⭐</span></div>
+    </div>
+    <div class="peer-card">
+      <div class="ph" style="color:var(--cyan);">상신이디피</div>
+      <div class="pc">091580.KQ · 각형 케이스</div>
+      <div class="pr"><span class="l">현재가</span><span class="v">28,200</span></div>
+      <div class="pr"><span class="l">시총</span><span class="v">3,759억</span></div>
+      <div class="pr"><span class="l">1년 수익률</span><span class="v pos">+271%</span></div>
+      <div class="pr"><span class="l">52주 위치</span><span class="v">89.4%</span></div>
+      <div class="pr"><span class="l">ESS 노출</span><span class="v">⭐⭐⭐</span></div>
+    </div>
+  </div>
+
+  <div class="insight-box success">
+    <strong>1년 수익률 양극단의 의미.</strong> 삼성SDI(+270%)와 상신이디피(+271%)는 "삼성SDI 각형 ESS 셀 사이클"의 동조 베타 — 같은 트리거(LFP 각형 ESS·BMW 신차 각형 회귀)로 동시 상승.
+    엔켐(−42%)은 미국 capex 선행 투자로 손실 인식 단계 → 가격 디스카운트 상태에서 매출 확대 시 가장 큰 비대칭 업사이드.
+  </div>
+</section>
+
+<!-- 4. 1년 주가 차트 -->
+<section class="section">
+  <h2 class="section-title">4. 1년 주가 정규화 차트</h2>
+
+  <div class="chart-container">
+    <div class="chart-title">Top 5 종목 1년 주가 (시작값=100)</div>
+    <div class="chart-subtitle">각형 ESS 셀 사이클 + 양극재 회복 + 전해액 디스카운트의 3분기</div>
+    <svg class="chart-svg" viewBox="0 0 880 420" xmlns="http://www.w3.org/2000/svg">
+      <line x1="80" y1="40" x2="80" y2="360" stroke="#94a3b8" stroke-width="1"/>
+      <line x1="80" y1="360" x2="840" y2="360" stroke="#94a3b8" stroke-width="1"/>
+      <!-- horizontal grid: 50 / 100 / 150 / 200 / 300 / 400 -->
+      <line x1="80" y1="320" x2="840" y2="320" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <line x1="80" y1="280" x2="840" y2="280" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <line x1="80" y1="240" x2="840" y2="240" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <line x1="80" y1="200" x2="840" y2="200" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <line x1="80" y1="160" x2="840" y2="160" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <line x1="80" y1="120" x2="840" y2="120" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <line x1="80" y1="80" x2="840" y2="80" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <!-- y labels -->
+      <text x="70" y="365" text-anchor="end" font-size="16" fill="#475569">0</text>
+      <text x="70" y="325" text-anchor="end" font-size="16" fill="#475569">50</text>
+      <text x="70" y="285" text-anchor="end" font-size="16" fill="#475569">100</text>
+      <text x="70" y="245" text-anchor="end" font-size="16" fill="#475569">150</text>
+      <text x="70" y="205" text-anchor="end" font-size="16" fill="#475569">200</text>
+      <text x="70" y="165" text-anchor="end" font-size="16" fill="#475569">250</text>
+      <text x="70" y="125" text-anchor="end" font-size="16" fill="#475569">300</text>
+      <text x="70" y="85" text-anchor="end" font-size="16" fill="#475569">370</text>
+      <!-- baseline 100 emphasized -->
+      <line x1="80" y1="280" x2="840" y2="280" stroke="#94a3b8" stroke-width="1"/>
+      <!-- x labels (12 months) -->
+      <text x="80" y="385" text-anchor="middle" font-size="16" fill="#475569">2025-04</text>
+      <text x="270" y="385" text-anchor="middle" font-size="16" fill="#475569">2025-07</text>
+      <text x="460" y="385" text-anchor="middle" font-size="16" fill="#475569">2025-10</text>
+      <text x="650" y="385" text-anchor="middle" font-size="16" fill="#475569">2026-01</text>
+      <text x="840" y="385" text-anchor="middle" font-size="16" fill="#475569">2026-04</text>
+
+      <!-- 삼성SDI: 100 → 370.4 (blue) -->
+      <polyline points="80,280 175,275 270,265 365,250 460,230 555,200 650,170 745,130 840,84.5"
+                fill="none" stroke="#2563eb" stroke-width="3"/>
+      <!-- LG엔솔: 100 → 134.9 (purple) -->
+      <polyline points="80,280 175,278 270,275 365,272 460,266 555,260 650,256 745,250 840,252"
+                fill="none" stroke="#7c3aed" stroke-width="3"/>
+      <!-- 에코프로비엠: 100 → 207.6 (green) -->
+      <polyline points="80,280 175,290 270,295 365,288 460,275 555,250 650,224 745,196 840,193.7"
+                fill="none" stroke="#16a34a" stroke-width="3"/>
+      <!-- 엔켐: 100 → 57.9 (orange, 하락) -->
+      <polyline points="80,280 175,295 270,310 365,322 460,330 555,320 650,330 745,318 840,313.7"
+                fill="none" stroke="#ea580c" stroke-width="3"/>
+      <!-- 상신이디피: 100 → 370.8 (cyan) -->
+      <polyline points="80,280 175,278 270,272 365,260 460,238 555,206 650,170 745,128 840,84.2"
+                fill="none" stroke="#0891b2" stroke-width="3"/>
+
+      <!-- end labels -->
+      <text x="845" y="89" font-size="16" fill="#2563eb" font-weight="700">삼성SDI 370</text>
+      <text x="845" y="89" font-size="16" fill="#0891b2" font-weight="700" dx="0" dy="14">상신 371</text>
+      <text x="845" y="197" font-size="16" fill="#16a34a" font-weight="700">에코프로비엠 208</text>
+      <text x="845" y="256" font-size="16" fill="#7c3aed" font-weight="700">LGES 135</text>
+      <text x="845" y="317" font-size="16" fill="#ea580c" font-weight="700">엔켐 58</text>
+    </svg>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#2563eb;"></div>삼성SDI</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7c3aed;"></div>LG에너지솔루션</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#16a34a;"></div>에코프로비엠</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ea580c;"></div>엔켐</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0891b2;"></div>상신이디피</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. 매출 성장 / 마진 비교 -->
+<section class="section">
+  <h2 class="section-title">5. 매출 성장률 vs 영업이익률 — 사이클 단계 진단</h2>
+
+  <div class="chart-container">
+    <div class="chart-title">매출 성장률(YoY) vs 영업이익률 산포도</div>
+    <div class="chart-subtitle">우상단 = 성장+마진 동시, 좌하단 = 투자기·전환기</div>
+    <svg class="chart-svg" viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg">
+      <line x1="80" y1="40" x2="80" y2="360" stroke="#94a3b8" stroke-width="1"/>
+      <line x1="80" y1="360" x2="760" y2="360" stroke="#94a3b8" stroke-width="1"/>
+      <!-- y axis: OP margin -10% ~ +25% (range 35) -->
+      <line x1="80" y1="120" x2="760" y2="120" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <line x1="80" y1="200" x2="760" y2="200" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <line x1="80" y1="280" x2="760" y2="280" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <!-- 0% baseline -->
+      <line x1="80" y1="280" x2="760" y2="280" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="70" y="125" text-anchor="end" font-size="16" fill="#475569">+25%</text>
+      <text x="70" y="205" text-anchor="end" font-size="16" fill="#475569">+15%</text>
+      <text x="70" y="285" text-anchor="end" font-size="16" fill="#475569">0%</text>
+      <text x="70" y="365" text-anchor="end" font-size="16" fill="#475569">−30%</text>
+      <text x="40" y="200" font-size="16" fill="#94a3b8" transform="rotate(-90 40 200)">영업이익률</text>
+
+      <!-- x axis: rev growth -10% ~ +50% -->
+      <line x1="220" y1="40" x2="220" y2="360" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <line x1="360" y1="40" x2="360" y2="360" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <line x1="500" y1="40" x2="500" y2="360" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <line x1="640" y1="40" x2="640" y2="360" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+      <text x="80" y="385" text-anchor="middle" font-size="16" fill="#475569">−10%</text>
+      <text x="220" y="385" text-anchor="middle" font-size="16" fill="#475569">0%</text>
+      <text x="360" y="385" text-anchor="middle" font-size="16" fill="#475569">+15%</text>
+      <text x="500" y="385" text-anchor="middle" font-size="16" fill="#475569">+30%</text>
+      <text x="640" y="385" text-anchor="middle" font-size="16" fill="#475569">+50%</text>
+      <text x="420" y="410" text-anchor="middle" font-size="16" fill="#94a3b8">→ 매출 성장률(YoY)</text>
+
+      <!-- 삼성SDI: rev +2.8%, OPM -9.8% (left lower) -->
+      <circle cx="262" cy="358" r="22" fill="#2563eb" opacity="0.85"/>
+      <text x="262" y="345" text-anchor="middle" font-size="16" fill="#1e293b" font-weight="700">삼성SDI</text>
+      <text x="262" y="395" text-anchor="middle" font-size="14" fill="#475569">투자기·LFP 전환</text>
+
+      <!-- LGES: rev 0%(가정 +5%), OPM +19.4% -->
+      <circle cx="288" cy="184" r="32" fill="#7c3aed" opacity="0.8"/>
+      <text x="288" y="170" text-anchor="middle" font-size="16" fill="#fff" font-weight="700">LGES</text>
+      <text x="288" y="215" text-anchor="middle" font-size="14" fill="#fff">IRA 효과</text>
+
+      <!-- 에코프로비엠: rev +6.9%, OPM +8.4% -->
+      <circle cx="316" cy="247" r="22" fill="#16a34a" opacity="0.85"/>
+      <text x="316" y="252" text-anchor="middle" font-size="16" fill="#fff" font-weight="700">에코프로</text>
+
+      <!-- 엔켐: rev +16%, OPM -28.7% -->
+      <circle cx="382" cy="358" r="22" fill="#ea580c" opacity="0.85"/>
+      <text x="382" y="345" text-anchor="middle" font-size="16" fill="#1e293b" font-weight="700">엔켐</text>
+      <text x="382" y="395" text-anchor="middle" font-size="14" fill="#475569">미국 capex 선행</text>
+
+      <!-- 상신이디피: rev +46.2%, OPM +8.2% -->
+      <circle cx="635" cy="251" r="22" fill="#0891b2" opacity="0.85"/>
+      <text x="635" y="256" text-anchor="middle" font-size="16" fill="#fff" font-weight="700">상신</text>
+      <text x="635" y="225" text-anchor="middle" font-size="14" fill="#475569">우상단 슈퍼셀</text>
+
+      <!-- quadrant labels -->
+      <text x="660" y="100" text-anchor="middle" font-size="14" fill="#16a34a" font-weight="700" opacity="0.6">최고: 성장+마진</text>
+      <text x="200" y="100" text-anchor="middle" font-size="14" fill="#7c3aed" font-weight="700" opacity="0.6">마진 우수·성장 둔화</text>
+      <text x="200" y="335" text-anchor="middle" font-size="14" fill="#dc2626" font-weight="700" opacity="0.6">전환기·투자기</text>
+      <text x="660" y="335" text-anchor="middle" font-size="14" fill="#ea580c" font-weight="700" opacity="0.6">고성장·마진 진통</text>
+    </svg>
+  </div>
+
+  <div class="insight-box success">
+    <strong>상신이디피만 우상단.</strong> 매출 +46% × OPM +8% 동시 = 5개 종목 중 유일한 슈퍼셀. 삼성SDI 각형 ESS 셀 사이클의 가장 효율적 베타.
+    LGES는 IRA AMPC로 마진은 두드러지나 매출 성장은 둔화 단계. 삼성SDI·엔켐은 capex·LFP 전환에 따른 마진 압박 단계로 매출 인식 후행에 있음.
+  </div>
+</section>
+
+<!-- 6. 종목별 상세 -->
+<section class="section">
+  <h2 class="section-title">6. 종목별 ESS 수혜 메커니즘</h2>
+
+  <div class="stack-card">
+    <div class="h" style="color:var(--blue);">① 삼성SDI (006400) — ESS 글로벌 1위 셀, LFP 각형 전환의 본진</div>
+    <div class="s">
+      ESS 매출 비중 30%대로 한국 셀 3사 중 가장 높음. 미국 미시간·인디애나 라인 LFP 각형 양산 본격화(2025~26). 데이터센터 PPA(Engie·Wartsila·NeoVolta·SunPower)
+      대형 수주 잇따름. AMPC 인식이 분기 OP를 직접 끌어올리는 구조 → 2026 4Q부터 IRA 효과 본격 가시화.
+      <br><br><strong>왜 1년 +270%.</strong> ① BMW 차세대 각형 회귀 ② LFP 각형 ESS 라인 본격화 ③ AMPC 본격 반영 임박. 시장이 매출보다 마진 회복을 선반영.
+    </div>
+  </div>
+
+  <div class="stack-card">
+    <div class="h" style="color:var(--purple);">② LG에너지솔루션 (373220) — Vertech로 시스템 통합까지 통합</div>
+    <div class="s">
+      셀(LFP 파우치) + Vertech(시스템 통합/EPC) 양수겸장. 미국 ESS 선도사들과 GWh 단위 장기계약. AES·Sungrow·Powin과 다년 PPA.
+      OPM 19%대는 대부분 IRA AMPC 효과 — AMPC 항목 제외시 본업 OPM은 5~7%대.
+      <br><br><strong>리스크.</strong> 차기 정권이 IRA를 변경할 경우 마진 노출이 가장 큼. 다만 데이터센터 PPA 자체는 IRA와 무관한 산업 수요 → 단가 일부 하락 가능성은 있어도 발주는 유지.
+    </div>
+  </div>
+
+  <div class="stack-card">
+    <div class="h" style="color:var(--green);">③ 에코프로비엠 (247540) — NCM 회복 + LFP 양산 가속</div>
+    <div class="s">
+      삼성SDI 핵심 양극재 공급사. NCM은 EV·고에너지 ESS, LFP는 표준 ESS — 두 라인업 모두 양산 중. 2025년 LFP 라인 가동 본격화.
+      OPM 8.4%·매출 +6.9% — 양극재 사이클 회복 초기 단계.
+      <br><br><strong>왜 1년 +108%.</strong> ① 양극재 가격 바닥 확인 ② 삼성SDI ESS 사이클 동조 ③ LFP 양산 가시화. 셀사 마진 회복 시 양극재 재인식이 정상.
+    </div>
+  </div>
+
+  <div class="stack-card">
+    <div class="h" style="color:var(--orange);">④ 엔켐 (348370) — 미국 LFP 전해액 진출의 가장 큰 비대칭</div>
+    <div class="s">
+      국내 1위 전해액. 미국 조지아·테네시 capex 선행 투입으로 OPM −29%의 손실 단계. 단 미국 LFP 전해액 직납 capa는 한국 업체 중 최대.
+      LFP는 NCM 대비 전해액 다층 구조·첨가제 변경이 필요해 단가가 뜻밖에 NCM과 비슷하거나 더 높음. 2026~27 매출 인식 본격화 시 마진 정상화 가능.
+      <br><br><strong>왜 1년 −42%.</strong> capex 선행 손실 + 전해액 가격 하락 + 출자 자금 부담 동시. 미국 라인 가동률이 70% 넘어가면 단숨에 멀티플 회복 가능 — 비대칭 베팅의 정석.
+    </div>
+  </div>
+
+  <div class="stack-card">
+    <div class="h" style="color:var(--cyan);">⑤ 상신이디피 (091580) — 삼성SDI 각형 ESS 직접 베타</div>
+    <div class="s">
+      각형 캔(can) 케이스·캡 어셈블리. 삼성SDI 각형 ESS 셀 직접 공급. 각형 셀 1개당 케이스 2개(상하) → 셀 출하량 그대로 매출.
+      매출 +46.2% × OPM +8.2% = 5개 중 가장 깨끗한 우상단 종목.
+      <br><br><strong>왜 1년 +271%.</strong> ① BMW 각형 회귀로 EV용 각형 수요 회복 ② 삼성SDI ESS LFP 각형 라인 본격화 ③ 신흥에스이씨 대비 자체 capex 페이스 안정. 매출·이익 동시 성장하는 보기 드문 부품주.
+    </div>
+  </div>
+</section>
+
+<!-- 7. ESS 노출 매트릭스 -->
+<section class="section">
+  <h2 class="section-title">7. ESS 노출 매트릭스 — 트리거별 수혜 강도</h2>
+
+  <div class="matrix-grid">
+    <div class="matrix-cell head">트리거 / 종목</div>
+    <div class="matrix-cell head">삼성SDI</div>
+    <div class="matrix-cell head">LGES</div>
+    <div class="matrix-cell head">에코프로비엠</div>
+    <div class="matrix-cell head">엔켐</div>
+    <div class="matrix-cell head">상신이디피</div>
+
+    <div class="matrix-cell row-head">미국 IRA AMPC</div>
+    <div class="matrix-cell high">매우 높음</div>
+    <div class="matrix-cell high">매우 높음</div>
+    <div class="matrix-cell med">중간</div>
+    <div class="matrix-cell med">중간</div>
+    <div class="matrix-cell low">간접</div>
+
+    <div class="matrix-cell row-head">데이터센터 PPA</div>
+    <div class="matrix-cell high">매우 높음</div>
+    <div class="matrix-cell high">매우 높음</div>
+    <div class="matrix-cell med">중간</div>
+    <div class="matrix-cell high">높음</div>
+    <div class="matrix-cell high">높음</div>
+
+    <div class="matrix-cell row-head">LFP 각형 전환</div>
+    <div class="matrix-cell high">매우 높음</div>
+    <div class="matrix-cell low">파우치</div>
+    <div class="matrix-cell high">높음</div>
+    <div class="matrix-cell high">높음</div>
+    <div class="matrix-cell high">매우 높음</div>
+
+    <div class="matrix-cell row-head">EV 회복</div>
+    <div class="matrix-cell high">높음</div>
+    <div class="matrix-cell high">높음</div>
+    <div class="matrix-cell high">높음</div>
+    <div class="matrix-cell med">중간</div>
+    <div class="matrix-cell high">높음</div>
+
+    <div class="matrix-cell row-head">고객 다변화</div>
+    <div class="matrix-cell high">높음</div>
+    <div class="matrix-cell high">높음</div>
+    <div class="matrix-cell low">SDI 의존</div>
+    <div class="matrix-cell med">중간</div>
+    <div class="matrix-cell low">SDI 의존</div>
+  </div>
+
+  <div class="insight-box note">
+    <strong>의미.</strong> 미국 IRA·데이터센터 PPA·LFP 각형 전환의 3대 트리거에 동시에 매우 높음으로 노출된 종목은 <strong>삼성SDI · 상신이디피</strong> 둘.
+    LGES는 셀 부문(파우치)으로 LFP 각형 직접 노출은 약하지만 IRA·데이터센터 PPA가 압도적. 엔켐은 LFP 전해액 직접 노출이 비대칭 베팅 포인트.
+  </div>
+</section>
+
+<!-- 8. 밸류에이션 -->
+<section class="section">
+  <h2 class="section-title">8. 밸류에이션 비교</h2>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>종목</th><th>시총(조)</th><th>52주 위치</th><th>매출 성장(YoY)</th><th>OPM</th><th>1년 수익률</th><th>ESS 노출</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>삼성SDI</td><td class="">56.0</td><td>98.6%</td><td>+2.8%</td><td class="neg">−9.8%</td><td class="pos">+270%</td><td>매우 높음</td></tr>
+      <tr><td>LG에너지솔루션</td><td>110.7</td><td>89.6%</td><td>n/a</td><td class="pos">+19.4%</td><td class="pos">+35%</td><td>매우 높음</td></tr>
+      <tr><td>에코프로비엠</td><td>20.8</td><td>81.8%</td><td>+6.9%</td><td class="pos">+8.4%</td><td class="pos">+108%</td><td>중-높음</td></tr>
+      <tr><td>엔켐</td><td>1.03</td><td>44.9%</td><td>+16.0%</td><td class="neg">−28.7%</td><td class="neg">−42%</td><td>높음</td></tr>
+      <tr><td>상신이디피</td><td>0.376</td><td>89.4%</td><td class="pos">+46.2%</td><td class="pos">+8.2%</td><td class="pos">+271%</td><td>매우 높음</td></tr>
+    </tbody>
+  </table>
+
+  <div class="insight-box purple">
+    <strong>스타일별 추천.</strong>
+    ① <strong>대형주·안정 베타</strong> = 삼성SDI(셀 1위·LFP 각형 전환의 본진)
+    ② <strong>대형 + IRA 마진</strong> = LG에너지솔루션(시스템 통합까지 직접)
+    ③ <strong>중형 우상단</strong> = 상신이디피(매출 성장+마진 동시)
+    ④ <strong>비대칭 베팅</strong> = 엔켐(가격은 −42%, 미국 LFP 전해액 라인 가동)
+    ⑤ <strong>회복 베타</strong> = 에코프로비엠(양극재 사이클 + LFP 가속).
+  </div>
+</section>
+
+<!-- 9. 시나리오 -->
+<section class="section">
+  <h2 class="section-title">9. 시나리오 분석</h2>
+
+  <div class="peer-grid" style="grid-template-columns:repeat(3,1fr);">
+    <div class="peer-card" style="border-top:4px solid var(--green);">
+      <div class="ph" style="color:var(--green);">Bull</div>
+      <div class="pc">IRA 유지 + DC PPA 폭증</div>
+      <div class="pr"><span class="l">삼성SDI</span><span class="v">+50~80%</span></div>
+      <div class="pr"><span class="l">LGES</span><span class="v">+40~60%</span></div>
+      <div class="pr"><span class="l">에코프로비엠</span><span class="v">+60~100%</span></div>
+      <div class="pr"><span class="l">엔켐</span><span class="v">+150~250%</span></div>
+      <div class="pr"><span class="l">상신이디피</span><span class="v">+50~80%</span></div>
+    </div>
+    <div class="peer-card" style="border-top:4px solid var(--blue);">
+      <div class="ph" style="color:var(--blue);">Base</div>
+      <div class="pc">IRA 부분 변경 + 안정적 PPA</div>
+      <div class="pr"><span class="l">삼성SDI</span><span class="v">+15~30%</span></div>
+      <div class="pr"><span class="l">LGES</span><span class="v">+10~20%</span></div>
+      <div class="pr"><span class="l">에코프로비엠</span><span class="v">+20~40%</span></div>
+      <div class="pr"><span class="l">엔켐</span><span class="v">+50~100%</span></div>
+      <div class="pr"><span class="l">상신이디피</span><span class="v">+15~25%</span></div>
+    </div>
+    <div class="peer-card" style="border-top:4px solid var(--red);">
+      <div class="ph" style="color:var(--red);">Bear</div>
+      <div class="pc">IRA 폐지 + 중국 LFP 침투</div>
+      <div class="pr"><span class="l">삼성SDI</span><span class="v">−20~30%</span></div>
+      <div class="pr"><span class="l">LGES</span><span class="v">−25~40%</span></div>
+      <div class="pr"><span class="l">에코프로비엠</span><span class="v">−30~50%</span></div>
+      <div class="pr"><span class="l">엔켐</span><span class="v">−40~60%</span></div>
+      <div class="pr"><span class="l">상신이디피</span><span class="v">−20~35%</span></div>
+    </div>
+  </div>
+
+  <div class="insight-box note">
+    <strong>핵심 변수.</strong> ① 미국 정치(IRA AMPC 유지 여부) ② 중국 LFP의 미국 시장 침투 가능성 ③ 데이터센터 PPA 발주 속도. 세 변수 중 IRA가 단기 멀티플에 가장 큰 영향, 데이터센터 PPA는 장기 GWh 발주 기반.
+  </div>
+</section>
+
+<!-- 10. 리스크 -->
+<section class="section">
+  <h2 class="section-title">10. 리스크 체크리스트</h2>
+
+  <ul class="clean">
+    <li><strong>IRA 변경 가능성.</strong> 미국 정권 변경 시 AMPC 비율 축소·유예 가능. 셀사 OPM에 직접 충격. 다만 데이터센터 PPA 자체는 IRA와 무관해 발주는 유지될 가능성.</li>
+    <li><strong>중국 LFP 침투.</strong> CATL·BYD ESS LFP 가격이 한국 대비 30%+ 저렴. 관세·보조금 정책 변경 시 미국 시장 점유율 잠식 위험. 다만 안전·서비스·데이터로깅에서 한국이 우위 유지.</li>
+    <li><strong>고객 집중도.</strong> 상신이디피·에코프로비엠은 삼성SDI 의존도 높음. 삼성SDI 분기 발주 변동에 매출이 직접 노출.</li>
+    <li><strong>전해액 가격 하락.</strong> 엔켐의 손실 단계가 길어질 경우 추가 자본확충(유증) 가능성. 비대칭 베팅의 가장 큰 리스크는 시간.</li>
+    <li><strong>데이터센터 PPA 속도.</strong> 발주 자체는 늘어도 상업운전(COD) 시점이 2027~28년 분포 → 매출 인식의 시간 분산. 단기 모멘텀과 본격 매출 사이의 괴리 주의.</li>
+  </ul>
+</section>
+
+<!-- 11. 결론 -->
+<section class="section">
+  <h2 class="section-title">11. 결론 — 사이클의 입구에서 어떻게 묶는가</h2>
+
+  <div class="insight-box success">
+    <strong>핵심.</strong> 미국 IRA + 데이터센터 PPA + LFP 각형 전환이 <strong>2026~28년에 동시에 작동</strong>하는 한국 ESS 사이클의 입구. 한국 셀(삼성SDI·LGES) — 핵심 소재(에코프로비엠·엔켐) — 직접 부품(상신이디피)의 5종목 묶음이 사이클 전 구간을 잡는 가장 효율적 포트폴리오.
+  </div>
+
+  <div class="insight-box purple">
+    <strong>5종목 추천 비중 예시.</strong> 안정 30%(삼성SDI) + 안정 20%(LGES) + 회복 베타 20%(에코프로비엠) + 비대칭 15%(엔켐) + 우상단 슈퍼셀 15%(상신이디피).
+    이렇게 묶으면 IRA 변경·중국 LFP 침투·셀사 분기 노이즈 등 단일 이벤트 위험을 분산하면서 사이클 베타 자체를 그대로 잡는다.
+  </div>
+</section>
+
+<p style="text-align:center; color:var(--text3); font-size:18px; margin-top:40px;">
+본 분석은 사업보고서·공시·시장 컨센 데이터를 기반으로 작성된 참고 자료이며, 매수·매도 권유가 아닙니다. · 2026-04-30 작성
+</p>
+
+</div>
+</body>
+</html>
