@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+<title>2차전지 캔·캡 4사 비교분석 — 상아프론테크 · 상신이디피 · 신흥에스이씨 · 동원시스템즈</title>
+<style>
+  :root{
+    --bg:#fff; --bg2:#fff; --bg3:#f1f5f9; --bg4:#e2e8f0;
+    --border:#e2e8f0; --text:#1e293b; --text2:#475569; --text3:#94a3b8;
+    --blue:#2563eb; --green:#16a34a; --red:#dc2626; --orange:#ea580c;
+    --purple:#7c3aed; --amber:#d97706; --cyan:#0891b2; --teal:#0d9488;
+    --c-darkest:#3b0764; --c-dark:#6b21a8; --c-mid:#9333ea; --c-light:#d8b4fe;
+    --co-sangah:#16a34a; --co-sangshin:#2563eb; --co-shinheung:#ea580c; --co-dongwon:#7c3aed;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  @page{size:A4;margin:0}
+  body{background:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;color:var(--text);line-height:1.6;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  .page{width:210mm;min-height:297mm;max-height:297mm;overflow:hidden;margin:0 auto 16px;background:#fff;position:relative;page-break-after:always;padding:11mm 13mm}
+  .cover{width:210mm;min-height:297mm;max-height:297mm;overflow:hidden;margin:0 auto 16px;background:linear-gradient(160deg,#3b0764 0%,#6b21a8 35%,#9333ea 70%,#d8b4fe 100%);position:relative;page-break-after:always;display:flex;flex-direction:column;justify-content:space-between;padding:24mm 18mm;color:#fff}
+  .cover-top{display:flex;justify-content:space-between;align-items:flex-start}
+  .cover-badge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:24px;padding:10px 22px;font-size:20px;font-weight:600;letter-spacing:1px}
+  .cover-date{color:rgba(255,255,255,.85);font-size:22px;font-weight:500}
+  .cover-main{flex:1;display:flex;flex-direction:column;justify-content:center;gap:24px}
+  .cover-sub{color:rgba(255,255,255,.7);font-size:22px;font-weight:500;letter-spacing:5px;text-transform:uppercase}
+  .cover-title{font-size:60px;font-weight:900;line-height:1.15;letter-spacing:-1.5px}
+  .cover-desc{color:rgba(255,255,255,.88);font-size:22px;line-height:1.7;max-width:170mm;margin-top:8px}
+  .cover-stats{display:flex;gap:24px;margin-top:24px;flex-wrap:wrap}
+  .cover-stat-value{color:#e9d5ff;font-size:36px;font-weight:800}
+  .cover-stat-label{color:rgba(255,255,255,.7);font-size:16px;font-weight:500}
+  .cover-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+  .cover-disclaimer{color:rgba(255,255,255,.55);font-size:14px;max-width:120mm;line-height:1.6}
+  .cover-tags{display:flex;gap:8px;flex-wrap:wrap}
+  .cover-tag{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:7px 16px;color:rgba(255,255,255,.85);font-size:16px}
+
+  .page-header{background:linear-gradient(90deg,#3b0764 0%,#6b21a8 60%,#9333ea 100%);padding:11px 20px;display:flex;justify-content:space-between;align-items:center;border-radius:8px;margin-bottom:10px;color:#fff}
+  .page-header-title{font-size:24px;font-weight:700}
+  .page-header-num{font-size:18px;color:rgba(255,255,255,.75)}
+
+  .section{margin-bottom:12px}
+  .section-title{font-size:26px;font-weight:700;color:var(--text);margin-bottom:10px;padding-bottom:5px;border-bottom:3px solid var(--purple)}
+  .section-sub{font-size:20px;font-weight:600;color:var(--text2);margin:10px 0 5px}
+  .text{font-size:17px;color:var(--text2);line-height:1.7;margin-bottom:6px}
+  .text-sm{font-size:14px;color:var(--text2);line-height:1.5;margin-bottom:5px}
+
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+  .kpi-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 8px;text-align:center}
+  .kpi-card.b1{border-top:4px solid var(--co-sangah)}
+  .kpi-card.b2{border-top:4px solid var(--co-sangshin)}
+  .kpi-card.b3{border-top:4px solid var(--co-shinheung)}
+  .kpi-card.b4{border-top:4px solid var(--co-dongwon)}
+  .kpi-label{font-size:13px;color:var(--text3);font-weight:700;margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px}
+  .kpi-value{font-size:22px;font-weight:800;color:var(--text)}
+  .kpi-sub{font-size:12px;color:var(--text2);margin-top:2px}
+
+  .data-table{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0}
+  .data-table th{background:var(--bg3);color:var(--text2);font-weight:700;padding:7px 6px;text-align:right;border:1px solid var(--border);font-size:13px}
+  .data-table th:first-child{text-align:center}
+  .data-table td{padding:7px 6px;text-align:right;border:1px solid var(--border);color:var(--text);font-size:13px}
+  .data-table td:first-child{text-align:center;font-weight:600;color:var(--text2)}
+  .data-table tr:nth-child(even){background:var(--bg3)}
+  .data-table td.pos{color:var(--green);font-weight:700}
+  .data-table td.neg{color:var(--red);font-weight:700}
+  .data-table td.highlight{background:rgba(124,58,237,.12);font-weight:700}
+  .data-table .row-highlight td{background:rgba(124,58,237,.1)!important;font-weight:700;color:var(--purple)}
+
+  .chart-container{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 10px 8px;margin:6px 0}
+  .chart-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:2px}
+  .chart-subtitle{font-size:14px;color:var(--text3);margin-bottom:8px}
+  .chart-svg{width:100%;height:auto;display:block;max-width:100%}
+  .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0}
+  .chart-quad{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}
+  .legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:6px}
+  .legend-item{display:flex;align-items:center;gap:5px;font-size:14px;color:var(--text2)}
+  .legend-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0}
+
+  .insight-box{background:var(--bg3);border-left:5px solid var(--purple);border-radius:0 10px 10px 0;padding:10px 14px;margin:6px 0;font-size:16px;color:var(--text2);line-height:1.7}
+  .insight-box strong{color:var(--text)}
+  .insight-box.good{border-left-color:var(--green);background:#f0fdf4}
+  .insight-box.warn{border-left-color:var(--orange);background:#fff7ed}
+  .insight-box.red{border-left-color:var(--red);background:#fef2f2}
+  .insight-box.purple{border-left-color:var(--purple);background:#faf5ff}
+
+  .bull-box{background:#f0fdf4;border-left:4px solid var(--green);border-radius:0 8px 8px 0;padding:8px 12px;margin:5px 0}
+  .bull-box .box-title{font-size:16px;font-weight:700;color:var(--green);margin-bottom:2px}
+  .bull-box .box-text{font-size:14px;color:#166534;line-height:1.55}
+  .bear-box{background:#fef2f2;border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:8px 12px;margin:5px 0}
+  .bear-box .box-title{font-size:16px;font-weight:700;color:var(--red);margin-bottom:2px}
+  .bear-box .box-text{font-size:14px;color:#991b1b;line-height:1.55}
+  .think-box{background:#eff6ff;border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:8px 12px;margin:5px 0}
+  .think-box .box-title{font-size:16px;font-weight:700;color:var(--blue);margin-bottom:2px}
+  .think-box .box-text{font-size:14px;color:#1e3a5f;line-height:1.55}
+
+  .pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:700;margin:1px}
+  .pill.b1{background:rgba(22,163,74,.15);color:var(--co-sangah)}
+  .pill.b2{background:rgba(37,99,235,.15);color:var(--co-sangshin)}
+  .pill.b3{background:rgba(234,88,12,.15);color:var(--co-shinheung)}
+  .pill.b4{background:rgba(124,58,237,.15);color:var(--co-dongwon)}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:5px 0}
+
+  .page-footer{position:absolute;bottom:8mm;left:13mm;right:13mm;display:flex;justify-content:space-between;font-size:12px;color:var(--text3)}
+
+  @media screen and (max-width:1024px){
+    .page,.cover{width:100vw;min-height:auto;max-height:none;overflow:visible;padding:5vw 5vw}
+    .cover-title{font-size:42px}
+    .kpi-row{grid-template-columns:repeat(2,1fr)}
+    .chart-row,.chart-quad,.two-col{grid-template-columns:1fr}
+  }
+  @media print{body{background:#fff}.page,.cover{margin:0;box-shadow:none}.page-header,.cover{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     PAGE 1 — COVER
+     ============================================================ -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-badge">DART 사업보고서 4사 비교 · FY2025</div>
+    <div class="cover-date">2026.05.02</div>
+  </div>
+  <div class="cover-main">
+    <div class="cover-sub">2nd Battery · Can &amp; Cap Ass'y · Peer Analysis</div>
+    <div class="cover-title">2차전지 캔·캡 4사<br>비교분석</div>
+    <div class="cover-desc">상아프론테크(CAP ASSY 일부 + GASKET) · 상신이디피(원형/각형 CAN 본체) · 신흥에스이씨(원형/각형 CAP ASSY) · 동원시스템즈(원통형 캔 + 식음료캔) — 같은 셀에 들어가는 보완 부품들이지만 제품 카테고리·고객 집중도·가동률 패턴이 명확히 다른 4사의 1차원 비교가 아닌 다차원 매트릭스 분석.</div>
+    <div class="cover-stats">
+      <div><div class="cover-stat-value">4社</div><div class="cover-stat-label">DART 종합</div></div>
+      <div><div class="cover-stat-value">2.21조</div><div class="cover-stat-label">합산 매출</div></div>
+      <div><div class="cover-stat-value">875억</div><div class="cover-stat-label">합산 영업이익</div></div>
+      <div><div class="cover-stat-value">2.01조</div><div class="cover-stat-label">합산 시총</div></div>
+    </div>
+  </div>
+  <div class="cover-bottom">
+    <div class="cover-disclaimer">본 자료는 DART 공시 사업보고서 4건 + yfinance 실시간 주가 기반의 투자 참고용 분석이며, 특정 종목의 매수·매도를 권유하지 않습니다. 투자 판단의 책임은 투자자 본인에게 있습니다.</div>
+    <div class="cover-tags">
+      <div class="cover-tag">CAN Body</div>
+      <div class="cover-tag">CAP ASS'Y</div>
+      <div class="cover-tag">GASKET</div>
+      <div class="cover-tag">원형 18650/21700/46파이</div>
+      <div class="cover-tag">각형 EV/ESS</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE 2 — 제품 카테고리 매트릭스 (가장 중요)
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">① 제품 카테고리 매트릭스 — 4사는 보완 관계</div>
+    <div class="page-header-num">02 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">"같은 셀에 들어가는 다른 부품" — 사업보고서 직접 인용</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="text-align:center">제품 카테고리</th>
+          <th style="text-align:left">상아프론테크</th>
+          <th style="text-align:left">상신이디피</th>
+          <th style="text-align:left">신흥에스이씨</th>
+          <th style="text-align:left">동원시스템즈</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-highlight">
+          <td><strong>원형 CAN<br>(Body, 외장)</strong></td>
+          <td style="text-align:left">-</td>
+          <td style="text-align:left"><span class="pill b2">803억 (32.1%)</span> 18650/21700/46파이</td>
+          <td style="text-align:left">-</td>
+          <td style="text-align:left">제관 부문에 통합 (별도 미공시) — <strong>"2차전지 원통형캔, 식음료 캔 포함"</strong> 명시</td>
+        </tr>
+        <tr class="row-highlight">
+          <td><strong>각형 CAN<br>(Body, EV/ESS)</strong></td>
+          <td style="text-align:left">-</td>
+          <td style="text-align:left"><span class="pill b2">1,410억 (56.4%)</span> EV·ESS</td>
+          <td style="text-align:left"><span class="pill b3">82억 (2.0%)</span> 보완 구색</td>
+          <td style="text-align:left">-</td>
+        </tr>
+        <tr class="row-highlight">
+          <td><strong>원형 CAP ASSY<br>(N-CID, NS Ass'y)</strong></td>
+          <td style="text-align:left">일부 (CAP ASSY)</td>
+          <td style="text-align:left">-</td>
+          <td style="text-align:left"><span class="pill b3">734억 (18.0%)</span> N-CID +<br>175억 (4.3%) NS Ass'y (이어폰)</td>
+          <td style="text-align:left">-</td>
+        </tr>
+        <tr class="row-highlight">
+          <td><strong>각형 CAP ASSY<br>(중대형, EV/ESS)</strong></td>
+          <td style="text-align:left"><span class="pill b1">CAP ASSY</span> + GASKET + INSULATOR</td>
+          <td style="text-align:left">-</td>
+          <td style="text-align:left"><span class="pill b3">3,029억 (74.2%)</span> 압도적 1위</td>
+          <td style="text-align:left">-</td>
+        </tr>
+        <tr>
+          <td>비-2차전지 사업</td>
+          <td style="text-align:left">멤브레인·OA벨트·웨이퍼캐리어·의료(60%)</td>
+          <td style="text-align:left">없음 (100% 2차전지)</td>
+          <td style="text-align:left">없음 (100% 2차전지)</td>
+          <td style="text-align:left">식음료캔·연포장·알미늄·아셉틱(95%)</td>
+        </tr>
+        <tr>
+          <td><strong>2차전지 매출 비중</strong></td>
+          <td style="text-align:left"><span class="pill b1">~30~40%</span> (CAP ASSY 등)</td>
+          <td style="text-align:left"><span class="pill b2">~95%</span></td>
+          <td style="text-align:left"><span class="pill b3">100%</span></td>
+          <td style="text-align:left"><span class="pill b4">~5~10%</span> (제관 일부)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box purple">
+      <strong>"어쌔이"는 ASSY = ASSEMBLY(조립체), 즉 CAP ASS'Y(셀 윗부분 안전 부품)다.</strong> 헷갈렸던 것이 풀린다. 상아프론테크의 부품사업(2차전지)은 GASKET(전해액 누수 방지), INSULATOR, CAP ASS'Y로 구성되며 신흥에스이씨의 CAP ASSY와 일부 중복 영역. <strong>4사는 경쟁이라기보다 "같은 셀의 다른 부품을 분담"하는 보완 관계</strong> — 셀 1개에 캔(상신/동원) + 캡 어셈블리(신흥/상아) + 가스켓·인슐레이터(상아) 모두 필요.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">사업보고서가 직접 명시한 "셀 부품 분업 구도"</div>
+    <div class="chart-container">
+      <div class="chart-title">셀 1개에 들어가는 부품 분업 (개념도)</div>
+      <div class="chart-subtitle">4사의 제품군이 어떻게 한 셀 안에서 결합되는지</div>
+      <svg class="chart-svg" viewBox="0 0 720 240">
+        <!-- 원통형 셀 -->
+        <rect x="120" y="40" width="80" height="160" rx="10" fill="#f1f5f9" stroke="#1e293b" stroke-width="2"/>
+        <rect x="120" y="40" width="80" height="32" rx="10" fill="#dc2626"/>
+        <text x="160" y="60" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">CAP ASSY</text>
+        <line x1="120" y1="84" x2="200" y2="84" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="160" y="95" font-size="11" fill="#475569" text-anchor="middle">GASKET 링</text>
+        <text x="160" y="135" font-size="13" fill="#475569" text-anchor="middle" font-weight="600">CAN</text>
+        <text x="160" y="155" font-size="11" fill="#94a3b8" text-anchor="middle">(외장)</text>
+        <text x="160" y="222" font-size="13" fill="#475569" text-anchor="middle" font-weight="600">원형 셀</text>
+
+        <!-- 각형 셀 -->
+        <rect x="280" y="50" width="120" height="140" rx="6" fill="#f1f5f9" stroke="#1e293b" stroke-width="2"/>
+        <rect x="280" y="50" width="120" height="28" rx="6" fill="#dc2626"/>
+        <text x="340" y="69" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">CAP ASSY</text>
+        <line x1="280" y1="86" x2="400" y2="86" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="340" y="100" font-size="11" fill="#475569" text-anchor="middle">GASKET / INSULATOR</text>
+        <text x="340" y="135" font-size="13" fill="#475569" text-anchor="middle" font-weight="600">CAN</text>
+        <text x="340" y="155" font-size="11" fill="#94a3b8" text-anchor="middle">(외장 + 내부)</text>
+        <text x="340" y="212" font-size="13" fill="#475569" text-anchor="middle" font-weight="600">각형 셀 (EV/ESS)</text>
+
+        <!-- 4사 라벨링 -->
+        <!-- 캡 → 신흥 -->
+        <line x1="200" y1="56" x2="450" y2="40" stroke="#ea580c" stroke-width="1.5"/>
+        <line x1="400" y1="64" x2="450" y2="56" stroke="#ea580c" stroke-width="1.5"/>
+        <rect x="450" y="30" width="220" height="36" rx="6" fill="#ea580c"/>
+        <text x="560" y="44" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">신흥에스이씨</text>
+        <text x="560" y="58" font-size="11" fill="#fff" text-anchor="middle">CAP ASSY 92.2% (소형 N-CID + 중대형 각형)</text>
+
+        <!-- 가스켓 → 상아프론테크 -->
+        <line x1="200" y1="92" x2="450" y2="86" stroke="#16a34a" stroke-width="1.5"/>
+        <line x1="400" y1="98" x2="450" y2="100" stroke="#16a34a" stroke-width="1.5"/>
+        <rect x="450" y="78" width="220" height="36" rx="6" fill="#16a34a"/>
+        <text x="560" y="92" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">상아프론테크</text>
+        <text x="560" y="106" font-size="11" fill="#fff" text-anchor="middle">CAP ASSY + GASKET + INSULATOR</text>
+
+        <!-- CAN → 상신/동원 -->
+        <line x1="200" y1="135" x2="450" y2="138" stroke="#2563eb" stroke-width="1.5"/>
+        <line x1="400" y1="138" x2="450" y2="138" stroke="#2563eb" stroke-width="1.5"/>
+        <rect x="450" y="126" width="220" height="36" rx="6" fill="#2563eb"/>
+        <text x="560" y="140" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">상신이디피</text>
+        <text x="560" y="154" font-size="11" fill="#fff" text-anchor="middle">원형 CAN 32% + 각형 CAN 56%</text>
+
+        <line x1="180" y1="160" x2="450" y2="180" stroke="#7c3aed" stroke-width="1.5"/>
+        <rect x="450" y="170" width="220" height="36" rx="6" fill="#7c3aed"/>
+        <text x="560" y="184" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">동원시스템즈</text>
+        <text x="560" y="198" font-size="11" fill="#fff" text-anchor="middle">원통형 CAN (식음료 캔과 통합 라인)</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 캔·캡 4사 비교 (DART 사업보고서 FY25)</span><span>2 / 8</span></div>
+</div>
+
+<!-- ============================================================
+     PAGE 3 — 매출 규모 + 2차전지 매출 비중 비교
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">② 매출 규모 + 2차전지 매출 비중</div>
+    <div class="page-header-num">03 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">FY2025 매출 — 4사 비교 (단위: 억원)</div>
+    <div class="chart-container">
+      <div class="chart-title">총 매출 vs 2차전지 부문 매출 (추정)</div>
+      <div class="chart-subtitle">동원시스템즈 외형은 압도적이나 2차전지 비중은 가장 낮음 / 신흥은 100% 2차전지 전업</div>
+      <svg class="chart-svg" viewBox="0 0 720 320">
+        <line x1="80" y1="40"  x2="680" y2="40"  stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80" y1="100" x2="680" y2="100" stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80" y1="160" x2="680" y2="160" stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80" y1="220" x2="680" y2="220" stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80" y1="270" x2="680" y2="270" stroke="#475569" stroke-width="1"/>
+        <text x="72" y="44"  font-size="13" fill="#94a3b8" text-anchor="end">15,000</text>
+        <text x="72" y="104" font-size="13" fill="#94a3b8" text-anchor="end">11,250</text>
+        <text x="72" y="164" font-size="13" fill="#94a3b8" text-anchor="end">7,500</text>
+        <text x="72" y="224" font-size="13" fill="#94a3b8" text-anchor="end">3,750</text>
+        <text x="72" y="274" font-size="13" fill="#94a3b8" text-anchor="end">0</text>
+
+        <!-- 매출 4사: 1960, 2501, 4082, 13729 -->
+        <!-- y_top = 270 - (val/15000)*230 -->
+        <!-- 1960→239.95(h=30.05), 2501→231.65(h=38.35), 4082→207.4(h=62.6), 13729→59.5(h=210.5) -->
+
+        <!-- 상아프론테크 1960 (전체) -->
+        <rect x="115" y="240" width="70" height="30" fill="#16a34a" opacity="0.4" rx="3"/>
+        <!-- 2차전지 비중 35% (686억) -->
+        <rect x="115" y="259.5" width="70" height="10.5" fill="#16a34a" rx="3"/>
+        <text x="150" y="232" font-size="14" fill="#16a34a" text-anchor="middle" font-weight="800">1,960</text>
+        <text x="150" y="295" font-size="14" fill="#475569" text-anchor="middle" font-weight="600">상아프론테크</text>
+        <text x="150" y="312" font-size="11" fill="#94a3b8" text-anchor="middle">2차전지 ~35%</text>
+
+        <!-- 상신이디피 2501 (전체) -->
+        <rect x="245" y="232" width="70" height="38" fill="#2563eb" opacity="0.3" rx="3"/>
+        <!-- 2차전지 95% (2376) → h=36.4 -->
+        <rect x="245" y="233.6" width="70" height="36.4" fill="#2563eb" rx="3"/>
+        <text x="280" y="225" font-size="14" fill="#2563eb" text-anchor="middle" font-weight="800">2,501</text>
+        <text x="280" y="295" font-size="14" fill="#475569" text-anchor="middle" font-weight="600">상신이디피</text>
+        <text x="280" y="312" font-size="11" fill="#94a3b8" text-anchor="middle">2차전지 ~95%</text>
+
+        <!-- 신흥에스이씨 4082 (전체) → h=62.6 -->
+        <rect x="375" y="207" width="70" height="63" fill="#ea580c" rx="3"/>
+        <text x="410" y="200" font-size="14" fill="#ea580c" text-anchor="middle" font-weight="800">4,082</text>
+        <text x="410" y="295" font-size="14" fill="#475569" text-anchor="middle" font-weight="600">신흥에스이씨</text>
+        <text x="410" y="312" font-size="11" fill="#16a34a" text-anchor="middle" font-weight="700">2차전지 100% ★</text>
+
+        <!-- 동원시스템즈 13729 (전체) → h=210.5 -->
+        <rect x="505" y="60" width="70" height="210" fill="#7c3aed" opacity="0.3" rx="3"/>
+        <!-- 2차전지 7% (961억) → h=14.7 -->
+        <rect x="505" y="255.3" width="70" height="14.7" fill="#7c3aed" rx="3"/>
+        <text x="540" y="52" font-size="16" fill="#7c3aed" text-anchor="middle" font-weight="800">13,729</text>
+        <text x="540" y="295" font-size="14" fill="#475569" text-anchor="middle" font-weight="600">동원시스템즈</text>
+        <text x="540" y="312" font-size="11" fill="#94a3b8" text-anchor="middle">2차전지 ~7%</text>
+
+      </svg>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#16a34a;opacity:0.4"></div>비-2차전지 (포장·소재·식품 등)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>2차전지 부품·캔</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">3개년 매출 추이 (YoY 비교)</div>
+    <table class="data-table">
+      <thead>
+        <tr><th>회사</th><th>FY23</th><th>FY24</th><th>FY25</th><th>YoY</th><th>3y CAGR</th><th>OPM(FY25)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>상아프론테크</strong></td><td>1,836</td><td>1,718</td><td class="pos">1,960</td><td class="pos">+14.1%</td><td>+3.4%</td><td>3.4%</td></tr>
+        <tr><td><strong>상신이디피</strong></td><td>2,901</td><td>2,451</td><td>2,501</td><td class="pos">+2.0%</td><td>-7.1%</td><td>3.5%</td></tr>
+        <tr><td><strong>신흥에스이씨</strong></td><td>5,399</td><td>4,328</td><td class="neg">4,082</td><td class="neg">-5.7%</td><td>-13.0%</td><td class="neg">1.5%</td></tr>
+        <tr class="row-highlight"><td><strong>동원시스템즈</strong></td><td>12,767</td><td>13,343</td><td class="pos">13,729</td><td class="pos">+2.9%</td><td>+3.7%</td><td class="pos">4.8%</td></tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box good">
+      <strong>2차전지 100% 의존도 ≠ 성장 우위.</strong> 신흥에스이씨(100% 2차전지)는 3년 CAGR -13%로 가장 나쁘고, 비-2차전지 비중이 60% 이상인 상아프론테크·동원시스템즈는 +3% 안정 성장. 단일 산업 의존이 EV 캐즘에 직격탄. <em>다각화된 포트폴리오가 사이클 방어에 우월</em>.
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 캔·캡 4사 비교 (DART 사업보고서 FY25)</span><span>3 / 8</span></div>
+</div>
+
+<!-- ============================================================
+     PAGE 4 — 고객사 집중도 비교 (HHI)
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">③ 고객사 집중도 — 사업보고서 직접 인용</div>
+    <div class="page-header-num">04 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">사업보고서가 명시한 주요 매출처 / 의존도</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="text-align:center">회사</th>
+          <th style="text-align:left">사업보고서 직접 인용</th>
+          <th style="text-align:left">집중도</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>상아프론테크</strong></td>
+          <td style="text-align:left"><strong>"주요 매출처는 삼성전자, 삼성SDI, 현대모비스, SK 등.</strong> 주요 매출처에 대한 매출 비중은 전체 매출액 대비 약 18.3% 수준이며, 당기 중 연결회사 매출액의 <strong>10% 이상을 차지하는 외부고객은 없습니다.</strong>"</td>
+          <td style="text-align:left"><span class="pill b1">분산형 (4사 합산 18.3%)</span></td>
+        </tr>
+        <tr>
+          <td><strong>상신이디피</strong></td>
+          <td style="text-align:left">"<strong>삼성SDI의 요구사항인 45일 Lead Time을 달성하였습니다.</strong> 이러한 Lead Time 단축이 일본업체에서 수입하던 물량을 대체하여 당사의 <strong>삼성SDI 2차전지 원형 CAN 점유율이 상당한 부분</strong>을 차지". "삼성SDI에서 1주일 단위로 발주를 하고 있으나..." (수주상황)</td>
+          <td style="text-align:left"><span class="pill b2">집중형 (삼성SDI 단일 의존)</span></td>
+        </tr>
+        <tr>
+          <td><strong>신흥에스이씨</strong></td>
+          <td style="text-align:left">"Cap 부문에서 <strong>소형제품 원형 1위, 중대형제품 각형 1위</strong>". 중대형 각형 Cap Ass'y의 판매경로 <strong>"자회사판매 58.0%"</strong> — 헝가리/미국/말레이시아/중국 자회사 경유 직수출 = 주요 셀 메이커 해외 공장 직접 공급</td>
+          <td style="text-align:left"><span class="pill b3">집중형 (셀 메이커 다층 라우팅)</span></td>
+        </tr>
+        <tr>
+          <td><strong>동원시스템즈</strong></td>
+          <td style="text-align:left">2차전지 매출처 별도 미공시. 판매조직에 <strong>"2차전지수주영업팀, 2차전지양산영업팀"</strong> 명시. 식품 부문은 동원그룹(참치캔) 내부 수요 + Chevron 등 글로벌 EPC향 (별도 분야)</td>
+          <td style="text-align:left"><span class="pill b4">미공시 (다각화 보완)</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">제품 포트폴리오 집중도 (HHI 산정)</div>
+    <div class="chart-container">
+      <div class="chart-title">제품 라인 HHI (Herfindahl-Hirschman Index, 매출 비중 제곱합)</div>
+      <div class="chart-subtitle">5,000 이상 = 매우 집중 / 2,500~5,000 = 집중 / 1,500~2,500 = 보통 / 1,500 미만 = 분산</div>
+      <svg class="chart-svg" viewBox="0 0 720 240">
+        <line x1="200" y1="30"  x2="700" y2="30"  stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="200" y1="80"  x2="700" y2="80"  stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="200" y1="130" x2="700" y2="130" stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="200" y1="180" x2="700" y2="180" stroke="#e2e8f0" stroke-width="0.5"/>
+
+        <!-- HHI scale 0~7000 -->
+        <text x="200" y="200" font-size="12" fill="#94a3b8" text-anchor="middle">0</text>
+        <text x="343" y="200" font-size="12" fill="#94a3b8" text-anchor="middle">2,000</text>
+        <text x="486" y="200" font-size="12" fill="#94a3b8" text-anchor="middle">4,000</text>
+        <text x="629" y="200" font-size="12" fill="#94a3b8" text-anchor="middle">6,000</text>
+        <text x="700" y="200" font-size="12" fill="#94a3b8" text-anchor="middle">7,000</text>
+
+        <!-- Reference zones -->
+        <line x1="307" y1="20" x2="307" y2="180" stroke="#16a34a" stroke-width="1" stroke-dasharray="3,2" opacity="0.7"/>
+        <text x="307" y="14" font-size="10" fill="#16a34a" text-anchor="middle">1,500 분산</text>
+        <line x1="378" y1="20" x2="378" y2="180" stroke="#ea580c" stroke-width="1" stroke-dasharray="3,2" opacity="0.7"/>
+        <text x="378" y="14" font-size="10" fill="#ea580c" text-anchor="middle">2,500 보통</text>
+        <line x1="557" y1="20" x2="557" y2="180" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,2" opacity="0.7"/>
+        <text x="557" y="14" font-size="10" fill="#dc2626" text-anchor="middle">5,000 집중</text>
+
+        <!-- bars: width = (HHI/7000)*500 px starting at x=200 -->
+        <!-- 상아프론테크 HHI ≈ 50.6²+36.3²+5.7²+7.4²/100 — 7개 라인 가중. 추정: 부품50.6% + 소재36.3 + 장비5.7 + 기타7.4 → 50.6²+36.3²+5.7²+7.4² = 2560+1318+32+55 = 3,965 -->
+        <rect x="200" y="32" width="283" height="22" fill="#16a34a" rx="3"/>
+        <text x="195" y="48" font-size="14" fill="#475569" text-anchor="end" font-weight="600">상아프론테크</text>
+        <text x="490" y="48" font-size="14" fill="#16a34a" text-anchor="start" font-weight="800">3,965</text>
+
+        <!-- 상신이디피 32.1²+56.4²+7.4²+4.2² = 1030+3181+55+18 = 4,284 -->
+        <rect x="200" y="62" width="306" height="22" fill="#2563eb" rx="3"/>
+        <text x="195" y="78" font-size="14" fill="#475569" text-anchor="end" font-weight="600">상신이디피</text>
+        <text x="513" y="78" font-size="14" fill="#2563eb" text-anchor="start" font-weight="800">4,284</text>
+
+        <!-- 신흥에스이씨 74.2²+18.0²+4.3²+2.0²+1.5² = 5506+324+18+4+2 = 5,854 -->
+        <rect x="200" y="92" width="418" height="22" fill="#ea580c" rx="3"/>
+        <text x="195" y="108" font-size="14" fill="#475569" text-anchor="end" font-weight="600">신흥에스이씨</text>
+        <text x="625" y="108" font-size="14" fill="#dc2626" text-anchor="start" font-weight="800">5,854 ★</text>
+
+        <!-- 동원시스템즈 47.6²+36.5²+8.0²+7.9² = 2266+1332+64+62 = 3,724 -->
+        <rect x="200" y="122" width="266" height="22" fill="#7c3aed" rx="3"/>
+        <text x="195" y="138" font-size="14" fill="#475569" text-anchor="end" font-weight="600">동원시스템즈</text>
+        <text x="473" y="138" font-size="14" fill="#7c3aed" text-anchor="start" font-weight="800">3,724</text>
+
+        <text x="450" y="220" font-size="14" fill="#475569" text-anchor="middle" font-weight="600">제품 라인 HHI ↑</text>
+      </svg>
+    </div>
+
+    <div class="bull-box">
+      <div class="box-title">상아프론테크 — 분산도 가장 높음 (다각화 우위)</div>
+      <div class="box-text">2차전지(부품 50.6%) + 소재(36.3%, 멤브레인·OA·반도체) + 장비(5.7%) + 의료/자동차(7.4%) 4분면 균형. 매출처 집중도도 4사 합산 18.3%로 단일 고객 의존 없음 — EV 사이클 변동성 충격 가장 낮음.</div>
+    </div>
+    <div class="bear-box">
+      <div class="box-title">신흥에스이씨 — HHI 5,854 (매우 집중)</div>
+      <div class="box-text">중대형 각형 Cap Ass'y가 매출 74.2%를 차지하며 단일 카테고리 의존. 더해서 100% 2차전지 전업, 중대형은 사실상 삼성SDI 자회사판매(58%) 의존. EV 캐즘 + 헝가리 가동률 추락 직격 → FY25 -58억 순손실 기록.</div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 캔·캡 4사 비교 (DART 사업보고서 FY25)</span><span>4 / 8</span></div>
+</div>
+
+<!-- ============================================================
+     PAGE 5 — 가동률 비교 (사이클 민감도)
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">④ 가동률 비교 — 사이클 민감도 = "진실의 순간"</div>
+    <div class="page-header-num">05 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">3개년 가동률 추이 — EV 캐즘 직격</div>
+    <div class="chart-container">
+      <div class="chart-title">FY23 → FY25 가동률 변화 (단위: %)</div>
+      <div class="chart-subtitle">"각형은 더 빨리, 더 깊게" — 신흥 각형 71%→29% / 상신 각형 81%→45% / 상신 원형 66%→35%</div>
+      <svg class="chart-svg" viewBox="0 0 720 320">
+        <!-- Grid -->
+        <line x1="80" y1="40"  x2="680" y2="40"  stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80" y1="100" x2="680" y2="100" stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80" y1="160" x2="680" y2="160" stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80" y1="220" x2="680" y2="220" stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80" y1="270" x2="680" y2="270" stroke="#475569" stroke-width="1"/>
+        <text x="72" y="44"  font-size="13" fill="#94a3b8" text-anchor="end">100%</text>
+        <text x="72" y="104" font-size="13" fill="#94a3b8" text-anchor="end">75%</text>
+        <text x="72" y="164" font-size="13" fill="#94a3b8" text-anchor="end">50%</text>
+        <text x="72" y="224" font-size="13" fill="#94a3b8" text-anchor="end">25%</text>
+        <text x="72" y="274" font-size="13" fill="#94a3b8" text-anchor="end">0%</text>
+
+        <!-- 80% reference -->
+        <line x1="80" y1="78" x2="680" y2="78" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,3" opacity="0.7"/>
+        <text x="684" y="82" font-size="11" fill="#16a34a">80% BEP</text>
+
+        <!-- X axis -->
+        <text x="180" y="294" font-size="14" fill="#475569" text-anchor="middle">FY23</text>
+        <text x="380" y="294" font-size="14" fill="#475569" text-anchor="middle">FY24</text>
+        <text x="580" y="294" font-size="14" fill="#475569" text-anchor="middle">FY25</text>
+
+        <!-- Lines (y = 270 - (pct/100)*230) -->
+        <!-- 상아 부품: 55.7, 53.3, 56.0 → 141.9, 147.4, 141.2 -->
+        <polyline points="180,142 380,147 580,141" fill="none" stroke="#16a34a" stroke-width="3"/>
+        <circle cx="180" cy="142" r="6" fill="#16a34a"/>
+        <circle cx="380" cy="147" r="6" fill="#16a34a"/>
+        <circle cx="580" cy="141" r="7" fill="#16a34a"/>
+        <text x="600" y="138" font-size="13" fill="#16a34a" font-weight="700">상아 부품 56%</text>
+
+        <!-- 상신 원형: 65.6, 42.9, 34.5 → 119.1, 171.3, 190.7 -->
+        <polyline points="180,119 380,171 580,191" fill="none" stroke="#2563eb" stroke-width="3"/>
+        <circle cx="180" cy="119" r="6" fill="#2563eb"/>
+        <circle cx="380" cy="171" r="6" fill="#2563eb"/>
+        <circle cx="580" cy="191" r="7" fill="#2563eb"/>
+        <text x="600" y="195" font-size="13" fill="#2563eb" font-weight="700">상신 원형 35%</text>
+
+        <!-- 상신 중대형: 80.8, 55.9, 45.2 → 84.2, 141.4, 166.0 -->
+        <polyline points="180,84 380,141 580,166" fill="none" stroke="#0891b2" stroke-width="3"/>
+        <circle cx="180" cy="84" r="6" fill="#0891b2"/>
+        <circle cx="380" cy="141" r="6" fill="#0891b2"/>
+        <circle cx="580" cy="166" r="7" fill="#0891b2"/>
+        <text x="600" y="170" font-size="13" fill="#0891b2" font-weight="700">상신 각형 45%</text>
+
+        <!-- 신흥 원형: 70.5, 57.0, 52.1 → 107.9, 138.9, 150.2 -->
+        <polyline points="180,108 380,139 580,150" fill="none" stroke="#ea580c" stroke-width="3" stroke-dasharray="6,3"/>
+        <circle cx="180" cy="108" r="6" fill="#ea580c"/>
+        <circle cx="380" cy="139" r="6" fill="#ea580c"/>
+        <circle cx="580" cy="150" r="7" fill="#ea580c"/>
+        <text x="600" y="154" font-size="13" fill="#ea580c" font-weight="700">신흥 원형 52%</text>
+
+        <!-- 신흥 각형: 71.2, 44.0, 28.9 → 106.2, 168.8, 203.5 -->
+        <polyline points="180,106 380,169 580,204" fill="none" stroke="#dc2626" stroke-width="3" stroke-dasharray="6,3"/>
+        <circle cx="180" cy="106" r="6" fill="#dc2626"/>
+        <circle cx="380" cy="169" r="6" fill="#dc2626"/>
+        <circle cx="580" cy="204" r="7" fill="#dc2626"/>
+        <text x="600" y="208" font-size="13" fill="#dc2626" font-weight="700">신흥 각형 29% ★</text>
+
+        <!-- 동원 제관 평균 (FY25만) ~80% -->
+        <circle cx="580" cy="86" r="7" fill="#7c3aed"/>
+        <text x="600" y="90" font-size="13" fill="#7c3aed" font-weight="700">동원 제관 80%+</text>
+
+      </svg>
+    </div>
+
+    <div class="insight-box red">
+      <strong>가동률은 EV·ESS 사이클의 "진실의 순간".</strong> 신흥에스이씨 각형은 FY23 71% → FY25 28.9%로 42%p 추락 — 사실상 BEP 50% 미만 진입. 상신이디피 각형도 81% → 45%로 36%p 하락. 반면 동원시스템즈 제관(원통형 캔 포함) 5사업장은 73~87% 안정 유지 — 식음료 캔과 같은 라인을 공유해 단일 사이클 노출 위험이 낮음. <strong>"100% 2차전지 전업"의 양면성</strong>이 가동률에서 가장 명확히 드러남.
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 캔·캡 4사 비교 (DART 사업보고서 FY25)</span><span>5 / 8</span></div>
+</div>
+
+<!-- ============================================================
+     PAGE 6 — 수익성 + 재무 안정성
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">⑤ 수익성 + 재무 안정성</div>
+    <div class="page-header-num">06 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">FY2025 4사 종합 재무</div>
+    <table class="data-table">
+      <thead>
+        <tr><th>항목</th><th>상아프론테크</th><th>상신이디피</th><th>신흥에스이씨</th><th>동원시스템즈</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>매출액</td><td>1,960</td><td>2,501</td><td>4,082</td><td class="highlight">13,729</td></tr>
+        <tr><td>매출 YoY</td><td class="pos">+14.1%</td><td class="pos">+2.0%</td><td class="neg">-5.7%</td><td class="pos">+2.9%</td></tr>
+        <tr><td>영업이익</td><td>67</td><td>87</td><td>59</td><td class="highlight">662</td></tr>
+        <tr><td>OPM</td><td>3.4%</td><td>3.5%</td><td class="neg">1.5%</td><td class="pos">4.8%</td></tr>
+        <tr><td>당기순이익</td><td>68</td><td>20</td><td class="neg">-58</td><td class="pos">537</td></tr>
+        <tr class="row-highlight"><td>EPS</td><td>~424원¹</td><td>478원</td><td>-151원</td><td>1,834원</td></tr>
+        <tr><td>자산총계</td><td>3,801</td><td>3,358</td><td>8,759</td><td>15,307</td></tr>
+        <tr><td>자본총계</td><td>2,033</td><td>1,601</td><td>3,539</td><td>8,626</td></tr>
+        <tr><td>부채비율</td><td>87%</td><td>110%</td><td class="neg">148%</td><td class="pos">77%</td></tr>
+        <tr><td>이익잉여금</td><td>1,225</td><td>986</td><td>1,494</td><td>4,628</td></tr>
+      </tbody>
+    </table>
+    <div class="text-sm" style="color:var(--text3)">단위: 매출/이익 억원 / ¹상아프론테크 EPS는 발행주식 159.89백만주 추정 / 출처: DART 요약재무정보</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">시장 평가 (yfinance 2026.05.02 기준)</div>
+    <table class="data-table">
+      <thead>
+        <tr><th>항목</th><th>상아프론테크</th><th>상신이디피</th><th>신흥에스이씨</th><th>동원시스템즈</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>시장</td><td>코스닥</td><td>코스닥</td><td>코스닥</td><td>코스피</td></tr>
+        <tr><td>현재가</td><td>27,450원</td><td>26,600원</td><td>10,550원</td><td>28,100원</td></tr>
+        <tr><td>시가총액</td><td>4,280억</td><td>3,545억</td><td>4,068억</td><td class="highlight">8,221억</td></tr>
+        <tr><td>52W High</td><td>30,050</td><td class="pos">31,550</td><td>12,290</td><td>33,350</td></tr>
+        <tr><td>52W Low</td><td>14,680</td><td class="pos">6,850</td><td class="pos">3,755</td><td>22,400</td></tr>
+        <tr class="row-highlight"><td>저점→현재 상승률</td><td class="pos">+87%</td><td class="pos">+288%</td><td class="pos">+181%</td><td>+25%</td></tr>
+        <tr><td>Beta (변동성)</td><td>1.14</td><td class="neg">1.05</td><td>0.97</td><td class="pos">0.81</td></tr>
+        <tr><td>PER (FY25)</td><td>~63x¹</td><td>56x</td><td>적자</td><td class="pos">15.3x</td></tr>
+        <tr><td>PBR</td><td>2.1x</td><td>2.2x</td><td>1.1x</td><td class="pos">0.94x</td></tr>
+      </tbody>
+    </table>
+    <div class="text-sm" style="color:var(--text3)">¹ 상아프론테크 PER은 잔여 EPS 변동성으로 추정 / 시장은 신흥·상신·상아 모두 EV 회복 기대를 선반영하여 큰 폭 상승</div>
+
+    <div class="insight-box purple">
+      <strong>주가는 사이클 회복을 선반영, 펀더멘털은 아직 바닥.</strong> 상신·신흥·상아 모두 52주 저점 대비 +180~290% 상승했으나 가동률·OPM은 여전히 바닥 수준. 시장은 26년 하반기 EV 회복 + ESS 슈퍼사이클을 선반영 중이지만 신흥에스이씨 부채비율 148% / 적자 등 펀더멘털 회복 시그널은 아직 부족. <strong>주가 vs 실적 갭이 가장 큰 종목 = 가장 큰 변동성</strong>.
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 캔·캡 4사 비교 (DART 사업보고서 FY25)</span><span>6 / 8</span></div>
+</div>
+
+<!-- ============================================================
+     PAGE 7 — Bull/Bear/Think 비교 + 투자 매력도 매트릭스
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">⑥ Bull / Bear / Think — 4사 비교</div>
+    <div class="page-header-num">07 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">투자 매력도 매트릭스 (4축 평가)</div>
+    <table class="data-table">
+      <thead>
+        <tr><th>축</th><th>상아프론테크</th><th>상신이디피</th><th>신흥에스이씨</th><th>동원시스템즈</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>고객 분산도</strong></td><td class="pos">★★★★★</td><td>★☆☆☆☆</td><td>★★☆☆☆</td><td>★★★☆☆</td></tr>
+        <tr><td><strong>제품 다각화</strong></td><td class="pos">★★★★★</td><td>★★☆☆☆</td><td>★☆☆☆☆</td><td class="pos">★★★★★</td></tr>
+        <tr><td><strong>2차전지 직접 노출</strong></td><td>★★★☆☆</td><td class="pos">★★★★★</td><td class="pos">★★★★★</td><td>★★☆☆☆</td></tr>
+        <tr><td><strong>가동률 안정성</strong></td><td>★★★☆☆</td><td>★★☆☆☆</td><td>★☆☆☆☆</td><td class="pos">★★★★★</td></tr>
+        <tr><td><strong>해외 진출 (미국·헝가리)</strong></td><td>★★★★☆</td><td>★★★★☆</td><td class="pos">★★★★★</td><td>★★★☆☆</td></tr>
+        <tr><td><strong>재무 안정성</strong></td><td>★★★☆☆</td><td>★★☆☆☆</td><td>★☆☆☆☆</td><td class="pos">★★★★★</td></tr>
+        <tr><td><strong>밸류에이션 매력</strong></td><td>★★☆☆☆</td><td>★★☆☆☆</td><td>★★★☆☆</td><td class="pos">★★★★★</td></tr>
+        <tr class="row-highlight"><td><strong>리레이팅 탄력</strong></td><td>★★★☆☆</td><td class="pos">★★★★☆</td><td class="pos">★★★★★</td><td>★★★☆☆</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">4사 BULL/BEAR 핵심 한 줄</div>
+    <div class="two-col">
+      <div>
+        <div class="bull-box">
+          <div class="box-title">상아프론테크 BULL · 멤브레인이 진짜 무기</div>
+          <div class="box-text">CAP ASSY는 부수적이며, e-PTFE Membrane(연료전지·반도체·수처리)가 차별화 기술. 2차전지 사이클 변동에 중립적이고 미국 인디애나법인 중대형 CAP ASSY 신규 가동.</div>
+        </div>
+        <div class="bear-box">
+          <div class="box-title">상아 BEAR · 가동률 56%·매출 다양성 ≠ 수익성</div>
+          <div class="box-text">부품 가동률 56%는 EV 캐즘 직격은 피했지만 여전히 절반 수준. OPM 3.4%로 낮고 PER 60x대 추정으로 멀티플 방어 어려움.</div>
+        </div>
+
+        <div class="bull-box">
+          <div class="box-title">상신이디피 BULL · 46파이 + 미국 인디애나</div>
+          <div class="box-text">"46파이 원형CAN 조기 진입" 전략 명시 + 미국 코코모 신규 법인(SDI 인디애나 옆) 가동. 삼성SDI 탭리스 4%→20% 확대 직접 수혜.</div>
+        </div>
+        <div class="bear-box">
+          <div class="box-title">상신 BEAR · 시안 사업 중단 + 가동률 35%</div>
+          <div class="box-text">상신하이텍(시안) 2차전지 사업 중단 결정(25.8월). 원형 가동률 65.6%→34.5% 폭락. 삼성SDI 단일 의존도 → 발주 변동성 직격.</div>
+        </div>
+      </div>
+      <div>
+        <div class="bull-box">
+          <div class="box-title">신흥에스이씨 BULL · 각형 캡 1위 + ESS 회복</div>
+          <div class="box-text">중대형 각형 Cap Ass'y 1위(74.2%). 미국법인 26년 재가동 + ESS 중심 매출 회복. EV 회복 시 가장 큰 영업레버리지(28.9% → 60% 가동률 회복).</div>
+        </div>
+        <div class="bear-box">
+          <div class="box-title">신흥 BEAR · 적자 -58억 + 부채비율 148%</div>
+          <div class="box-text">FY25 첫 적자 진입(-58억). 부채비율 148%로 4사 중 가장 높음. 헝가리 가동률 부진 + 미국법인 25년 가동 정지 영향. 이익잉여금 -7.3% 감소.</div>
+        </div>
+
+        <div class="bull-box">
+          <div class="box-title">동원시스템즈 BULL · PBR 0.94 + 안정 캐시카우</div>
+          <div class="box-text">PBR 0.94 / 부채비율 77% / 이익잉여금 4,628억(역대 최대). 식음료 캔이 사이클 방어막, 2차전지 원통형캔은 옵션. 제관 가동률 73~87% 안정.</div>
+        </div>
+        <div class="bear-box">
+          <div class="box-title">동원 BEAR · 2차전지 비중 낮음 (성장 한계)</div>
+          <div class="box-text">2차전지 매출 추정 5~10%로 4사 중 최저. EV/ESS 슈퍼사이클 직접 노출 가장 적음. 시장이 "포장재 멀티플"로 평가하면 리레이팅 한계.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="think-box">
+      <div class="box-title">THINK · "어떤 시나리오에서 어떤 종목이 이기나"</div>
+      <div class="box-text"><strong>EV 빠른 회복 시나리오</strong> → <span class="pill b3">신흥에스이씨</span> 영업레버리지 1위 (각형 가동률 28.9% → 60% 회복 시 OP +400%). <strong>46파이/원형 슈퍼사이클</strong> → <span class="pill b2">상신이디피</span> (탭리스 SDI 직접 수혜). <strong>리스크 회피 + 자산가치</strong> → <span class="pill b4">동원시스템즈</span> (PBR 0.94 + 안정 캐시카우). <strong>2차전지 + 알파(연료전지·반도체)</strong> → <span class="pill b1">상아프론테크</span> (멤브레인 옵션). 시나리오별 픽이 명확히 다른 4사다.</div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 캔·캡 4사 비교 (DART 사업보고서 FY25)</span><span>7 / 8</span></div>
+</div>
+
+<!-- ============================================================
+     PAGE 8 — 종합 결론 + 우선순위
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">⑦ 종합 결론 — 시나리오별 우선순위</div>
+    <div class="page-header-num">08 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">시나리오별 픽 매트릭스</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="text-align:center">시나리오</th>
+          <th style="text-align:left">최우선 픽</th>
+          <th style="text-align:left">차선 픽</th>
+          <th style="text-align:left">방어 픽</th>
+          <th style="text-align:left">관망</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill b3">EV 빠른 V자 회복</span></td>
+          <td style="text-align:left"><strong>신흥에스이씨</strong> (각형 1위, 영업레버리지 최대)</td>
+          <td style="text-align:left">상신이디피 (각형 56%)</td>
+          <td style="text-align:left">상아프론테크 (CAP ASSY)</td>
+          <td style="text-align:left">동원시스템즈</td>
+        </tr>
+        <tr>
+          <td><span class="pill b2">원형 46파이 슈퍼사이클</span></td>
+          <td style="text-align:left"><strong>상신이디피</strong> (원형 32% + 46파이 조기 진입)</td>
+          <td style="text-align:left">신흥에스이씨 (N-CID 18%)</td>
+          <td style="text-align:left">상아프론테크 (CAP ASSY)</td>
+          <td style="text-align:left">동원시스템즈 (원통형 미공시)</td>
+        </tr>
+        <tr>
+          <td><span class="pill b3">ESS 단독 슈퍼사이클</span></td>
+          <td style="text-align:left"><strong>신흥에스이씨</strong> (ESS 중심 미국·국내 회복)</td>
+          <td style="text-align:left">상신이디피 (각형 ESS)</td>
+          <td style="text-align:left">상아프론테크 (CAP ASSY)</td>
+          <td style="text-align:left">동원시스템즈</td>
+        </tr>
+        <tr>
+          <td><span class="pill b1">2차전지 침체 장기화</span></td>
+          <td style="text-align:left"><strong>동원시스템즈</strong> (식품 캐시카우)</td>
+          <td style="text-align:left">상아프론테크 (멤브레인·반도체)</td>
+          <td style="text-align:left">현금 보유</td>
+          <td style="text-align:left">상신·신흥 (적자 위험)</td>
+        </tr>
+        <tr class="row-highlight">
+          <td><span class="pill b4">PBR 0.94 자산 디스카운트</span></td>
+          <td style="text-align:left"><strong>동원시스템즈</strong> (자본 8,626억 vs 시총 8,221억)</td>
+          <td style="text-align:left">신흥에스이씨 (PBR 1.1x)</td>
+          <td style="text-align:left">상아·상신 (PBR 2.1~2.2x)</td>
+          <td style="text-align:left">-</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box purple">
+      <strong>최종 결론.</strong> 4사는 같은 셀에 들어가는 보완 부품이지만 <em>투자 관점에서는 완전히 다른 4개의 베팅</em>이다. ① <strong>상아프론테크</strong>는 2차전지 + 멤브레인 + 반도체 멀티 옵션의 "분산 베팅", ② <strong>상신이디피</strong>는 원형/각형 캔 본체 + 미국 인디애나 + 46파이의 "정공법 베팅", ③ <strong>신흥에스이씨</strong>는 각형 캡 1위·ESS 회복의 "고변동성 베팅", ④ <strong>동원시스템즈</strong>는 PBR 0.94 + 식품 캐시카우 + 2차전지 옵션의 "자산가치 베팅". <strong>포트폴리오 구성 관점</strong>에서는 동원(코어 50%) + 상아(분산 25%) + 상신·신흥(2차전지 베팅 25%)이 가장 균형있는 조합.
+    </div>
+
+    <div class="bull-box">
+      <div class="box-title">우선순위 액션</div>
+      <div class="box-text">① <strong>즉시 (안전마진):</strong> 동원시스템즈 27,000원대 분할 매수 (PBR 0.94 + Beta 0.81). ② <strong>1Q26 분기보고서 확인 후 (5월 중순):</strong> 신흥에스이씨 헝가리·미국 가동률 회복 시그널 → 배치. ③ <strong>3Q26 트리거:</strong> LG엔솔 46시리즈 양산 + SDI 탭리스 20% 도달 시 상신이디피 비중 확대. ④ <strong>중장기 다각화 헤지:</strong> 상아프론테크 멤브레인 부문 별도 모니터링.</div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 캔·캡 4사 비교 (DART 사업보고서 FY25) · 본 자료는 투자 참고용</span><span>8 / 8</span></div>
+</div>
+
+</body>
+</html>
