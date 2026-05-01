@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+<title>2차전지 1Q26 컨콜 종합 — 산업 인사이트 &amp; 수혜 밸류체인</title>
+<style>
+  :root{
+    --bg:#fff; --bg2:#fff; --bg3:#f1f5f9; --bg4:#e2e8f0;
+    --border:#e2e8f0; --text:#1e293b; --text2:#475569; --text3:#94a3b8;
+    --blue:#2563eb; --green:#16a34a; --red:#dc2626; --orange:#ea580c;
+    --purple:#7c3aed; --amber:#d97706; --cyan:#0891b2; --teal:#0d9488;
+    --c-darkest:#0c1445; --c-dark:#1e3a8a; --c-mid:#2563eb; --c-light:#93c5fd;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  @page{size:A4;margin:0}
+  body{
+    background:#e2e8f0;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;
+    color:var(--text); line-height:1.6;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .page{
+    width:210mm; min-height:297mm; max-height:297mm;
+    overflow:hidden; margin:0 auto 16px;
+    background:#fff; position:relative;
+    page-break-after:always;
+    padding:12mm 14mm;
+  }
+  .cover{
+    width:210mm; min-height:297mm; max-height:297mm;
+    overflow:hidden; margin:0 auto 16px;
+    background:linear-gradient(160deg,#0c1445 0%,#1e3a8a 35%,#2563eb 70%,#93c5fd 100%);
+    position:relative; page-break-after:always;
+    display:flex; flex-direction:column; justify-content:space-between;
+    padding:24mm 18mm; color:#fff;
+  }
+  .cover-top{display:flex;justify-content:space-between;align-items:flex-start}
+  .cover-badge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:24px;padding:10px 24px;color:#fff;font-size:22px;font-weight:600;letter-spacing:1px}
+  .cover-date{color:rgba(255,255,255,.8);font-size:22px;font-weight:500}
+  .cover-main{flex:1;display:flex;flex-direction:column;justify-content:center;gap:24px}
+  .cover-sub{color:rgba(255,255,255,.7);font-size:24px;font-weight:500;letter-spacing:6px;text-transform:uppercase}
+  .cover-title{color:#fff;font-size:64px;font-weight:900;line-height:1.15;letter-spacing:-1.5px}
+  .cover-desc{color:rgba(255,255,255,.88);font-size:24px;line-height:1.7;max-width:170mm;margin-top:12px}
+  .cover-stats{display:flex;gap:30px;margin-top:32px;flex-wrap:wrap}
+  .cover-stat-value{color:#bfdbfe;font-size:42px;font-weight:800}
+  .cover-stat-label{color:rgba(255,255,255,.7);font-size:18px;font-weight:500}
+  .cover-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+  .cover-disclaimer{color:rgba(255,255,255,.55);font-size:15px;max-width:120mm;line-height:1.6}
+  .cover-tags{display:flex;gap:10px;flex-wrap:wrap}
+  .cover-tag{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:18px;padding:8px 18px;color:rgba(255,255,255,.85);font-size:18px}
+
+  .page-header{background:linear-gradient(90deg,#0c1445 0%,#1e3a8a 60%,#2563eb 100%);padding:13px 22px;display:flex;justify-content:space-between;align-items:center;border-radius:8px;margin-bottom:12px;color:#fff}
+  .page-header-title{font-size:26px;font-weight:700}
+  .page-header-num{font-size:20px;color:rgba(255,255,255,.75)}
+
+  .section{margin-bottom:14px}
+  .section-title{font-size:30px;font-weight:700;color:var(--text);margin-bottom:12px;padding-bottom:6px;border-bottom:3px solid var(--blue)}
+  .section-sub{font-size:22px;font-weight:600;color:var(--text2);margin:12px 0 6px}
+  .text{font-size:18px;color:var(--text2);line-height:1.7;margin-bottom:8px}
+  .text-sm{font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:6px}
+
+  .kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px}
+  .kpi-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center}
+  .kpi-label{font-size:14px;color:var(--text3);font-weight:600;margin-bottom:3px}
+  .kpi-value{font-size:24px;font-weight:800;color:var(--text)}
+  .kpi-sub{font-size:13px;color:var(--text2);margin-top:2px}
+
+  .data-table{width:100%;border-collapse:collapse;font-size:16px;margin:8px 0}
+  .data-table th{background:var(--bg3);color:var(--text2);font-weight:700;padding:10px 8px;text-align:right;border:1px solid var(--border)}
+  .data-table th:first-child{text-align:center}
+  .data-table td{padding:10px 8px;text-align:right;border:1px solid var(--border);color:var(--text)}
+  .data-table td:first-child{text-align:center;font-weight:600;color:var(--text2)}
+  .data-table tr:nth-child(even){background:var(--bg3)}
+  .data-table td.pos{color:var(--green);font-weight:700}
+  .data-table td.neg{color:var(--red);font-weight:700}
+  .data-table td.highlight{background:rgba(37,99,235,.08);font-weight:700}
+  .data-table .row-highlight td{background:rgba(37,99,235,.1)!important;font-weight:700;color:var(--blue)}
+
+  .chart-container{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 12px 10px;margin:8px 0}
+  .chart-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:3px}
+  .chart-subtitle{font-size:16px;color:var(--text3);margin-bottom:10px}
+  .chart-svg{width:100%;height:auto;display:block;max-width:100%}
+  .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:8px}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:16px;color:var(--text2)}
+  .legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+  .legend-line{width:18px;height:3px;flex-shrink:0}
+
+  .insight-box{background:var(--bg3);border-left:5px solid var(--blue);border-radius:0 10px 10px 0;padding:12px 16px;margin:8px 0;font-size:18px;color:var(--text2);line-height:1.7}
+  .insight-box strong{color:var(--text)}
+  .insight-box.good{border-left-color:var(--green);background:#f0fdf4}
+  .insight-box.warn{border-left-color:var(--orange);background:#fff7ed}
+  .insight-box.red{border-left-color:var(--red);background:#fef2f2}
+  .insight-box.purple{border-left-color:var(--purple);background:#faf5ff}
+
+  .bull-box{background:#f0fdf4;border-left:5px solid var(--green);border-radius:0 10px 10px 0;padding:10px 14px;margin:6px 0}
+  .bull-box .box-title{font-size:18px;font-weight:700;color:var(--green);margin-bottom:3px}
+  .bull-box .box-text{font-size:16px;color:#166534;line-height:1.6}
+  .bear-box{background:#fef2f2;border-left:5px solid var(--red);border-radius:0 10px 10px 0;padding:10px 14px;margin:6px 0}
+  .bear-box .box-title{font-size:18px;font-weight:700;color:var(--red);margin-bottom:3px}
+  .bear-box .box-text{font-size:16px;color:#991b1b;line-height:1.6}
+  .think-box{background:#eff6ff;border-left:5px solid var(--blue);border-radius:0 10px 10px 0;padding:10px 14px;margin:6px 0}
+  .think-box .box-title{font-size:18px;font-weight:700;color:var(--blue);margin-bottom:3px}
+  .think-box .box-text{font-size:16px;color:#1e3a5f;line-height:1.6}
+
+  .vc-flow{display:flex;align-items:center;gap:6px;margin:8px 0;flex-wrap:wrap}
+  .vc-node{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;padding:8px 14px;border-radius:8px;font-size:16px;font-weight:600;text-align:center;min-width:90px}
+  .vc-node.lite{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
+  .vc-node.warn{background:linear-gradient(135deg,#ea580c,#fb923c)}
+  .vc-arrow{color:#475569;font-size:20px;font-weight:700}
+
+  .scenario-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
+  .scenario-card{border-radius:12px;padding:14px 16px;border:2px solid var(--border)}
+  .scenario-card.bull{background:#f0fdf4;border-color:#bbf7d0}
+  .scenario-card.base{background:var(--bg3);border-color:#cbd5e1}
+  .scenario-card.bear{background:#fef2f2;border-color:#fecaca}
+  .scenario-card-title{font-size:20px;font-weight:700;margin-bottom:6px}
+  .scenario-card.bull .scenario-card-title{color:var(--green)}
+  .scenario-card.base .scenario-card-title{color:var(--text2)}
+  .scenario-card.bear .scenario-card-title{color:var(--red)}
+  .scenario-card-price{font-size:30px;font-weight:800;margin-bottom:6px}
+  .scenario-card-prob{font-size:16px;color:var(--text2);margin-bottom:6px;font-weight:600}
+  .scenario-card-text{font-size:16px;color:var(--text);line-height:1.5}
+
+  .checklist-item{display:flex;align-items:flex-start;gap:10px;padding:5px 0;font-size:18px;color:var(--text)}
+  .checklist-icon{font-size:20px;flex-shrink:0;font-weight:700}
+  .checklist-icon.pass{color:var(--green)}
+  .checklist-icon.fail{color:var(--red)}
+  .checklist-icon.neutral{color:var(--orange)}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:6px 0}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:6px 0}
+
+  .page-footer{position:absolute;bottom:8mm;left:14mm;right:14mm;display:flex;justify-content:space-between;font-size:13px;color:var(--text3)}
+
+  .pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:13px;font-weight:700;margin-right:4px}
+  .pill.blue{background:rgba(37,99,235,.12);color:var(--blue)}
+  .pill.green{background:rgba(22,163,74,.12);color:var(--green)}
+  .pill.purple{background:rgba(124,58,237,.12);color:var(--purple)}
+  .pill.orange{background:rgba(234,88,12,.12);color:var(--orange)}
+  .pill.red{background:rgba(220,38,38,.12);color:var(--red)}
+
+  @media screen and (max-width:1024px){
+    .page,.cover{width:100vw;min-height:auto;max-height:none;overflow:visible;padding:5vw 5vw}
+    .cover-title{font-size:44px}
+    .kpi-row{grid-template-columns:repeat(3,1fr)}
+    .scenario-row,.chart-row,.two-col,.three-col{grid-template-columns:1fr}
+  }
+  @media print{
+    body{background:#fff}
+    .page,.cover{margin:0;box-shadow:none}
+    .page-header,.cover{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     PAGE 1 — COVER
+     ============================================================ -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-badge">SECTOR DEEP DIVE · 1Q26 EARNINGS</div>
+    <div class="cover-date">2026.05.02</div>
+  </div>
+  <div class="cover-main">
+    <div class="cover-sub">2nd Battery · Value Chain Insights</div>
+    <div class="cover-title">2차전지 1Q26<br>슈퍼사이클의 분기점</div>
+    <div class="cover-desc">LG엔솔·삼성SDI·에코프로비엠·에코프로·포스코퓨처엠·엘앤에프 6개사 1Q26 컨퍼런스콜 종합. EV 둔화 → ESS·DC BBU·46시리즈·전고체로 수요 축이 이동하며 비중국 공급망 재편이 가속화되는 구조 변화의 분기점 분석. 수혜 밸류체인 우선순위와 시나리오별 투자 가이드 제시.</div>
+    <div class="cover-stats">
+      <div><div class="cover-stat-value">6社</div><div class="cover-stat-label">컨콜 종합</div></div>
+      <div><div class="cover-stat-value">+106%</div><div class="cover-stat-label">엘앤에프 매출 YoY</div></div>
+      <div><div class="cover-stat-value">440GW</div><div class="cover-stat-label">LG엔솔 46시리즈 잔고</div></div>
+      <div><div class="cover-stat-value">50GW+</div><div class="cover-stat-label">북미 ESS 캐파 목표</div></div>
+    </div>
+  </div>
+  <div class="cover-bottom">
+    <div class="cover-disclaimer">본 자료는 미래에셋 김철중 애널리스트 컨콜 노트(@cjdbj) 등 공개 자료를 종합·재구성한 투자 참고용 자료이며, 특정 종목의 매수·매도를 권유하지 않습니다. 최종 투자 판단의 책임은 투자자 본인에게 있습니다.</div>
+    <div class="cover-tags">
+      <div class="cover-tag">ESS 슈퍼사이클</div>
+      <div class="cover-tag">46시리즈</div>
+      <div class="cover-tag">LFP·LMR</div>
+      <div class="cover-tag">전고체</div>
+      <div class="cover-tag">Non-PFE</div>
+      <div class="cover-tag">DC BBU</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE 2 — 1Q26 6사 실적 한눈에
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">① 1Q26 실적 종합 — 6사 한눈에</div>
+    <div class="page-header-num">02 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">실적 KPI (1Q26)</div>
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">LG엔솔</div>
+        <div class="kpi-value" style="color:var(--red)">-2,078</div>
+        <div class="kpi-sub">매출 6.55조 / OPM -3.2%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">삼성SDI</div>
+        <div class="kpi-value" style="color:var(--red)">-1,556</div>
+        <div class="kpi-sub">매출 3.58조 / +12.6% YoY</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">에코프로비엠</div>
+        <div class="kpi-value" style="color:var(--green)">+209</div>
+        <div class="kpi-sub">매출 6,054억 / 흑자전환</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">에코프로</div>
+        <div class="kpi-value" style="color:var(--green)">+602</div>
+        <div class="kpi-sub">매출 8,220억 / +29% QoQ</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">포스코퓨처엠</div>
+        <div class="kpi-value" style="color:var(--green)">+177</div>
+        <div class="kpi-sub">매출 7,575억 / 흑자전환</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">엘앤에프</div>
+        <div class="kpi-value" style="color:var(--green)">+1,173</div>
+        <div class="kpi-sub">매출 7,396억 / +103% YoY</div>
+      </div>
+    </div>
+    <div class="text-sm" style="text-align:center;color:var(--text3)">단위: 영업이익(억원). 셀 메이커는 적자 지속, 양극재 4사는 흑자 전환·이익 폭증 → 가치사슬 내 이익 분배 변화</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">매출 성장률 비교 (YoY)</div>
+    <div class="chart-container">
+      <div class="chart-title">1Q26 매출 YoY 성장률 — 양극재 vs 셀</div>
+      <div class="chart-subtitle">셀 메이커는 EV 둔화로 정체, 양극재는 ASP·물량 동시 회복</div>
+      <svg class="chart-svg" viewBox="0 0 720 280">
+        <!-- Grid -->
+        <line x1="120" y1="40"  x2="680" y2="40"  stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="120" y1="90"  x2="680" y2="90"  stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="120" y1="140" x2="680" y2="140" stroke="#475569" stroke-width="1.2"/>
+        <line x1="120" y1="190" x2="680" y2="190" stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="120" y1="240" x2="680" y2="240" stroke="#e2e8f0" stroke-width="0.5"/>
+        <text x="112" y="44" font-size="14" fill="#94a3b8" text-anchor="end">+120%</text>
+        <text x="112" y="94" font-size="14" fill="#94a3b8" text-anchor="end">+60%</text>
+        <text x="112" y="144" font-size="14" fill="#475569" text-anchor="end" font-weight="700">0%</text>
+        <text x="112" y="194" font-size="14" fill="#94a3b8" text-anchor="end">-30%</text>
+        <text x="112" y="244" font-size="14" fill="#94a3b8" text-anchor="end">-60%</text>
+
+        <!-- Bars: y=140 baseline; +103% L&F, +12.6% SDI, -2.5% LGES, -3.9% BM, -10.4% PSCFM, +15% ECO -->
+        <!-- scale: 50 px = 60% (so 1% = 0.833 px), positive up, negative down -->
+        <!-- LG엔솔 -2.5% → y=140+2.08=142, h=2 (negative) -->
+        <rect x="170" y="140" width="60" height="2" fill="#dc2626"/>
+        <text x="200" y="158" font-size="14" fill="#dc2626" text-anchor="middle" font-weight="700">-2.5%</text>
+        <text x="200" y="262" font-size="15" fill="#475569" text-anchor="middle" font-weight="600">LG엔솔</text>
+
+        <!-- SDI +12.6% → y=140-10.5=129.5, h=10.5 -->
+        <rect x="245" y="130" width="60" height="10" fill="#16a34a"/>
+        <text x="275" y="124" font-size="14" fill="#16a34a" text-anchor="middle" font-weight="700">+12.6%</text>
+        <text x="275" y="262" font-size="15" fill="#475569" text-anchor="middle" font-weight="600">삼성SDI</text>
+
+        <!-- 에코프로비엠 -3.9% → y=140, h=3.25 negative -->
+        <rect x="320" y="140" width="60" height="3" fill="#dc2626"/>
+        <text x="350" y="158" font-size="14" fill="#dc2626" text-anchor="middle" font-weight="700">-3.9%</text>
+        <text x="350" y="262" font-size="15" fill="#475569" text-anchor="middle" font-weight="600">에코프로BM</text>
+
+        <!-- 에코프로 +15% (QoQ로 표기, 보수치) → y=140-12.5=127.5, h=12.5 -->
+        <rect x="395" y="127" width="60" height="13" fill="#16a34a"/>
+        <text x="425" y="121" font-size="14" fill="#16a34a" text-anchor="middle" font-weight="700">+15.0%</text>
+        <text x="425" y="262" font-size="15" fill="#475569" text-anchor="middle" font-weight="600">에코프로</text>
+
+        <!-- 포스코퓨처엠 -10.4% → y=140, h=8.7 negative -->
+        <rect x="470" y="140" width="60" height="9" fill="#dc2626"/>
+        <text x="500" y="158" font-size="14" fill="#dc2626" text-anchor="middle" font-weight="700">-10.4%</text>
+        <text x="500" y="262" font-size="15" fill="#475569" text-anchor="middle" font-weight="600">포스코퓨처엠</text>
+
+        <!-- 엘앤에프 +102.8% → y=140-85.7=54.3, h=85.7 -->
+        <rect x="545" y="54" width="60" height="86" fill="#16a34a"/>
+        <text x="575" y="48" font-size="16" fill="#16a34a" text-anchor="middle" font-weight="800">+102.8%</text>
+        <text x="575" y="262" font-size="15" fill="#475569" text-anchor="middle" font-weight="700">엘앤에프</text>
+
+        <text x="400" y="20" font-size="14" fill="#94a3b8" text-anchor="middle" font-style="italic">↑ 양극재 회복 / 셀 정체 ↓</text>
+      </svg>
+    </div>
+
+    <div class="insight-box purple">
+      <strong>가치사슬 내 이익 분배의 명확한 시그널.</strong> 셀 메이커(LG엔솔·SDI)는 북미 ESS 램프업 비용·EV 부진 직격으로 적자가 지속된 반면, 양극재 4사는 모두 흑자 전환했고 특히 엘앤에프(+103% YoY, OPM 15.9%)·에코프로비엠(영업이익 +823% YoY)이 압도적 회복세. <strong>1차적 사고</strong>는 "양극재가 셀보다 좋다"지만, <strong>2차적 사고</strong>로 보면 셀의 적자는 미래 캐파(ESS 50GW)에 대한 선제 투자성 비용이고 양극재의 흑자는 메탈가 상승·환율 효과·재고평가 환입의 일회성 호재가 결합된 것 — 양쪽 모두 <em>4Q26~1Q27 동시 정상화</em> 시나리오가 가장 유력.
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 1Q26 컨콜 종합</span><span>2 / 8</span></div>
+</div>
+
+<!-- ============================================================
+     PAGE 3 — ESS 슈퍼사이클: 북미 캐파 경쟁
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">② ESS 슈퍼사이클 — 북미 캐파 경쟁</div>
+    <div class="page-header-num">03 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">북미 ESS 시장 성장 (CAGR 12% / DC향 30%)</div>
+    <div class="chart-container">
+      <div class="chart-title">미국 ESS 수요 전망 — 25년 90GW → 30년 160GW</div>
+      <div class="chart-subtitle">전체 ESS CAGR 12% / 데이터센터向 ESS는 CAGR 30%로 별도 급성장 (출처: SDI 컨콜)</div>
+      <svg class="chart-svg" viewBox="0 0 720 280">
+        <!-- Grid -->
+        <line x1="80"  y1="40"  x2="680" y2="40"  stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80"  y1="100" x2="680" y2="100" stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80"  y1="160" x2="680" y2="160" stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80"  y1="220" x2="680" y2="220" stroke="#475569" stroke-width="1"/>
+        <text x="72" y="44"  font-size="14" fill="#94a3b8" text-anchor="end">200GW</text>
+        <text x="72" y="104" font-size="14" fill="#94a3b8" text-anchor="end">150GW</text>
+        <text x="72" y="164" font-size="14" fill="#94a3b8" text-anchor="end">100GW</text>
+        <text x="72" y="224" font-size="14" fill="#94a3b8" text-anchor="end">0GW</text>
+
+        <!-- Total ESS bars: 25=90, 26=105, 27=120, 28=135, 29=148, 30=160 -->
+        <!-- y_top = 220 - (val/200)*180 -->
+        <!-- 90→139, 105→125.5, 120→112, 135→98.5, 148→86.8, 160→76 -->
+        <rect x="120" y="139" width="60" height="81" fill="#2563eb" opacity="0.85" rx="4"/>
+        <text x="150" y="132" font-size="14" fill="#2563eb" text-anchor="middle" font-weight="700">90</text>
+        <rect x="210" y="125" width="60" height="95" fill="#2563eb" opacity="0.85" rx="4"/>
+        <text x="240" y="118" font-size="14" fill="#2563eb" text-anchor="middle" font-weight="700">105</text>
+        <rect x="300" y="112" width="60" height="108" fill="#2563eb" opacity="0.85" rx="4"/>
+        <text x="330" y="105" font-size="14" fill="#2563eb" text-anchor="middle" font-weight="700">120</text>
+        <rect x="390" y="98" width="60" height="122" fill="#2563eb" opacity="0.85" rx="4"/>
+        <text x="420" y="91" font-size="14" fill="#2563eb" text-anchor="middle" font-weight="700">135</text>
+        <rect x="480" y="87" width="60" height="133" fill="#2563eb" opacity="0.85" rx="4"/>
+        <text x="510" y="80" font-size="14" fill="#2563eb" text-anchor="middle" font-weight="700">148</text>
+        <rect x="570" y="76" width="60" height="144" fill="#2563eb" rx="4"/>
+        <text x="600" y="69" font-size="16" fill="#1e3a8a" text-anchor="middle" font-weight="800">160</text>
+
+        <!-- DC ESS overlaid bars (smaller): 9, 13, 18, 25, 32, 40 -->
+        <!-- 9→212, 13→208, 18→203.8, 25→197.5, 32→191.2, 40→184 -->
+        <rect x="135" y="212" width="30" height="8" fill="#7c3aed" rx="2"/>
+        <text x="150" y="207" font-size="12" fill="#7c3aed" text-anchor="middle" font-weight="600">9</text>
+        <rect x="225" y="208" width="30" height="12" fill="#7c3aed" rx="2"/>
+        <text x="240" y="203" font-size="12" fill="#7c3aed" text-anchor="middle" font-weight="600">13</text>
+        <rect x="315" y="204" width="30" height="16" fill="#7c3aed" rx="2"/>
+        <text x="330" y="199" font-size="12" fill="#7c3aed" text-anchor="middle" font-weight="600">18</text>
+        <rect x="405" y="198" width="30" height="22" fill="#7c3aed" rx="2"/>
+        <text x="420" y="193" font-size="12" fill="#7c3aed" text-anchor="middle" font-weight="600">25</text>
+        <rect x="495" y="191" width="30" height="29" fill="#7c3aed" rx="2"/>
+        <text x="510" y="186" font-size="12" fill="#7c3aed" text-anchor="middle" font-weight="600">32</text>
+        <rect x="585" y="184" width="30" height="36" fill="#7c3aed" rx="2"/>
+        <text x="600" y="179" font-size="13" fill="#7c3aed" text-anchor="middle" font-weight="700">40</text>
+
+        <!-- X labels -->
+        <text x="150" y="244" font-size="15" fill="#475569" text-anchor="middle">25E</text>
+        <text x="240" y="244" font-size="15" fill="#475569" text-anchor="middle">26E</text>
+        <text x="330" y="244" font-size="15" fill="#475569" text-anchor="middle">27E</text>
+        <text x="420" y="244" font-size="15" fill="#475569" text-anchor="middle">28E</text>
+        <text x="510" y="244" font-size="15" fill="#475569" text-anchor="middle">29E</text>
+        <text x="600" y="244" font-size="15" fill="#475569" text-anchor="middle">30E</text>
+      </svg>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#2563eb"></div>전체 ESS (CAGR 12%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#7c3aed"></div>데이터센터向 ESS (CAGR 30%)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">한국 셀 3사 북미 ESS 캐파 레이스</div>
+    <table class="data-table">
+      <thead><tr><th>구분</th><th>현재 ESS 매출 비중</th><th>26년 말 비중 목표</th><th>북미 캐파 목표</th><th>핵심 거점</th></tr></thead>
+      <tbody>
+        <tr class="row-highlight"><td>LG엔솔</td><td>20% 중반</td><td class="pos">30%+</td><td>50GW 이상</td><td>미시간 홀랜드/랜싱·온타리오·혼다·GM 2기·테네시 ESS 전환</td></tr>
+        <tr><td>삼성SDI</td><td>~15%</td><td>20%+</td><td>NDA</td><td>인디애나 SK JV·자체 ESS 양산 라인</td></tr>
+        <tr><td>SK온</td><td>10% 미만</td><td>15%</td><td>NDA</td><td>EV 라인 부분 ESS 전환 검토</td></tr>
+      </tbody>
+    </table>
+
+    <div class="bull-box">
+      <div class="box-title">BULL · LG엔솔 ESS 비중 30%+ 진입 시 적자 탈출</div>
+      <div class="box-text">현재 EV 적자를 ESS 수익이 상쇄하는 구조 변화. 28년 출시 LFP 차세대 ESS는 에너지밀도 +10% / Landed Cost -15% 개선으로 가격경쟁력 확보. 북미 50GW 캐파 가동률 70% 가정 시 연간 ESS 매출 8조원+ 가능 (현재 사업부 3조원 수준).</div>
+    </div>
+    <div class="bear-box">
+      <div class="box-title">BEAR · ESS 초기 램프업 비용 부담 지속</div>
+      <div class="box-text">테네시 EV→ESS 전환 등 신규 라인 가동 초기 고정비·관세·메탈가 상승이 마진을 1~2분기 더 압박. 가동률 안정화 전까지 ESS 비중 확대=이익 확대 등식 성립 안함. 분기 흑자전환은 빨라야 3Q26.</div>
+    </div>
+    <div class="think-box">
+      <div class="box-title">THINK · 공급과잉 우려는 시기상조</div>
+      <div class="box-text"><strong>1차적 사고</strong> — 모두 ESS로 몰리니 27~28년 공급과잉. <strong>2차적 사고</strong> — 중국 업체는 OBBBA·관세·IRA로 미국 진입 사실상 봉쇄. 비중국 현지 생산능력은 한국 3사+테슬라 메가팩 외 없음. AI 데이터센터 마이크로그리드용 ESS는 통계 외(비공식 PPA 직거래) 수요로 30년까지 만성 공급부족 가능성.</div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 1Q26 컨콜 종합</span><span>3 / 8</span></div>
+</div>
+
+<!-- ============================================================
+     PAGE 4 — 46시리즈 / 원통형 / DC BBU
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">③ 46시리즈 · 원통형 · 데이터센터 BBU</div>
+    <div class="page-header-num">04 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">LG엔솔 46시리즈 수주잔고 폭증</div>
+    <div class="chart-container">
+      <div class="chart-title">46시리즈 수주잔고 추이 (단위: GWh)</div>
+      <div class="chart-subtitle">25년말 300GW → 26년 4월말 440GW (4개월 +47%) — 유럽 OEM 프리미엄 모델향 대규모 수주 확보</div>
+      <svg class="chart-svg" viewBox="0 0 720 240">
+        <line x1="80" y1="40" x2="680" y2="40" stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80" y1="100" x2="680" y2="100" stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80" y1="160" x2="680" y2="160" stroke="#e2e8f0" stroke-width="0.5"/>
+        <line x1="80" y1="200" x2="680" y2="200" stroke="#475569" stroke-width="1"/>
+        <text x="72" y="44" font-size="14" fill="#94a3b8" text-anchor="end">500</text>
+        <text x="72" y="104" font-size="14" fill="#94a3b8" text-anchor="end">300</text>
+        <text x="72" y="164" font-size="14" fill="#94a3b8" text-anchor="end">100</text>
+        <text x="72" y="204" font-size="14" fill="#94a3b8" text-anchor="end">0</text>
+
+        <!-- Stages: 24말=80, 25중=170, 25말=300, 26.4=440 -->
+        <!-- y = 200 - (val/500)*160 -->
+        <!-- 80→174.4 h=25.6, 170→145.6 h=54.4, 300→104 h=96, 440→59.2 h=140.8 -->
+        <rect x="150" y="174" width="80" height="26" fill="#93c5fd" rx="4"/>
+        <text x="190" y="167" font-size="15" fill="#1e3a8a" text-anchor="middle" font-weight="700">80</text>
+        <rect x="270" y="146" width="80" height="54" fill="#60a5fa" rx="4"/>
+        <text x="310" y="139" font-size="15" fill="#1e3a8a" text-anchor="middle" font-weight="700">170</text>
+        <rect x="390" y="104" width="80" height="96" fill="#3b82f6" rx="4"/>
+        <text x="430" y="97" font-size="15" fill="#1e3a8a" text-anchor="middle" font-weight="700">300</text>
+        <rect x="510" y="59" width="80" height="141" fill="#1e3a8a" rx="4"/>
+        <text x="550" y="52" font-size="18" fill="#1e3a8a" text-anchor="middle" font-weight="800">440</text>
+
+        <!-- Growth arrow 25말→26.4 -->
+        <path d="M470 100 Q500 60 525 60" stroke="#16a34a" stroke-width="2.5" fill="none"/>
+        <polygon points="525,55 535,60 525,65" fill="#16a34a"/>
+        <text x="510" y="40" font-size="14" fill="#16a34a" text-anchor="middle" font-weight="700">+47% (4M)</text>
+
+        <text x="190" y="222" font-size="15" fill="#475569" text-anchor="middle">24년말</text>
+        <text x="310" y="222" font-size="15" fill="#475569" text-anchor="middle">25년중</text>
+        <text x="430" y="222" font-size="15" fill="#475569" text-anchor="middle">25년말</text>
+        <text x="550" y="222" font-size="15" fill="#475569" text-anchor="middle">26.4월말</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">데이터센터 BBU — 새 핵심 성장 축</div>
+    <div class="two-col">
+      <div>
+        <div class="bull-box">
+          <div class="box-title">BBU 시장 ’26년 8억$ (+70% YoY)</div>
+          <div class="box-text">클라우드 인프라 투자 확대로 BBU 시장 폭발. 삼성SDI는 1Q26 BBU 큰 폭 성장, 연간 시장 성장세 상회 목표. 중장기 원형배터리 사업의 핵심 축으로 구축.</div>
+        </div>
+        <div class="bull-box">
+          <div class="box-title">탭리스 비중 4% → 20%+</div>
+          <div class="box-text">SDI 원형배터리 내 탭리스 비중 작년 3-4% → 26년 20%+. 전동공구 +30% YoY, 데이터센터 BBU·하이브리드 EV향 확대로 원형 사업 수익성 개선 명확.</div>
+        </div>
+      </div>
+      <div>
+        <div class="think-box">
+          <div class="box-title">THINK · BBU = 양극재 P/A 부문 재평가</div>
+          <div class="box-text">에코프로비엠 P/A(파워툴/원통) 매출 1,143억(+44% YoY) — EV 부문 -24%와 정반대 흐름. 1차적으로 "전동공구 호황"이지만, 2차적으로 보면 <em>BBU·UPS·DC 마이크로그리드</em>의 양극재 직접 수요로 카테고리 자체가 신설된 것. 시장이 P/A를 EV 양극재의 부속물로 보지만 곧 별도 멀티플로 평가받을 것.</div>
+        </div>
+        <div class="bear-box">
+          <div class="box-title">BEAR · 클라우드 직접 구매 위협</div>
+          <div class="box-text">하이퍼스케일러(MS·구글·아마존)가 BBU 직접 확보 움직임. 셀 메이커가 OEM(서버업체)을 거치지 않고 클라우드와 직거래 시 가격결정력 약화 우려.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-box good">
+      <strong>원통형 3대 모멘텀 동시 발화.</strong> ① LG엔솔 46시리즈 수주 440GW(4개월 +47%) ② SDI 탭리스 4%→20%+ ③ BBU 시장 +70% YoY. <strong>엘앤에프</strong>는 NCMA 양극재 출하 중 46파이 비중 7%로 구체화, 27년 10% 목표. 폼팩터 전환은 단순 효율 개선이 아니라 <em>수율·캐파·고객 다변화</em> 3중 변수가 동시 호전되는 구조.
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 1Q26 컨콜 종합</span><span>4 / 8</span></div>
+</div>
+
+<!-- ============================================================
+     PAGE 5 — LFP / LMR / 전고체 로드맵
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">④ 양극재 로드맵 — LFP · LMR · 전고체</div>
+    <div class="page-header-num">05 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">차세대 양극재 양산 시점 비교</div>
+    <div class="chart-container">
+      <div class="chart-title">제품별 양산 시점 로드맵</div>
+      <div class="chart-subtitle">26년~30년 양극재 4사 LFP·LMR·전고체 양산 일정 정리</div>
+      <svg class="chart-svg" viewBox="0 0 720 320">
+        <!-- Year axis -->
+        <line x1="180" y1="280" x2="660" y2="280" stroke="#475569" stroke-width="1"/>
+        <text x="180" y="300" font-size="14" fill="#475569" text-anchor="middle">26</text>
+        <text x="276" y="300" font-size="14" fill="#475569" text-anchor="middle">27</text>
+        <text x="372" y="300" font-size="14" fill="#475569" text-anchor="middle">28</text>
+        <text x="468" y="300" font-size="14" fill="#475569" text-anchor="middle">29</text>
+        <text x="564" y="300" font-size="14" fill="#475569" text-anchor="middle">30</text>
+        <text x="660" y="300" font-size="14" fill="#475569" text-anchor="middle">31</text>
+
+        <!-- Vertical year grid -->
+        <line x1="180" y1="40" x2="180" y2="280" stroke="#e2e8f0"/>
+        <line x1="276" y1="40" x2="276" y2="280" stroke="#e2e8f0"/>
+        <line x1="372" y1="40" x2="372" y2="280" stroke="#e2e8f0"/>
+        <line x1="468" y1="40" x2="468" y2="280" stroke="#e2e8f0"/>
+        <line x1="564" y1="40" x2="564" y2="280" stroke="#e2e8f0"/>
+        <line x1="660" y1="40" x2="660" y2="280" stroke="#e2e8f0"/>
+
+        <!-- Rows -->
+        <text x="172" y="60" font-size="14" fill="#475569" text-anchor="end" font-weight="600">엘앤에프 LFP (3+3만톤)</text>
+        <rect x="252" y="50" width="48" height="22" fill="#16a34a" rx="4"/>
+        <text x="276" y="65" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">3Q26 1단계</text>
+        <rect x="316" y="50" width="48" height="22" fill="#16a34a" rx="4" opacity="0.7"/>
+        <text x="340" y="65" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">1Q27 6만톤</text>
+
+        <text x="172" y="100" font-size="14" fill="#475569" text-anchor="end" font-weight="600">에코프로비엠 헝가리</text>
+        <rect x="200" y="90" width="80" height="22" fill="#2563eb" rx="4"/>
+        <text x="240" y="105" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">5/9월 가동 1만톤</text>
+        <rect x="284" y="90" width="80" height="22" fill="#2563eb" rx="4" opacity="0.7"/>
+        <text x="324" y="105" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">27년 3만톤</text>
+
+        <text x="172" y="140" font-size="14" fill="#475569" text-anchor="end" font-weight="600">포스코퓨처엠 LFP CNP</text>
+        <rect x="316" y="130" width="80" height="22" fill="#7c3aed" rx="4"/>
+        <text x="356" y="145" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">27.3-4Q 양산</text>
+        <rect x="400" y="130" width="200" height="22" fill="#7c3aed" rx="4" opacity="0.6"/>
+        <text x="500" y="145" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">5만톤 단계 확장</text>
+
+        <text x="172" y="180" font-size="14" fill="#475569" text-anchor="end" font-weight="600">포스코퓨처엠 LMR (GM)</text>
+        <rect x="396" y="170" width="180" height="22" fill="#ea580c" rx="4"/>
+        <text x="486" y="185" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">28년 GM 양산 → 다른 OEM 확산</text>
+
+        <text x="172" y="220" font-size="14" fill="#475569" text-anchor="end" font-weight="600">에코프로비엠 전고체</text>
+        <rect x="316" y="210" width="48" height="22" fill="#dc2626" rx="4"/>
+        <text x="340" y="225" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">27 시양산</text>
+        <rect x="380" y="210" width="120" height="22" fill="#dc2626" rx="4" opacity="0.6"/>
+        <text x="440" y="225" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">고객 수요 매칭</text>
+
+        <text x="172" y="260" font-size="14" fill="#475569" text-anchor="end" font-weight="600">포스코퓨처엠 전고체 (Factorial·일본)</text>
+        <rect x="380" y="250" width="180" height="22" fill="#0d9488" rx="4"/>
+        <text x="470" y="265" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">29~30 본격 양산</text>
+
+        <!-- Title row -->
+        <text x="200" y="30" font-size="14" fill="#94a3b8" font-weight="600">LFP/LMR</text>
+        <text x="500" y="30" font-size="14" fill="#94a3b8" font-weight="600">차세대 (전고체)</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">탈중국 전구체 — 게임 체인저</div>
+    <div class="two-col">
+      <div>
+        <div class="bull-box">
+          <div class="box-title">포스코퓨처엠 — 염호기반 LP 신공법</div>
+          <div class="box-text">기존 LFP는 FP 전구체 100% 중국 의존. 포스코는 <strong>아르헨티나 염호 중간산물(LP) + 산화철</strong>로 자체 공법 개발 → 리튬가가 LFP 원가의 핵심인 만큼 원가 우위 확보 가능. 27년 양산 시 비중국 LFP 양극재의 유일한 풀 SCM 보유사로 부상.</div>
+        </div>
+        <div class="bull-box">
+          <div class="box-title">엘앤에프 — LS-LNF Non-PFE 풀체인</div>
+          <div class="box-text">25년 3Q LS-LNF 합작 전구체사 준공 완료. 원료-전구체-양극재-리사이클 풀체인 비중국화 거의 완성. 캐파 26년 2만톤→27년 4만톤→최대 12만톤 단계적 검토. NCM/LFP 모두 대응.</div>
+        </div>
+      </div>
+      <div>
+        <div class="think-box">
+          <div class="box-title">THINK · 진짜 보틀넥은 전구체</div>
+          <div class="box-text"><strong>1차적 사고</strong> — Non-PFE 정책으로 양극재 4사가 다 같이 수혜. <strong>2차적 사고</strong> — 양극재 자체는 이미 4사 경쟁구도이지만 <em>비중국 전구체</em>는 LS-LNF·포스코·에코프로머티리얼즈 3사 외 없음. OBBBA Non-PFE 비율 27년 25% → 30년 15% 단계 강화 시 <strong>전구체 보유사가 양극재 출하의 게이트키퍼</strong>로 부상. 시장 멀티플은 양극재 < 전구체.</div>
+        </div>
+        <div class="insight-box warn">
+          <strong>리튬가 변수.</strong> 리튬·니켈 가격은 25년 4Q부터 상승 흐름. 판가 반영 1~2분기 시차 → 26년 하반기부터 양극재 P 본격 인상. 포스코퓨처엠은 재고평가 충당금 환입으로 1Q 흑전, 엘앤에프는 1,330억 충당금 잔액 보유 → 가격 추가 상승 시 환입 추가 가능(단, 안정 구간 가정 시 효과 제한적).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 1Q26 컨콜 종합</span><span>5 / 8</span></div>
+</div>
+
+<!-- ============================================================
+     PAGE 6 — 수혜 밸류체인 매핑 (5대 테마)
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">⑤ 수혜 밸류체인 — 5대 테마 매핑</div>
+    <div class="page-header-num">06 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">테마별 수혜 종목 우선순위</div>
+    <table class="data-table" style="font-size:15px">
+      <thead>
+        <tr>
+          <th style="text-align:center">테마</th>
+          <th style="text-align:left">셀</th>
+          <th style="text-align:left">양극재</th>
+          <th style="text-align:left">전구체·소재</th>
+          <th style="text-align:left">우선 픽</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill blue">ESS</span></td>
+          <td style="text-align:left">LG엔솔, 삼성SDI</td>
+          <td style="text-align:left">엘앤에프(LFP), 에코프로비엠(NCA), 포스코퓨처엠</td>
+          <td style="text-align:left">에코프로머티리얼즈, 포스코퓨처엠(인조흑연)</td>
+          <td style="text-align:left" class="highlight"><strong>LG엔솔 / 엘앤에프</strong></td>
+        </tr>
+        <tr>
+          <td><span class="pill purple">DC BBU/UPS</span></td>
+          <td style="text-align:left">삼성SDI</td>
+          <td style="text-align:left">에코프로비엠 P/A, 엘앤에프</td>
+          <td style="text-align:left">포스코퓨처엠(활성탄소), 에코프로머티리얼즈(전구체)</td>
+          <td style="text-align:left" class="highlight"><strong>삼성SDI / 에코프로비엠</strong></td>
+        </tr>
+        <tr>
+          <td><span class="pill green">46시리즈</span></td>
+          <td style="text-align:left">LG엔솔</td>
+          <td style="text-align:left">엘앤에프(46파이 7%→10%)</td>
+          <td style="text-align:left">에코프로머티리얼즈, 포스코퓨처엠</td>
+          <td style="text-align:left" class="highlight"><strong>LG엔솔 / 엘앤에프</strong></td>
+        </tr>
+        <tr>
+          <td><span class="pill orange">LFP·LMR</span></td>
+          <td style="text-align:left">SK온(LFP 셀), 삼성SDI</td>
+          <td style="text-align:left">엘앤에프(6만톤), 포스코퓨처엠(27.3-4Q)</td>
+          <td style="text-align:left">포스코(LP 신공법), LS-LNF</td>
+          <td style="text-align:left" class="highlight"><strong>엘앤에프 / 포스코퓨처엠</strong></td>
+        </tr>
+        <tr>
+          <td><span class="pill red">전고체</span></td>
+          <td style="text-align:left">삼성SDI(피지컬 AI)</td>
+          <td style="text-align:left">포스코퓨처엠(일본 OEM 단독), 에코프로비엠(40톤 파일럿)</td>
+          <td style="text-align:left">고체전해질·LMR 전구체</td>
+          <td style="text-align:left" class="highlight"><strong>포스코퓨처엠 / 삼성SDI</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="section-sub">밸류체인 흐름</div>
+    <div class="vc-flow">
+      <div class="vc-node">리튬·니켈</div>
+      <div class="vc-arrow">→</div>
+      <div class="vc-node">전구체<br><span style="font-size:13px;font-weight:400">에코프로MAT, LS-LNF</span></div>
+      <div class="vc-arrow">→</div>
+      <div class="vc-node">양극재<br><span style="font-size:13px;font-weight:400">엘앤에프, 에코프로BM, 포스코FM</span></div>
+      <div class="vc-arrow">→</div>
+      <div class="vc-node">셀<br><span style="font-size:13px;font-weight:400">LG엔솔, 삼성SDI, SK온</span></div>
+      <div class="vc-arrow">→</div>
+      <div class="vc-node lite">EV·ESS·BBU</div>
+    </div>
+    <div class="vc-flow">
+      <div class="vc-node warn">제련<br><span style="font-size:13px;font-weight:400">에코프로(IGIP), 그린에코니켈</span></div>
+      <div class="vc-arrow">↓</div>
+      <div class="vc-node">소재<br><span style="font-size:13px;font-weight:400">포스코(활성탄소·인조흑연·고체전해질)</span></div>
+      <div class="vc-arrow">↓</div>
+      <div class="vc-node">부품·환경<br><span style="font-size:13px;font-weight:400">에코프로HN(반도체→ESS)</span></div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 1Q26 컨콜 종합</span><span>6 / 8</span></div>
+</div>
+
+<!-- ============================================================
+     PAGE 7 — Bull / Base / Bear 시나리오
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">⑥ 2026년 시나리오 분석</div>
+    <div class="page-header-num">07 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">2H26 섹터 시나리오</div>
+    <div class="scenario-row">
+      <div class="scenario-card bull">
+        <div class="scenario-card-title">Bull Case (30%)</div>
+        <div class="scenario-card-price" style="color:var(--green)">섹터 +40%</div>
+        <div class="scenario-card-prob">3Q26 셀사 흑자전환 + 양극재 P·Q 동시 호조</div>
+        <div class="scenario-card-text">유럽 EV 보조금 재도입·중동 지정학 리스크로 EV+ESS 동시 풀인. 46시리즈 수주 600GW 돌파. 데이터센터 BBU 시장 10억$ 도달. LFP 양극재 ASP 안정화로 엘앤에프·포스코퓨처엠 OPM 두 자릿수.</div>
+      </div>
+      <div class="scenario-card base">
+        <div class="scenario-card-title">Base Case (50%)</div>
+        <div class="scenario-card-price" style="color:var(--text2)">섹터 +15%</div>
+        <div class="scenario-card-prob">셀사 4Q26 흑전 / 양극재 안정 흐름</div>
+        <div class="scenario-card-text">LG엔솔·SDI 가이던스 매출 +15~20% 달성. ESS 비중 30% 진입. 양극재 4사 모두 흑자 유지. 메탈가 안정. 포스코퓨처엠·엘앤에프는 P 인상 효과로 OPM 5~10%.</div>
+      </div>
+      <div class="scenario-card bear">
+        <div class="scenario-card-title">Bear Case (20%)</div>
+        <div class="scenario-card-price" style="color:var(--red)">섹터 -15%</div>
+        <div class="scenario-card-prob">EV 침체 장기화 + ESS 캐파 가동률 부진</div>
+        <div class="scenario-card-text">북미 EV 보조금 폐지 + GM 얼티엄셀 휴지 장기화. 셀사 적자 4Q26까지 지속. 양극재 재고평가 환입 종료 + 고정비 부담. 헝가리 신정부 규제 강화 우려.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">투자 체크리스트</div>
+    <div>
+      <div class="checklist-item"><span class="checklist-icon pass">&#10003;</span><span><strong>ESS 매출 비중 25%+</strong> — LG엔솔 1Q26 20% 중반, 연말 30% 목표 (충족 진행 중)</span></div>
+      <div class="checklist-item"><span class="checklist-icon pass">&#10003;</span><span><strong>46시리즈 수주잔고 +47%</strong> — 25말 300GW → 26.4 440GW (강한 모멘텀)</span></div>
+      <div class="checklist-item"><span class="checklist-icon pass">&#10003;</span><span><strong>양극재 4사 동시 흑전</strong> — 엘앤에프·에코프로비엠·에코프로·포스코퓨처엠</span></div>
+      <div class="checklist-item"><span class="checklist-icon pass">&#10003;</span><span><strong>리튬·니켈 가격 상승 사이클</strong> — 25.4Q부터 → 2H26 판가 인상 본격화</span></div>
+      <div class="checklist-item"><span class="checklist-icon neutral">&#9679;</span><span><strong>EV 수요 회복 시그널 모니터링</strong> — 미국 3월 판매 소폭 증가, 중고차 호조</span></div>
+      <div class="checklist-item"><span class="checklist-icon neutral">&#9679;</span><span><strong>헝가리 신정부 규제 리스크</strong> — 4.12 총선 야당 승리, 환경·노동 규제 강화</span></div>
+      <div class="checklist-item"><span class="checklist-icon fail">&#10007;</span><span><strong>북미 ESS 초기 램프업 비용</strong> — LG엔솔 -2,078억 적자의 핵심 원인 (1~2Q 추가 부담)</span></div>
+      <div class="checklist-item"><span class="checklist-icon fail">&#10007;</span><span><strong>GM 얼티엄셀 휴지 지속</strong> — 포스코퓨처엠 N86 판매량 ZERO 영향</span></div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 1Q26 컨콜 종합</span><span>7 / 8</span></div>
+</div>
+
+<!-- ============================================================
+     PAGE 8 — 종합 결론 + 우선순위 픽
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">⑦ 종합 결론 — 우선순위 픽</div>
+    <div class="page-header-num">08 / 08</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">종합 픽 — Top 5</div>
+    <table class="data-table" style="font-size:15px">
+      <thead>
+        <tr><th>순위</th><th style="text-align:left">종목</th><th style="text-align:left">핵심 모멘텀</th><th style="text-align:left">트리거</th><th>가격민감도</th></tr>
+      </thead>
+      <tbody>
+        <tr class="row-highlight">
+          <td>①</td>
+          <td style="text-align:left"><strong>엘앤에프 (066970)</strong></td>
+          <td style="text-align:left">매출 +103% YoY · OPM 15.9% · LFP 6만톤 SOP / 46파이 비중 7%→10%</td>
+          <td style="text-align:left">3Q26 LFP SOP, 27.1Q 6만톤 완공</td>
+          <td>★★★★★</td>
+        </tr>
+        <tr class="row-highlight">
+          <td>②</td>
+          <td style="text-align:left"><strong>LG에너지솔루션 (373220)</strong></td>
+          <td style="text-align:left">ESS 비중 20%중반→30%+ · 46시리즈 잔고 440GW · 북미 50GW 캐파</td>
+          <td style="text-align:left">3Q26 ESS 가동률 안정화, 분기 흑전</td>
+          <td>★★★★☆</td>
+        </tr>
+        <tr class="row-highlight">
+          <td>③</td>
+          <td style="text-align:left"><strong>포스코퓨처엠 (003670)</strong></td>
+          <td style="text-align:left">탈중국 LP 신공법 + 활성탄소(슈퍼커패시터) + 전고체 일본 단독 + LMR Gen2</td>
+          <td style="text-align:left">27.3-4Q LFP 양산 / 28년 GM LMR</td>
+          <td>★★★★☆</td>
+        </tr>
+        <tr>
+          <td>④</td>
+          <td style="text-align:left"><strong>에코프로비엠 (247540)</strong></td>
+          <td style="text-align:left">P/A +44% YoY (BBU·전동공구) · 헝가리 5/9월 가동 · 전고체 27 시양산</td>
+          <td style="text-align:left">2H26 헝가리 흑전, 신규 OEM 수주</td>
+          <td>★★★☆☆</td>
+        </tr>
+        <tr>
+          <td>⑤</td>
+          <td style="text-align:left"><strong>삼성SDI (006400)</strong></td>
+          <td style="text-align:left">탭리스 4%→20% · BBU +70% YoY · 헝가리 가동률 70% · LFP 각형 27말</td>
+          <td style="text-align:left">3-4Q26 분기 흑전, SDC 매각 결정</td>
+          <td>★★★☆☆</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box purple">
+      <strong>최종 결론 — 1Q26은 슈퍼사이클의 분기점.</strong> EV 둔화에도 불구하고 ① ESS 북미 캐파 경쟁 ② 46시리즈 수주 폭증 ③ 데이터센터 BBU/UPS 신시장 ④ Non-PFE 탈중국 공급망 재편 ⑤ 27~28년 LFP·LMR·전고체 양산 로드맵 가시화 — 5개 축이 동시 점화. 핵심 리스크는 셀사 ESS 램프업 비용 1~2Q 추가 부담과 헝가리 신정부 규제. <strong>3Q26 셀사 분기 흑전 + 양극재 P·Q 동시 호조</strong>가 확인되는 시점이 섹터 리레이팅의 결정적 트리거.
+    </div>
+
+    <div class="bull-box">
+      <div class="box-title">투자 액션 — 분할 매수 전략</div>
+      <div class="box-text"><strong>1단계 (즉시):</strong> 양극재 4사 중 흑자 폭이 가장 큰 엘앤에프, 그리고 활성탄소·LMR·전고체 멀티 옵션을 보유한 포스코퓨처엠을 코어 포지션으로. <strong>2단계 (3Q26 트리거):</strong> LG엔솔 ESS 가동률 70%+ 확인 시 비중 확대. <strong>3단계 (4Q26~1Q27):</strong> 46시리즈 양산 안정화·LFP SOP 완료 시 삼성SDI·에코프로비엠 추가 비중.</div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span>2차전지 1Q26 컨콜 종합 · 본 자료는 투자 참고용</span><span>8 / 8</span></div>
+</div>
+
+</body>
+</html>
