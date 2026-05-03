@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LFP/ESS 시대 한국 2차전지 밸류체인 12영역 베스트 픽 — 셀 베타 / 자원 베타 / 회복 시간축</title>
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#ffffff; --bg3:#f0fdf4; --bg4:#dcfce7;
+    --border:#bbf7d0; --text:#14532d; --text2:#166534; --text3:#86efac;
+    --green:#16a34a; --green-d:#15803d; --green-dd:#14532d;
+    --blue:#2563eb; --red:#dc2626; --orange:#ea580c;
+    --purple:#7c3aed; --amber:#d97706; --cyan:#0891b2; --gold:#ca8a04;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;background:#ffffff;color:#1e293b;line-height:1.65}
+  .container{max-width:1400px;margin:0 auto;padding:0 28px 80px}
+  .hero{background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 50%,#bbf7d0 100%);padding:72px 24px 56px;text-align:center;margin-bottom:44px;border-bottom:2px solid var(--green)}
+  .hero-badge{display:inline-block;background:rgba(22,163,74,.15);color:var(--green-dd);font-size:24px;font-weight:700;padding:8px 24px;border-radius:24px;margin-bottom:18px;letter-spacing:.6px}
+  .hero h1{font-size:48px;font-weight:900;margin-bottom:14px;line-height:1.2;letter-spacing:-.5px;color:var(--green-dd)}
+  .hero .sub{font-size:28px;color:var(--text);font-weight:500;line-height:1.55}
+  .hero-stats{display:flex;justify-content:center;gap:36px;margin-top:32px;flex-wrap:wrap}
+  .hero-stat{text-align:center}
+  .hero-stat-value{font-size:46px;font-weight:900;color:var(--green-dd);line-height:1.1}
+  .hero-stat-label{font-size:20px;color:var(--text2);margin-top:6px}
+
+  .section{margin-bottom:52px}
+  .section-title{font-size:36px;font-weight:800;margin-bottom:22px;padding-bottom:12px;border-bottom:3px solid var(--green);color:#1e293b}
+
+  .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:28px}
+  .kpi-card{background:var(--bg3);border-radius:14px;padding:20px 16px;text-align:center;border:1px solid var(--border)}
+  .kpi-label{font-size:22px;color:var(--text2);font-weight:700;margin-bottom:6px;letter-spacing:.3px}
+  .kpi-value{font-size:40px;font-weight:900;line-height:1.15}
+  .kpi-sub{font-size:20px;color:var(--text);margin-top:6px}
+
+  .insight-box{background:var(--bg3);border-left:6px solid var(--green);border-radius:0 12px 12px 0;padding:18px 22px;margin-bottom:18px;font-size:26px;color:#334155;line-height:1.7}
+  .insight-box strong{color:var(--green-dd);font-weight:800}
+  .insight-box.warn{border-left-color:var(--orange);background:#fff7ed;color:#7c2d12}
+  .insight-box.warn strong{color:#9a3412}
+  .insight-box.blue{border-left-color:var(--blue);background:#eff6ff;color:#1e3a8a}
+  .insight-box.blue strong{color:#1e3a8a}
+  .insight-box.purple{border-left-color:var(--purple);background:#faf5ff;color:#581c87}
+  .insight-box.purple strong{color:#581c87}
+
+  .chart-container{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:28px 22px 20px;margin-bottom:26px}
+  .chart-title{font-size:30px;font-weight:800;margin-bottom:6px}
+  .chart-subtitle{font-size:24px;color:#64748b;margin-bottom:18px}
+  .chart-svg{width:100%;height:auto;display:block;max-width:100%}
+  .legend{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;margin-top:14px}
+  .legend-item{display:flex;align-items:center;gap:8px;font-size:22px;color:#475569}
+  .legend-dot{width:18px;height:18px;border-radius:4px;flex-shrink:0}
+
+  .data-table{width:100%;border-collapse:collapse;font-size:22px;margin:14px 0}
+  .data-table th{background:var(--bg3);color:var(--green-dd);font-weight:800;padding:12px;text-align:left;border:1px solid var(--border)}
+  .data-table th.center{text-align:center}
+  .data-table td{padding:12px;text-align:left;border:1px solid var(--border);color:#1e293b;vertical-align:top}
+  .data-table td.center{text-align:center;font-weight:700}
+  .data-table tr:nth-child(even){background:#f8fafc}
+  .data-table td.tier-s{background:rgba(202,138,4,.18);font-weight:800;color:var(--gold)}
+  .data-table td.tier-a{background:rgba(37,99,235,.1);font-weight:800;color:var(--blue)}
+  .data-table td.tier-b{background:rgba(124,58,237,.1);font-weight:800;color:var(--purple)}
+  .data-table td.tier-c{background:rgba(148,163,184,.15);font-weight:700;color:#64748b}
+  .data-table td.beta-cell{background:rgba(22,163,74,.12);color:var(--green-d);font-weight:800}
+  .data-table td.beta-resource{background:rgba(202,138,4,.12);color:var(--amber);font-weight:800}
+  .data-table td.beta-ess{background:rgba(124,58,237,.12);color:var(--purple);font-weight:800}
+  .data-table td.beta-can{background:rgba(234,88,12,.12);color:var(--orange);font-weight:800}
+
+  .pick-card{background:linear-gradient(135deg,#ffffff 0%,#f0fdf4 100%);border:2px solid var(--border);border-radius:18px;padding:26px;box-shadow:0 4px 12px rgba(22,163,74,.08);margin-bottom:18px;position:relative}
+  .pick-rank{position:absolute;top:-14px;left:24px;background:var(--green-dd);color:#fff;font-size:22px;font-weight:800;padding:6px 18px;border-radius:14px;letter-spacing:.5px}
+  .pick-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;margin:8px 0 12px}
+  .pick-name{font-size:34px;font-weight:900;color:var(--green-dd)}
+  .pick-ticker{font-size:22px;color:#64748b;margin-top:4px}
+  .pick-tier{display:inline-block;background:rgba(202,138,4,.18);color:var(--gold);font-size:22px;font-weight:800;padding:4px 16px;border-radius:14px}
+  .pick-tier.a{background:rgba(37,99,235,.12);color:var(--blue)}
+  .pick-tier.b{background:rgba(124,58,237,.12);color:var(--purple)}
+  .pick-row{display:flex;justify-content:space-between;font-size:22px;padding:8px 0;border-bottom:1px solid var(--border)}
+  .pick-row:last-child{border:none}
+  .pick-label{color:#64748b;font-weight:600}
+  .pick-val{color:#1e293b;font-weight:800;text-align:right;max-width:60%}
+  .pick-thesis{margin-top:14px;padding:12px 16px;background:#fff;border-radius:10px;border-left:4px solid var(--green);font-size:22px;line-height:1.6;color:#334155}
+  .pick-thesis strong{color:var(--green-dd)}
+
+  .timeline-row{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:24px}
+  .timeline-card{background:var(--bg2);border:2px solid var(--border);border-radius:16px;padding:22px;position:relative}
+  .timeline-card.t1{background:#f0fdf4;border-color:var(--green)}
+  .timeline-card.t2{background:#eff6ff;border-color:var(--blue)}
+  .timeline-card.t3{background:#faf5ff;border-color:var(--purple)}
+  .timeline-card.t4{background:#fff7ed;border-color:var(--orange)}
+  .timeline-period{font-size:22px;font-weight:800;letter-spacing:.5px;margin-bottom:6px}
+  .timeline-card.t1 .timeline-period{color:var(--green-d)}
+  .timeline-card.t2 .timeline-period{color:var(--blue)}
+  .timeline-card.t3 .timeline-period{color:var(--purple)}
+  .timeline-card.t4 .timeline-period{color:var(--orange)}
+  .timeline-title{font-size:26px;font-weight:800;color:#1e293b;margin-bottom:10px}
+  .timeline-stocks{font-size:22px;line-height:1.7;color:#334155}
+  .timeline-stocks strong{color:var(--green-dd);font-weight:800}
+
+  .beta-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:24px}
+  .beta-card{background:var(--bg2);border:2px solid var(--border);border-radius:16px;padding:24px}
+  .beta-card.cell{border-color:var(--green);background:#f0fdf4}
+  .beta-card.resource{border-color:var(--gold);background:#fefce8}
+  .beta-card.ess{border-color:var(--purple);background:#faf5ff}
+  .beta-card.can{border-color:var(--orange);background:#fff7ed}
+  .beta-head{font-size:30px;font-weight:900;margin-bottom:8px}
+  .beta-card.cell .beta-head{color:var(--green-d)}
+  .beta-card.resource .beta-head{color:var(--amber)}
+  .beta-card.ess .beta-head{color:var(--purple)}
+  .beta-card.can .beta-head{color:var(--orange)}
+  .beta-desc{font-size:22px;color:#334155;line-height:1.65;margin-bottom:12px}
+  .beta-list{font-size:24px;color:#1e293b;font-weight:700;line-height:1.8}
+
+  .bull-box,.bear-box,.think-box{border-radius:0 12px 12px 0;padding:18px 22px;margin:12px 0}
+  .bull-box{background:#f0fdf4;border-left:6px solid var(--green)}
+  .bull-box .box-title{font-size:28px;font-weight:800;color:var(--green-d);margin-bottom:6px}
+  .bull-box .box-text{font-size:24px;color:#166534;line-height:1.7}
+  .bear-box{background:#fef2f2;border-left:6px solid var(--red)}
+  .bear-box .box-title{font-size:28px;font-weight:800;color:var(--red);margin-bottom:6px}
+  .bear-box .box-text{font-size:24px;color:#991b1b;line-height:1.7}
+  .think-box{background:#eff6ff;border-left:6px solid var(--blue)}
+  .think-box .box-title{font-size:28px;font-weight:800;color:var(--blue);margin-bottom:6px}
+  .think-box .box-text{font-size:24px;color:#1e3a5f;line-height:1.7}
+
+  ul.clean{list-style:none;padding:0}
+  ul.clean li{font-size:24px;color:#334155;padding:8px 0 8px 28px;position:relative;line-height:1.7}
+  ul.clean li::before{content:'▸';position:absolute;left:0;color:var(--green);font-weight:800;font-size:24px}
+  ul.clean li strong{color:var(--green-dd);font-weight:800}
+
+  .footer{text-align:center;padding:36px 0;font-size:20px;color:#64748b;border-top:1px solid var(--border);margin-top:60px;line-height:1.7}
+
+  @media(max-width:900px){
+    .container{padding:0 16px 60px}
+    .hero{padding:48px 16px 36px}
+    .hero h1{font-size:32px}
+    .hero .sub{font-size:20px}
+    .hero-stat-value{font-size:32px}
+    .hero-stat-label{font-size:14px}
+    .hero-stats{gap:18px}
+    .section-title{font-size:26px}
+    .kpi-row{grid-template-columns:repeat(2,1fr)}
+    .kpi-value{font-size:28px}
+    .kpi-label,.kpi-sub{font-size:16px}
+    .insight-box{font-size:18px;padding:14px 16px}
+    .data-table{font-size:16px}
+    .data-table th,.data-table td{padding:8px}
+    .chart-title{font-size:22px}
+    .chart-subtitle{font-size:16px}
+    ul.clean li{font-size:18px}
+    .legend-item{font-size:16px}
+    .pick-name{font-size:24px}
+    .pick-ticker,.pick-tier,.pick-row,.pick-thesis{font-size:18px}
+    .timeline-row{grid-template-columns:1fr}
+    .timeline-period{font-size:18px}
+    .timeline-title{font-size:20px}
+    .timeline-stocks{font-size:18px}
+    .beta-grid{grid-template-columns:1fr}
+    .beta-head{font-size:22px}
+    .beta-desc,.beta-list{font-size:18px}
+    .bull-box .box-title,.bear-box .box-title,.think-box .box-title{font-size:22px}
+    .bull-box .box-text,.bear-box .box-text,.think-box .box-text{font-size:18px}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">DEEP DIVE · VALUE CHAIN REPORT · 2026.05.03</div>
+  <div style="font-size:22px;color:var(--text2);font-weight:600;letter-spacing:6px;margin-bottom:14px">KOREAN 2ND BATTERY · LFP &amp; ESS ERA</div>
+  <h1>LFP/ESS 시대 한국 2차전지<br>밸류체인 12영역 베스트 픽</h1>
+  <div class="sub">CATL "자원 독립" 메시지를 트리거로, 한국 상장 12개 밸류체인 영역에서 LFP/ESS 시대 수혜 강도와 OPM 사이클 분석<br><strong style="color:var(--green-dd)">셀 베타 vs 자원 베타 분리 + 회복 시간축 4단계 분류</strong>로 최적 포트폴리오 구성</div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-value">12</div><div class="hero-stat-label">밸류체인 영역</div></div>
+    <div class="hero-stat"><div class="hero-stat-value">11</div><div class="hero-stat-label">베스트 픽 종목</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--gold)">★★★★★</div><div class="hero-stat-label">최고 LFP 수혜</div></div>
+    <div class="hero-stat"><div class="hero-stat-value">2026~</div><div class="hero-stat-label">회복 시작</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ① 보고서 프레임 -->
+<div class="section">
+  <div class="section-title">① 보고서 프레임 — 3개의 분석 축</div>
+
+  <div class="insight-box">
+    <strong>본 리포트의 분석 프레임 —</strong> CATL 1Q26 컨콜에서 가장 강하게 부각된 메시지(<strong>"자원 독립"·ESS 25%·풀가동·메탈 연동·파워 일렉트로닉스 보강</strong>)를 트리거로, 한국 2차전지 12개 영역을 다음 <strong>3축</strong>으로 분해:
+    <br>① <strong>수혜 강도 5단계 (Tier S~D)</strong> — LFP/ESS 시대 매출·이익 영향력
+    <br>② <strong>베타 분류 4종 (셀 / 자원 / ESS / 캔)</strong> — 어떤 매크로 변수에 가장 민감한가
+    <br>③ <strong>회복 시간축 4단계 (즉시 / 단기 / 중기 / 장기)</strong> — 1Q26 시점에서 언제 진입이 적정한가
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">분석 영역</div>
+      <div class="kpi-value" style="color:var(--green-d)">12개</div>
+      <div class="kpi-sub">셀 ~ ESS 시스템</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">베스트 픽 종목</div>
+      <div class="kpi-value" style="color:var(--gold)">11종</div>
+      <div class="kpi-sub">Tier S+A 우선순위</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">LFP 시대 변곡점</div>
+      <div class="kpi-value" style="color:var(--purple)">2026 1H</div>
+      <div class="kpi-sub">삼성SDI ESS 인디애나 가동</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">DC BBU 신규 시장</div>
+      <div class="kpi-value" style="color:var(--blue)">15~20<br>GWh/GW</div>
+      <div class="kpi-sub">데이터센터 1GW당 ESS 수요</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">CATL 점유율 확대</div>
+      <div class="kpi-value" style="color:var(--orange)">+3.4%p</div>
+      <div class="kpi-sub">중국 1Q 장착량 점유율</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">한국 양극재 4사</div>
+      <div class="kpi-value" style="color:var(--green-d)">흑자전환</div>
+      <div class="kpi-sub">메탈 연동 GPM 검증</div>
+    </div>
+  </div>
+</div>
+
+<!-- ② 12영역 풀맵 -->
+<div class="section">
+  <div class="section-title">② 12개 밸류체인 영역 — 핵심 종목 한눈에</div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th class="center">#</th>
+        <th>영역</th>
+        <th>핵심 종목</th>
+        <th class="center">베타</th>
+        <th class="center">수혜 Tier</th>
+        <th class="center">회복 시간축</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="center">1</td>
+        <td><strong>셀 (Cell)</strong></td>
+        <td>LG에너지솔루션 · 삼성SDI</td>
+        <td class="center beta-cell">셀 베타</td>
+        <td class="center tier-s">S ★★★★★</td>
+        <td class="center">즉시 (1Q26~)</td>
+      </tr>
+      <tr>
+        <td class="center">2</td>
+        <td><strong>양극재</strong></td>
+        <td>에코프로비엠 · 엘앤에프 · 포스코퓨처엠 · LG화학</td>
+        <td class="center beta-cell">셀 베타</td>
+        <td class="center tier-s">S ★★★★★</td>
+        <td class="center">즉시 (1Q26~)</td>
+      </tr>
+      <tr>
+        <td class="center">3</td>
+        <td><strong>음극재 (실리콘 포함)</strong></td>
+        <td>포스코퓨처엠 · 대주전자재료 · 한솔케미칼</td>
+        <td class="center beta-cell">셀 베타</td>
+        <td class="center tier-a">A ★★★★</td>
+        <td class="center">단기 (2H26)</td>
+      </tr>
+      <tr>
+        <td class="center">4</td>
+        <td><strong>분리막</strong></td>
+        <td>SKIET · WCP</td>
+        <td class="center beta-cell">셀 베타</td>
+        <td class="center tier-a">A ★★★★</td>
+        <td class="center">단기 (2H26)</td>
+      </tr>
+      <tr>
+        <td class="center">5</td>
+        <td><strong>전해액 + 첨가제</strong></td>
+        <td>엔켐 · 동화기업 · 솔브레인 · 천보 · 후성</td>
+        <td class="center beta-cell">셀 베타</td>
+        <td class="center tier-a">A ★★★★</td>
+        <td class="center">단기 (2H26)</td>
+      </tr>
+      <tr>
+        <td class="center">6</td>
+        <td><strong>도전재 (CNT)</strong></td>
+        <td>나노신소재</td>
+        <td class="center beta-cell">셀 베타</td>
+        <td class="center tier-a">A ★★★★</td>
+        <td class="center">단기 (2H26)</td>
+      </tr>
+      <tr>
+        <td class="center">7</td>
+        <td><strong>동박</strong></td>
+        <td>롯데에너지머티리얼즈 · SKC · 솔루스첨단소재</td>
+        <td class="center beta-cell">셀 베타</td>
+        <td class="center tier-a">A ★★★★</td>
+        <td class="center">단기 (2H26)</td>
+      </tr>
+      <tr>
+        <td class="center">8</td>
+        <td><strong>캔 / 셀 케이싱</strong></td>
+        <td>상신이디피 · 신흥에스이씨 · 동원시스템즈 · 상아프론테크</td>
+        <td class="center beta-can">캔 베타</td>
+        <td class="center tier-s">S ★★★★★</td>
+        <td class="center">즉시 (1Q26~)</td>
+      </tr>
+      <tr>
+        <td class="center">9</td>
+        <td><strong>리튬·정제·전구체</strong></td>
+        <td>포스코홀딩스 · 에코프로머티 · 강원에너지 · 코스모화학</td>
+        <td class="center beta-resource">자원 베타</td>
+        <td class="center tier-b">B ★★★</td>
+        <td class="center">중기 (2027~)</td>
+      </tr>
+      <tr>
+        <td class="center">10</td>
+        <td><strong>리사이클링</strong></td>
+        <td>성일하이텍 · 새빗켐</td>
+        <td class="center beta-resource">자원 베타</td>
+        <td class="center tier-c">C ★★</td>
+        <td class="center">장기 (2028+)</td>
+      </tr>
+      <tr>
+        <td class="center">11</td>
+        <td><strong>장비 (코팅·노칭·검사)</strong></td>
+        <td>피엔티 · 씨아이에스 · 하나기술 · 윤성에프엔씨 · 엠플러스 · 에이프로 외</td>
+        <td class="center beta-cell">셀 베타 (후행)</td>
+        <td class="center tier-c">C ★★</td>
+        <td class="center">중기 (2027~)</td>
+      </tr>
+      <tr>
+        <td class="center">12</td>
+        <td><strong>ESS 시스템 / 전력기기</strong></td>
+        <td>LS일렉트릭 · LS에코에너지 · HD현대일렉트릭 · 효성중공업</td>
+        <td class="center beta-ess">ESS 베타</td>
+        <td class="center tier-s">S ★★★★★</td>
+        <td class="center">즉시 (1Q26~)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="insight-box warn">
+    <strong>핵심 관전 —</strong> 12개 영역 중 즉시 수혜(1Q26~)는 <strong>셀(1)·양극재(2)·캔(8)·ESS 시스템(12)</strong>의 4개 영역. 단기 수혜(2H26)는 셀 후방 소재 5개(분리막·전해액·동박·도전재·실리콘 음극). 중·장기는 자원·리사이클·장비. <strong>"즉시 수혜 4개 영역에 베스트 픽 11종 중 8종 집중"</strong>이 본 리포트의 핵심 포지셔닝.
+  </div>
+</div>
+
+<!-- ③ 베타 분류 -->
+<div class="section">
+  <div class="section-title">③ 베타 분류 — 셀 베타 / 자원 베타 / ESS 베타 / 캔 베타</div>
+
+  <div class="insight-box blue">
+    <strong>왜 베타로 분류하는가? —</strong> "2차전지 종목"으로 묶어서 보면 모든 종목이 같은 사이클을 탈 것 같지만, 실제로는 <strong>매크로 변수가 다르다</strong>. 셀 베타는 EV/ESS 셀 출하량에, 자원 베타는 LME 메탈 가격에, ESS 베타는 데이터센터 Capex·전력 인프라에, 캔 베타는 셀 메이커 가동률에 가장 민감. 동일 영역이라도 베타가 다르면 사이클 진입 타이밍이 달라짐.
+  </div>
+
+  <div class="beta-grid">
+    <div class="beta-card cell">
+      <div class="beta-head">▲ 셀 베타 (Cell Beta)</div>
+      <div class="beta-desc"><strong>EV·ESS 셀 출하량</strong>에 매출·이익 동행. CATL "ESS 25%·풀가동" 메시지에 직접 매칭.</div>
+      <div class="beta-list">LG엔솔 · 삼성SDI · 에코프로비엠 · 엘앤에프 · 포스코퓨처엠 · LG화학 · SKIET · WCP · 엔켐 · 동화기업 · 롯데에너지머티 · 대주전자재료 · 나노신소재</div>
+    </div>
+    <div class="beta-card resource">
+      <div class="beta-head">▲ 자원 베타 (Resource Beta)</div>
+      <div class="beta-desc"><strong>LME 메탈 가격(리튬·니켈·코발트)</strong>에 직접 노출. CATL "자원 독립" 메시지의 한국 거울.</div>
+      <div class="beta-list">포스코홀딩스 · 에코프로머티 · 강원에너지 · 코스모화학 · 성일하이텍 · 새빗켐</div>
+    </div>
+    <div class="beta-card ess">
+      <div class="beta-head">▲ ESS 베타 (ESS System Beta)</div>
+      <div class="beta-desc"><strong>데이터센터 Capex · 전력 인프라</strong>에 동행. CATL "1GW당 15~20GWh + 파워 일렉트로닉스 보강" 직접 매칭.</div>
+      <div class="beta-list">LS일렉트릭 · LS에코에너지 · HD현대일렉트릭 · 효성중공업 · (간접: LG엔솔 ESS · 삼성SDI ESS 인디애나)</div>
+    </div>
+    <div class="beta-card can">
+      <div class="beta-head">▲ 캔 베타 (Cell Housing Beta)</div>
+      <div class="beta-desc"><strong>셀 메이커 가동률 + 알루미늄 가격</strong>에 직접 동행. CATL "캐파 부족·풀가동" 시그널의 가장 빠른 선행 지표.</div>
+      <div class="beta-list">상신이디피 · 신흥에스이씨 · 동원시스템즈 · 상아프론테크</div>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <div class="chart-title">베타별 매크로 변수 민감도 매트릭스</div>
+    <div class="chart-subtitle">5단계 평가 (★★★★★ = 가장 민감)</div>
+    <svg class="chart-svg" viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+      <!-- Header row -->
+      <text x="120" y="34" font-size="20" fill="#14532d" font-weight="800" text-anchor="middle">베타 분류</text>
+      <text x="280" y="34" font-size="20" fill="#14532d" font-weight="800" text-anchor="middle">셀 출하</text>
+      <text x="400" y="34" font-size="20" fill="#14532d" font-weight="800" text-anchor="middle">메탈 가격</text>
+      <text x="520" y="34" font-size="20" fill="#14532d" font-weight="800" text-anchor="middle">DC Capex</text>
+      <text x="640" y="34" font-size="20" fill="#14532d" font-weight="800" text-anchor="middle">알루미늄</text>
+
+      <!-- Cell Beta row -->
+      <rect x="40" y="60" width="160" height="60" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+      <text x="120" y="98" font-size="22" fill="#15803d" font-weight="800" text-anchor="middle">셀 베타</text>
+      <text x="280" y="98" font-size="32" fill="#16a34a" text-anchor="middle">★★★★★</text>
+      <text x="400" y="98" font-size="32" fill="#94a3b8" text-anchor="middle">★★</text>
+      <text x="520" y="98" font-size="32" fill="#94a3b8" text-anchor="middle">★★</text>
+      <text x="640" y="98" font-size="32" fill="#94a3b8" text-anchor="middle">★</text>
+
+      <!-- Resource Beta row -->
+      <rect x="40" y="135" width="160" height="60" rx="8" fill="#fefce8" stroke="#ca8a04" stroke-width="2"/>
+      <text x="120" y="173" font-size="22" fill="#a16207" font-weight="800" text-anchor="middle">자원 베타</text>
+      <text x="280" y="173" font-size="32" fill="#94a3b8" text-anchor="middle">★★</text>
+      <text x="400" y="173" font-size="32" fill="#ca8a04" text-anchor="middle">★★★★★</text>
+      <text x="520" y="173" font-size="32" fill="#94a3b8" text-anchor="middle">★</text>
+      <text x="640" y="173" font-size="32" fill="#94a3b8" text-anchor="middle">★</text>
+
+      <!-- ESS Beta row -->
+      <rect x="40" y="210" width="160" height="60" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+      <text x="120" y="248" font-size="22" fill="#6d28d9" font-weight="800" text-anchor="middle">ESS 베타</text>
+      <text x="280" y="248" font-size="32" fill="#94a3b8" text-anchor="middle">★★★</text>
+      <text x="400" y="248" font-size="32" fill="#94a3b8" text-anchor="middle">★</text>
+      <text x="520" y="248" font-size="32" fill="#7c3aed" text-anchor="middle">★★★★★</text>
+      <text x="640" y="248" font-size="32" fill="#94a3b8" text-anchor="middle">★</text>
+
+      <!-- Can Beta row -->
+      <rect x="40" y="285" width="160" height="60" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+      <text x="120" y="323" font-size="22" fill="#9a3412" font-weight="800" text-anchor="middle">캔 베타</text>
+      <text x="280" y="323" font-size="32" fill="#ea580c" text-anchor="middle">★★★★★</text>
+      <text x="400" y="323" font-size="32" fill="#94a3b8" text-anchor="middle">★</text>
+      <text x="520" y="323" font-size="32" fill="#94a3b8" text-anchor="middle">★★</text>
+      <text x="640" y="323" font-size="32" fill="#ea580c" text-anchor="middle">★★★★★</text>
+    </svg>
+  </div>
+</div>
+
+<!-- ④ 회복 시간축 -->
+<div class="section">
+  <div class="section-title">④ 회복 시간축 — 4단계 사이클 매핑</div>
+
+  <div class="timeline-row">
+    <div class="timeline-card t1">
+      <div class="timeline-period">T1 · 즉시 (1Q26~)</div>
+      <div class="timeline-title">셀 / 양극재 / 캔 / ESS 시스템</div>
+      <div class="timeline-stocks">
+        ▸ <strong>LG엔솔 · 삼성SDI</strong> — ESS 비중 확대<br>
+        ▸ <strong>에코프로비엠 · 엘앤에프 · 포스코퓨처엠 · LG화학</strong> — 메탈 연동 GPM 흑자전환<br>
+        ▸ <strong>상신이디피 · 신흥에스이씨 · 동원시스템즈 · 상아프론테크</strong> — 캐파 부족 → 캔 발주 회복 선행<br>
+        ▸ <strong>LS일렉트릭 · HD현대일렉트릭 · 효성중공업</strong> — DC BBU·변압기 즉시 수요
+      </div>
+    </div>
+    <div class="timeline-card t2">
+      <div class="timeline-period">T2 · 단기 (2H26)</div>
+      <div class="timeline-title">분리막 / 전해액 / 동박 / 도전재</div>
+      <div class="timeline-stocks">
+        ▸ <strong>SKIET · WCP</strong> — 셀 풀가동 후 분리막 발주 회복<br>
+        ▸ <strong>엔켐 · 동화기업 · 솔브레인</strong> — 셀 출하 동행성 가장 강함<br>
+        ▸ <strong>롯데에너지머티리얼즈 · SKC · 솔루스</strong> — 동박 출하 회복<br>
+        ▸ <strong>나노신소재</strong> — 4680/고출력 셀에 CNT 도전재
+      </div>
+    </div>
+    <div class="timeline-card t3">
+      <div class="timeline-period">T3 · 중기 (2027~)</div>
+      <div class="timeline-title">실리콘 음극 / 리튬·전구체 / 장비</div>
+      <div class="timeline-stocks">
+        ▸ <strong>대주전자재료 · 한솔케미칼</strong> — 4680/전고체 침투 시 실리콘 음극 수요<br>
+        ▸ <strong>포스코홀딩스 · 에코프로머티 · 강원에너지</strong> — "자원 독립" 한국형 베팅<br>
+        ▸ <strong>피엔티 · 씨아이에스 · 하나기술</strong> — 신규 캐파 발주 12~18개월 시차로 도래
+      </div>
+    </div>
+    <div class="timeline-card t4">
+      <div class="timeline-period">T4 · 장기 (2028+)</div>
+      <div class="timeline-title">리사이클 / 양극박 / 파우치 필름</div>
+      <div class="timeline-stocks">
+        ▸ <strong>성일하이텍 · 새빗켐</strong> — 폐배터리 회수 본격 사이클 (2027~2028)<br>
+        ▸ <strong>율촌화학 · 대한유화</strong> — 파우치 필름·분리막 PE 원료<br>
+        ▸ ESS 시스템 + 데이터센터 통합 운영의 2차 파생 시장
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box purple">
+    <strong>시간축 활용법 —</strong> T1(즉시 수혜)은 <strong>"이미 검증된 사이클" — 1Q26 결산이 BoE(Body of Evidence)</strong>가 될 영역. T2(단기)는 <strong>"확실히 따라오는 영역"</strong>으로 셀 메이커 가동률이 80% 안착하면 1~2분기 시차로 발주 회복. T3(중기)은 <strong>"테마성 + 실적 검증 동시 필요"</strong> — 4680/전고체/자원 독립 모두 트리거 이벤트가 필요. T4(장기)은 <strong>"옵션 가치 베팅"</strong>으로 포트폴리오의 5~10% 수준이 적정.
+  </div>
+</div>
+
+<!-- ⑤ 11 베스트 픽 -->
+<div class="section">
+  <div class="section-title">⑤ 11 베스트 픽 — 상세 카드</div>
+
+  <div class="pick-card">
+    <span class="pick-rank">PICK #1</span>
+    <div class="pick-head">
+      <div><div class="pick-name">LG에너지솔루션</div><div class="pick-ticker">373220.KS · 셀 베타 · T1 즉시</div></div>
+      <div class="pick-tier">Tier S ★★★★★</div>
+    </div>
+    <div class="pick-row"><span class="pick-label">CATL 매핑</span><span class="pick-val">ESS 25% + DC BBU 직접 수혜</span></div>
+    <div class="pick-row"><span class="pick-label">2026 핵심 트리거</span><span class="pick-val">북미 50GWh+ ESS 캐파 가동</span></div>
+    <div class="pick-row"><span class="pick-label">관전 포인트</span><span class="pick-val">46시리즈 잔고 440GW · LFP 양산</span></div>
+    <div class="pick-thesis"><strong>Thesis —</strong> 한국 셀 1위. ESS 비중이 CATL 25%와 동일 궤도로 진입 시 매출 믹스 변경의 알파. 1Q26 적자는 이미 시장 반영, ESS 인디애나·미시간 가동이 변곡점.</div>
+  </div>
+
+  <div class="pick-card">
+    <span class="pick-rank">PICK #2</span>
+    <div class="pick-head">
+      <div><div class="pick-name">삼성SDI</div><div class="pick-ticker">006400.KS · 셀 베타 · T1 즉시</div></div>
+      <div class="pick-tier">Tier S ★★★★★</div>
+    </div>
+    <div class="pick-row"><span class="pick-label">CATL 매핑</span><span class="pick-val">각형·46시리즈 + ESS</span></div>
+    <div class="pick-row"><span class="pick-label">2026 핵심 트리거</span><span class="pick-val">ESS 인디애나 LFP 라인 가동</span></div>
+    <div class="pick-row"><span class="pick-label">관전 포인트</span><span class="pick-val">3Q25 누적 적자 → 1Q26 흑자 전환 가능성</span></div>
+    <div class="pick-thesis"><strong>Thesis —</strong> 신흥에스이씨와 운명 공동체. ESS 인디애나 LFP 가동 = 캔 회사 폭증 트리거 동시 발생. 캐즘 회복의 한국 셀 베스트 프록시.</div>
+  </div>
+
+  <div class="pick-card">
+    <span class="pick-rank">PICK #3</span>
+    <div class="pick-head">
+      <div><div class="pick-name">에코프로비엠</div><div class="pick-ticker">247540.KQ · 셀 베타 · T1 즉시</div></div>
+      <div class="pick-tier">Tier S ★★★★★</div>
+    </div>
+    <div class="pick-row"><span class="pick-label">CATL 매핑</span><span class="pick-val">메탈 연동 GPM 안정 (1Q26 흑자전환)</span></div>
+    <div class="pick-row"><span class="pick-label">2026 핵심 트리거</span><span class="pick-val">NCA·LFP 양산 + Non-PFE 케미스트리</span></div>
+    <div class="pick-row"><span class="pick-label">관전 포인트</span><span class="pick-val">에코프로 그룹 합산 시 NAV 관점</span></div>
+    <div class="pick-thesis"><strong>Thesis —</strong> 한국 양극재 글로벌 1위. CATL 메탈 연동 가격제 검증 = 한국 양극재 4사의 1Q26 흑자전환 흐름의 지속성 확인.</div>
+  </div>
+
+  <div class="pick-card">
+    <span class="pick-rank">PICK #4</span>
+    <div class="pick-head">
+      <div><div class="pick-name">엘앤에프</div><div class="pick-ticker">066970.KQ · 셀 베타 · T1 즉시</div></div>
+      <div class="pick-tier">Tier S ★★★★★</div>
+    </div>
+    <div class="pick-row"><span class="pick-label">CATL 매핑</span><span class="pick-val">하이니켈·LFP 듀얼 트랙</span></div>
+    <div class="pick-row"><span class="pick-label">2026 핵심 트리거</span><span class="pick-val">매출 +106% YoY (1Q26)</span></div>
+    <div class="pick-row"><span class="pick-label">관전 포인트</span><span class="pick-val">테슬라 NCA + LFP 양산 진입</span></div>
+    <div class="pick-thesis"><strong>Thesis —</strong> 양극재 4사 중 가장 빠른 매출 회복. 메탈 연동 가격제 + ASP·물량 동시 회복의 직접 수혜.</div>
+  </div>
+
+  <div class="pick-card">
+    <span class="pick-rank">PICK #5</span>
+    <div class="pick-head">
+      <div><div class="pick-name">신흥에스이씨</div><div class="pick-ticker">243840.KQ · 캔 베타 · T1 즉시</div></div>
+      <div class="pick-tier">Tier S ★★★★★</div>
+    </div>
+    <div class="pick-row"><span class="pick-label">CATL 매핑</span><span class="pick-val">캐파 부족 → 캔 발주 회복 선행 시그널</span></div>
+    <div class="pick-row"><span class="pick-label">2026 핵심 트리거</span><span class="pick-val">영업이익 +8배 (ESS 폭증)</span></div>
+    <div class="pick-row"><span class="pick-label">관전 포인트</span><span class="pick-val">삼성SDI 90% 의존 (양날의 검)</span></div>
+    <div class="pick-thesis"><strong>Thesis —</strong> 한국 캔 베타의 베스트 프록시. 삼성SDI ESS 인디애나 LFP 가동 = 영업이익 폭증의 직접 트리거. 단, 단일 고객 리스크는 항상 인지.</div>
+  </div>
+
+  <div class="pick-card">
+    <span class="pick-rank">PICK #6</span>
+    <div class="pick-head">
+      <div><div class="pick-name">상신이디피</div><div class="pick-ticker">091580.KQ · 캔 베타 · T1 즉시</div></div>
+      <div class="pick-tier">Tier S ★★★★★</div>
+    </div>
+    <div class="pick-row"><span class="pick-label">CATL 매핑</span><span class="pick-val">캐파 부족 시그널 + 인디애나 IRA 수혜</span></div>
+    <div class="pick-row"><span class="pick-label">2026 핵심 트리거</span><span class="pick-val">미국 인디애나 가동 + LG엔솔 ESS</span></div>
+    <div class="pick-row"><span class="pick-label">관전 포인트</span><span class="pick-val">2025 매출 -10% → 2026 회복 폭</span></div>
+    <div class="pick-thesis"><strong>Thesis —</strong> Kedali 위스콘신이 트럼프 관세로 막히면 인디애나 거점의 IRA 수혜 직접. 신흥보다 고객 분산도 높은 강점.</div>
+  </div>
+
+  <div class="pick-card">
+    <span class="pick-rank">PICK #7</span>
+    <div class="pick-head">
+      <div><div class="pick-name">LS일렉트릭</div><div class="pick-ticker">010120.KS · ESS 베타 · T1 즉시</div></div>
+      <div class="pick-tier">Tier S ★★★★★</div>
+    </div>
+    <div class="pick-row"><span class="pick-label">CATL 매핑</span><span class="pick-val">파워 일렉트로닉스 보강의 한국 베스트 프록시</span></div>
+    <div class="pick-row"><span class="pick-label">2026 핵심 트리거</span><span class="pick-val">DC BBU 시스템 + PCS·EMS</span></div>
+    <div class="pick-row"><span class="pick-label">관전 포인트</span><span class="pick-val">PDP8 개정 + 데이터센터 변압기</span></div>
+    <div class="pick-thesis"><strong>Thesis —</strong> ESS 베타 베스트 픽. CATL이 "파워 일렉트로닉스 보강"이라고 지목한 영역의 한국 직접 수혜. AI Capex 사이클 + 한전 그리드 강화 동시 견인.</div>
+  </div>
+
+  <div class="pick-card">
+    <span class="pick-rank">PICK #8</span>
+    <div class="pick-head">
+      <div><div class="pick-name">HD현대일렉트릭</div><div class="pick-ticker">267260.KS · ESS 베타 · T1 즉시</div></div>
+      <div class="pick-tier">Tier S ★★★★★</div>
+    </div>
+    <div class="pick-row"><span class="pick-label">CATL 매핑</span><span class="pick-val">DC 변압기 + 재생에너지 연계</span></div>
+    <div class="pick-row"><span class="pick-label">2026 핵심 트리거</span><span class="pick-val">북미 변압기 수출 사이클 지속</span></div>
+    <div class="pick-row"><span class="pick-label">관전 포인트</span><span class="pick-val">변압기 LT 4년 + 백로그</span></div>
+    <div class="pick-thesis"><strong>Thesis —</strong> 데이터센터 1GW당 15~20GWh ESS의 "전력 측 인프라" 직접 수혜. 변압기 사이클이 지속되는 한 ESS 시스템 매출도 동행.</div>
+  </div>
+
+  <div class="pick-card">
+    <span class="pick-rank">PICK #9</span>
+    <div class="pick-head">
+      <div><div class="pick-name">SKIET</div><div class="pick-ticker">361610.KS · 셀 베타 · T2 단기</div></div>
+      <div class="pick-tier a">Tier A ★★★★</div>
+    </div>
+    <div class="pick-row"><span class="pick-label">CATL 매핑</span><span class="pick-val">셀 풀가동 → 분리막 발주 회복 동행</span></div>
+    <div class="pick-row"><span class="pick-label">2026 핵심 트리거</span><span class="pick-val">SK on 가동률 + 코팅 분리막(CCS)</span></div>
+    <div class="pick-row"><span class="pick-label">관전 포인트</span><span class="pick-val">2H26 가동률 회복 폭</span></div>
+    <div class="pick-thesis"><strong>Thesis —</strong> 셀 메이커 풀가동 시 가장 먼저 발주가 풀리는 소재. SK on의 1Q26 흑자 전환 가능성과 동행하는 분리막 베스트 프록시.</div>
+  </div>
+
+  <div class="pick-card">
+    <span class="pick-rank">PICK #10</span>
+    <div class="pick-head">
+      <div><div class="pick-name">엔켐</div><div class="pick-ticker">348370.KQ · 셀 베타 · T2 단기</div></div>
+      <div class="pick-tier a">Tier A ★★★★</div>
+    </div>
+    <div class="pick-row"><span class="pick-label">CATL 매핑</span><span class="pick-val">셀 출하와 가장 강한 동행성</span></div>
+    <div class="pick-row"><span class="pick-label">2026 핵심 트리거</span><span class="pick-val">북미 전해액 1위 추격</span></div>
+    <div class="pick-row"><span class="pick-label">관전 포인트</span><span class="pick-val">LG엔솔·삼성SDI·SK on 풀커버</span></div>
+    <div class="pick-thesis"><strong>Thesis —</strong> 한국 셀 3사 모두에 공급하는 전해액 베스트 프록시. 셀 풀가동 → 전해액 수요 즉시 동행이라는 강한 단기 사이클.</div>
+  </div>
+
+  <div class="pick-card">
+    <span class="pick-rank">PICK #11</span>
+    <div class="pick-head">
+      <div><div class="pick-name">포스코홀딩스</div><div class="pick-ticker">005490.KS · 자원 베타 · T3 중기</div></div>
+      <div class="pick-tier b">Tier B ★★★</div>
+    </div>
+    <div class="pick-row"><span class="pick-label">CATL 매핑</span><span class="pick-val">"자원 독립" 한국형 베팅의 베스트 프록시</span></div>
+    <div class="pick-row"><span class="pick-label">2026 핵심 트리거</span><span class="pick-val">아르헨티나 리튬 직접 채굴 가동</span></div>
+    <div class="pick-row"><span class="pick-label">관전 포인트</span><span class="pick-val">철강 부문 노출 → NAV 분리 분석</span></div>
+    <div class="pick-thesis"><strong>Thesis —</strong> CATL 메시지 ④ "자원 독립"의 한국 직접 매핑. 단, 철강 노출이 커서 순수 2차전지 베팅보다는 "자원 자체 공급 능력 + 철강 사이클" 복합 노출.</div>
+  </div>
+</div>
+
+<!-- ⑥ OPM 사이클 -->
+<div class="section">
+  <div class="section-title">⑥ 영역별 OPM 사이클 — LFP/ESS 시대 마진 회복 패턴</div>
+
+  <div class="chart-container">
+    <div class="chart-title">12 영역 OPM 사이클 — Trough → Recovery → Peak</div>
+    <div class="chart-subtitle">2025 저점 → 2026 회복 → 2027 정상화 패턴</div>
+    <svg class="chart-svg" viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+      <!-- Grid -->
+      <line x1="100" y1="40"  x2="780" y2="40"  stroke="#bbf7d0" stroke-width="0.6"/>
+      <line x1="100" y1="100" x2="780" y2="100" stroke="#bbf7d0" stroke-width="0.6"/>
+      <line x1="100" y1="160" x2="780" y2="160" stroke="#bbf7d0" stroke-width="0.6"/>
+      <line x1="100" y1="220" x2="780" y2="220" stroke="#bbf7d0" stroke-width="0.6"/>
+      <line x1="100" y1="280" x2="780" y2="280" stroke="#475569" stroke-width="1.4"/>
+
+      <text x="92" y="44" font-size="14" fill="#64748b" text-anchor="end">20%</text>
+      <text x="92" y="104" font-size="14" fill="#64748b" text-anchor="end">15%</text>
+      <text x="92" y="164" font-size="14" fill="#64748b" text-anchor="end">10%</text>
+      <text x="92" y="224" font-size="14" fill="#64748b" text-anchor="end">5%</text>
+      <text x="92" y="284" font-size="14" fill="#64748b" text-anchor="end">0%</text>
+
+      <!-- X axis labels -->
+      <text x="220" y="305" font-size="16" fill="#475569" text-anchor="middle" font-weight="700">2025 (저점)</text>
+      <text x="440" y="305" font-size="16" fill="#475569" text-anchor="middle" font-weight="700">2026 (회복)</text>
+      <text x="660" y="305" font-size="16" fill="#475569" text-anchor="middle" font-weight="700">2027 (정상화)</text>
+
+      <!-- 셀 (LG엔솔/삼성SDI): -3% → 5% → 12% -->
+      <polyline points="220,316 440,220 660,136" stroke="#16a34a" stroke-width="3" fill="none"/>
+      <circle cx="220" cy="316" r="6" fill="#16a34a"/>
+      <circle cx="440" cy="220" r="6" fill="#16a34a"/>
+      <circle cx="660" cy="136" r="6" fill="#16a34a"/>
+      <text x="680" y="132" font-size="18" fill="#16a34a" font-weight="800">셀</text>
+
+      <!-- 양극재: 0% → 7% → 13% -->
+      <polyline points="220,280 440,196 660,124" stroke="#7c3aed" stroke-width="3" fill="none"/>
+      <circle cx="220" cy="280" r="6" fill="#7c3aed"/>
+      <circle cx="440" cy="196" r="6" fill="#7c3aed"/>
+      <circle cx="660" cy="124" r="6" fill="#7c3aed"/>
+      <text x="680" y="120" font-size="18" fill="#7c3aed" font-weight="800">양극재</text>
+
+      <!-- 캔: 5% → 8% → 11% -->
+      <polyline points="220,220 440,184 660,148" stroke="#ea580c" stroke-width="3" fill="none"/>
+      <circle cx="220" cy="220" r="6" fill="#ea580c"/>
+      <circle cx="440" cy="184" r="6" fill="#ea580c"/>
+      <circle cx="660" cy="148" r="6" fill="#ea580c"/>
+      <text x="680" y="154" font-size="18" fill="#ea580c" font-weight="800">캔</text>
+
+      <!-- ESS 시스템: 8% → 10% → 14% -->
+      <polyline points="220,184 440,160 660,112" stroke="#2563eb" stroke-width="3" fill="none"/>
+      <circle cx="220" cy="184" r="6" fill="#2563eb"/>
+      <circle cx="440" cy="160" r="6" fill="#2563eb"/>
+      <circle cx="660" cy="112" r="6" fill="#2563eb"/>
+      <text x="680" y="108" font-size="18" fill="#2563eb" font-weight="800">ESS 시스템</text>
+
+      <!-- 분리막/전해액: -2% → 4% → 9% -->
+      <polyline points="220,304 440,232 660,172" stroke="#0891b2" stroke-width="3" fill="none" stroke-dasharray="6,3"/>
+      <circle cx="220" cy="304" r="5" fill="#0891b2"/>
+      <circle cx="440" cy="232" r="5" fill="#0891b2"/>
+      <circle cx="660" cy="172" r="5" fill="#0891b2"/>
+      <text x="680" y="176" font-size="18" fill="#0891b2" font-weight="800">소재</text>
+
+      <!-- 자원: 1% → 3% → 6% -->
+      <polyline points="220,268 440,244 660,208" stroke="#ca8a04" stroke-width="3" fill="none" stroke-dasharray="6,3"/>
+      <circle cx="220" cy="268" r="5" fill="#ca8a04"/>
+      <circle cx="440" cy="244" r="5" fill="#ca8a04"/>
+      <circle cx="660" cy="208" r="5" fill="#ca8a04"/>
+      <text x="680" y="212" font-size="18" fill="#ca8a04" font-weight="800">자원</text>
+
+      <text x="50" y="20" font-size="16" fill="#14532d" font-weight="700">OPM (영업이익률)</text>
+    </svg>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#16a34a"></span>셀 (LG엔솔·삼성SDI)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#7c3aed"></span>양극재 4사</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#ea580c"></span>캔 4사</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#2563eb"></span>ESS 시스템</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#0891b2"></span>분리막·전해액·동박</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#ca8a04"></span>리튬·자원</div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <strong>OPM 사이클 핵심 패턴 —</strong> 2025년이 영역별 저점, 2026년이 회복 구간, 2027년이 정상화. <strong>가장 가파른 회복은 양극재 4사</strong>(0% → 13%, 메탈 연동 + 양 회복). <strong>가장 안정적 우상향은 ESS 시스템</strong>(8% → 14%, 데이터센터 + 변압기 사이클). <strong>캔은 안정적 마진</strong>(5% → 11%, 양 폭증 + 알루미늄 안정). <strong>분리막·전해액·동박은 적자 → 흑자 전환 폭이 큼</strong>(-2% → 9%, 셀 가동률 정상화 시 가동률 레버리지 가장 큼).
+  </div>
+</div>
+
+<!-- ⑦ Bull/Bear/Think Box -->
+<div class="section">
+  <div class="section-title">⑦ 종합 인사이트 — Bull · Bear · Think Box</div>
+
+  <div class="bull-box">
+    <div class="box-title">▲ Bull Case — LFP/ESS 시대의 한국 베스트 픽 11종이 모두 성공할 시나리오</div>
+    <div class="box-text">
+      ① <strong>LG엔솔 ESS 인디애나 + 삼성SDI ESS 인디애나 LFP</strong>가 1H26 가동 → 셀 1·2위 동시 흑자전환.<br>
+      ② <strong>CATL 풀가동 + 한국 셀 풀가동 동시 진입</strong> → 캔(상신·신흥)·양극재(엘앤에프·에코프로비엠)·소재(SKIET·엔켐) 모두 발주 회복.<br>
+      ③ <strong>AI Capex + 데이터센터 BBU 사이클</strong> → LS일렉트릭·HD현대일렉트릭·효성중공업의 ESS 시스템 매출 폭증.<br>
+      ④ <strong>메탈 연동 GPM</strong> 검증 = 양극재 4사 안정적 흑자 유지, 1Q26 흑자전환 흐름의 지속성 확인.<br>
+      ⑤ 트럼프 대중국 관세 강화 시 <strong>한국 캔(인디애나) + 한국 분리막(SKIET) + 한국 전해액(엔켐) IRA 직접 수혜</strong> 비대칭 알파.
+    </div>
+  </div>
+
+  <div class="bear-box">
+    <div class="box-title">▼ Bear Case — 회복 사이클이 1~2분기 지연 또는 좌초 시나리오</div>
+    <div class="box-text">
+      ① <strong>유럽 EV 캐즘 회복 지연</strong> → 헝가리 거점(상신·신흥) 적자 지속, 셀 3사 유럽 익스포저 손실.<br>
+      ② <strong>알루미늄 가격 상승 + 헤지 부재</strong> → 캔 4사 마진 동시 충격(Kedali 무헤지 인정 → 한국도 동일 가능성).<br>
+      ③ <strong>단가 -4~5% 추가 하락</strong> → 양 성장이 단가 하락을 못 따라잡으면 매출 성장 ≠ 이익 성장.<br>
+      ④ <strong>중동 정세 장기화 + 관세 확장</strong> → 한국 셀·소재의 해외 매출 익스포저(LG엔솔 1/3, 삼성SDI 1/3)에 단계적 충격.<br>
+      ⑤ <strong>BYD 초고속 충전 추격 + LFP 가격 경쟁</strong> → 양극재 ASP 압박, 한국 양극재 4사 ASP 회복 지연.<br>
+      ⑥ <strong>장비·리사이클(T3·T4)는 1~2분기 안에 단기 반등 어려움</strong> — 12~18개월 시차 리스크.
+    </div>
+  </div>
+
+  <div class="think-box">
+    <div class="box-title">◆ Think Box — 2차적 사고</div>
+    <div class="box-text">
+      ① <strong>"베타 분류는 분산투자 도구"</strong> — 셀 베타 + 자원 베타 + ESS 베타 + 캔 베타를 골고루 가져가면 매크로 변수 충격에 헷지 효과. 단일 베타 100% 노출은 사이클 깨질 때 직격.<br>
+      ② <strong>"시간축은 진입 타이밍 도구"</strong> — T1(즉시 수혜)에 70%, T2(단기)에 20%, T3+T4에 10% 분산이 1Q26 시점의 적정 비중. T3·T4를 너무 일찍 진입하면 12~18개월 무수익 구간 발생.<br>
+      ③ <strong>"한국 베스트 픽 11종 모두 사라"가 아닌 "베타·시간축 매트릭스 4분면에서 각 1~2종"</strong>이 적정. 11종 모두 보유는 ETF 효과 + 종목 분산도 과도.<br>
+      ④ <strong>"CATL = 한국 셀의 미래"라는 가정</strong>은 1Q26 검증되었지만, ESS 마진 = EV 마진(Kedali 컨콜)이라는 점도 확인. <strong>"ESS 비중 확대 = 매출 폭증 ≠ 마진 폭증"</strong>임을 분명히 인식 후 매수.<br>
+      ⑤ <strong>알루미늄 가격 모니터링</strong>은 캔 4사 분기 결산의 1순위 라인. 1Q26 사업보고서 "위험관리" 섹션에서 헤지 정책 공시 확인 권장.<br>
+      ⑥ <strong>삼성SDI 분기 컨콜은 한국 캔 4사 분석의 선행 지표</strong>. 신흥에스이씨 영업이익 +8배의 진짜 이유는 ESS 자체 마진이 아닌 "고정비 레버리지 + 볼륨 폭증" 임을 고려.<br>
+      ⑦ <strong>"자원 독립" 트렌드 + 트럼프 관세</strong>의 양면 영향 — 한국에 유리하게 작동(IRA·CRMA) 시 한국 자원 베타(포스코홀딩스·에코프로머티) 재평가, 불리하게 작동 시 셀 베타에 악재.
+    </div>
+  </div>
+</div>
+
+<!-- ⑧ 결론 -->
+<div class="section">
+  <div class="section-title">⑧ 결론 — 포트폴리오 구성 가이드</div>
+
+  <div class="insight-box">
+    <strong>LFP/ESS 시대 한국 2차전지 12영역 중 베스트 픽 11종을 정리했지만, 핵심은 "어떻게 조합하느냐"입니다.</strong> 다음 4가지 원칙으로 정리:
+  </div>
+
+  <ul class="clean">
+    <li><strong>4분면 분산 원칙</strong> — 셀 베타 / 자원 베타 / ESS 베타 / 캔 베타에 각각 1~2종씩 분산. 단일 베타 집중은 사이클 변곡점에서 위험.</li>
+    <li><strong>시간축 분배 원칙</strong> — T1 즉시 70% + T2 단기 20% + T3·T4 중장기 10%. 너무 빠른 중장기 진입은 무수익 구간 발생.</li>
+    <li><strong>OPM 사이클 인식</strong> — 양극재(가장 가파른 회복) > ESS 시스템(가장 안정) > 캔(안정+양 폭증) > 셀(폭은 크나 변동성↑) > 소재(턴어라운드 폭 크나 진입 타이밍 어려움) > 자원(가장 느림).</li>
+    <li><strong>리스크 모니터링</strong> — ① 알루미늄 가격(캔), ② 유럽 EV 회복 시점(셀·캔), ③ 트럼프 관세(셀·캔·소재), ④ 삼성SDI 분기 흑자전환(신흥), ⑤ CATL 다각화(글로벌 경쟁).</li>
+  </ul>
+
+  <div class="insight-box purple" style="margin-top:24px">
+    <strong>최종 한 줄 —</strong> "LFP/ESS 시대 = 매출 성장의 시대 + 마진은 영역별 차별화 + 베타·시간축 매트릭스 분산이 핵심. 11종 모두 매수가 아니라 4분면에서 베스트 1~2종씩 골라 분산하는 것이 1Q26 시점의 정답."
+  </div>
+</div>
+
+<div class="footer">
+  <strong>LFP/ESS 시대 한국 2차전지 밸류체인 12영역 베스트 픽 — 셀 베타 / 자원 베타 / 회복 시간축 분류</strong><br>
+  본 리포트 작성: 2026.05.03 · CATL 1Q26 컨콜(2026.04.15) + Kedali(科达利) 4월 8일 컨콜 메시지 종합<br>
+  본 자료는 한국 2차전지 밸류체인 종목 정리 및 베타·시간축 매트릭스 분석을 위한 투자 참고용 자료이며, 특정 종목의 매수·매도를 권유하지 않습니다.<br>
+  종목코드·사업 영역은 작성 시점 기준이며, 일부 회사명·합병 이력은 변경되었을 수 있어 최종 투자 판단 전 공식 공시 자료 확인을 권장합니다.<br>
+  최종 투자 판단의 책임은 투자자 본인에게 있습니다.
+</div>
+
+</div>
+</body>
+</html>
