@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한국 2차전지 밸류체인 풀맵 — 사용자 보유 8사 vs 놓친 종목 + 수혜 강도 분석</title>
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#ffffff; --bg3:#f1f5f9; --bg4:#e2e8f0;
+    --border:#e2e8f0; --text:#1e293b; --text2:#475569; --text3:#94a3b8;
+    --blue:#2563eb; --green:#16a34a; --red:#dc2626; --orange:#ea580c;
+    --purple:#7c3aed; --amber:#d97706; --cyan:#0891b2; --teal:#0d9488;
+    --gold:#ca8a04;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);line-height:1.65}
+  .container{max-width:1400px;margin:0 auto;padding:0 28px 80px}
+  .hero{background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 50%,#eff6ff 100%);padding:72px 24px 56px;text-align:center;margin-bottom:44px;border-bottom:1px solid var(--border)}
+  .hero-badge{display:inline-block;background:rgba(37,99,235,.12);color:var(--blue);font-size:24px;font-weight:700;padding:8px 24px;border-radius:24px;margin-bottom:18px;letter-spacing:.6px}
+  .hero h1{font-size:48px;font-weight:900;margin-bottom:14px;line-height:1.2;letter-spacing:-.5px}
+  .hero .sub{font-size:28px;color:var(--text2);font-weight:500;line-height:1.55}
+  .section{margin-bottom:52px}
+  .section-title{font-size:36px;font-weight:800;margin-bottom:22px;padding-bottom:12px;border-bottom:3px solid var(--blue)}
+  .sub-title{font-size:28px;font-weight:700;color:var(--text);margin:18px 0 10px}
+
+  .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:28px}
+  .kpi-card{background:var(--bg3);border-radius:14px;padding:20px 16px;text-align:center;border:1px solid var(--border)}
+  .kpi-label{font-size:22px;color:var(--text3);font-weight:700;margin-bottom:6px;letter-spacing:.3px}
+  .kpi-value{font-size:40px;font-weight:900;line-height:1.15}
+  .kpi-sub{font-size:20px;color:var(--text2);margin-top:6px}
+
+  .chart-container{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:28px 22px 20px;margin-bottom:26px}
+  .chart-title{font-size:30px;font-weight:800;margin-bottom:6px}
+  .chart-subtitle{font-size:24px;color:var(--text3);margin-bottom:18px}
+  .chart-svg{width:100%;height:auto;display:block;max-width:100%}
+  .legend{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;margin-top:14px}
+  .legend-item{display:flex;align-items:center;gap:8px;font-size:22px;color:var(--text2)}
+  .legend-dot{width:18px;height:18px;border-radius:4px;flex-shrink:0}
+
+  .insight-box{background:var(--bg3);border-left:6px solid var(--blue);border-radius:0 12px 12px 0;padding:18px 22px;margin-bottom:18px;font-size:26px;color:var(--text2);line-height:1.7}
+  .insight-box strong{color:var(--text);font-weight:800}
+  .insight-box.warn{border-left-color:var(--orange);background:#fff7ed}
+  .insight-box.good{border-left-color:var(--green);background:#f0fdf4}
+  .insight-box.red{border-left-color:var(--red);background:#fef2f2}
+  .insight-box.purple{border-left-color:var(--purple);background:#faf5ff}
+
+  .data-table{width:100%;border-collapse:collapse;font-size:22px;margin:14px 0}
+  .data-table th{background:var(--bg3);color:var(--text2);font-weight:700;padding:12px;text-align:left;border:1px solid var(--border)}
+  .data-table th.center{text-align:center}
+  .data-table th.right{text-align:right}
+  .data-table td{padding:12px;text-align:left;border:1px solid var(--border);color:var(--text);vertical-align:top}
+  .data-table td.center{text-align:center;font-weight:700;color:var(--text2)}
+  .data-table td.right{text-align:right}
+  .data-table tr:nth-child(even){background:var(--bg3)}
+  .data-table td.user-have{background:rgba(22,163,74,.12);font-weight:800;color:var(--green)}
+  .data-table td.missing{background:rgba(220,38,38,.08);color:var(--red);font-weight:700}
+  .data-table td.tier-s{background:rgba(202,138,4,.18);font-weight:800;color:var(--gold)}
+  .data-table td.tier-a{background:rgba(37,99,235,.1);font-weight:800;color:var(--blue)}
+  .data-table td.tier-b{background:rgba(124,58,237,.1);font-weight:800;color:var(--purple)}
+  .data-table td.tier-c{background:rgba(148,163,184,.15);font-weight:700;color:var(--text2)}
+
+  .pill{display:inline-block;padding:3px 10px;border-radius:14px;font-size:18px;font-weight:700;margin:2px 4px 2px 0;white-space:nowrap}
+  .pill.green{background:rgba(22,163,74,.15);color:var(--green)}
+  .pill.red{background:rgba(220,38,38,.12);color:var(--red)}
+  .pill.blue{background:rgba(37,99,235,.12);color:var(--blue)}
+  .pill.gold{background:rgba(202,138,4,.18);color:var(--gold)}
+  .pill.purple{background:rgba(124,58,237,.12);color:var(--purple)}
+  .pill.orange{background:rgba(234,88,12,.12);color:var(--orange)}
+
+  .bull-box,.bear-box,.think-box{border-radius:0 12px 12px 0;padding:18px 22px;margin:12px 0}
+  .bull-box{background:#f0fdf4;border-left:6px solid var(--green)}
+  .bull-box .box-title{font-size:28px;font-weight:800;color:var(--green);margin-bottom:6px}
+  .bull-box .box-text{font-size:24px;color:#166534;line-height:1.7}
+  .bear-box{background:#fef2f2;border-left:6px solid var(--red)}
+  .bear-box .box-title{font-size:28px;font-weight:800;color:var(--red);margin-bottom:6px}
+  .bear-box .box-text{font-size:24px;color:#991b1b;line-height:1.7}
+  .think-box{background:#eff6ff;border-left:6px solid var(--blue)}
+  .think-box .box-title{font-size:28px;font-weight:800;color:var(--blue);margin-bottom:6px}
+  .think-box .box-text{font-size:24px;color:#1e3a5f;line-height:1.7}
+
+  ul.clean{list-style:none;padding:0}
+  ul.clean li{font-size:24px;color:var(--text2);padding:8px 0 8px 28px;position:relative;line-height:1.7}
+  ul.clean li::before{content:'▸';position:absolute;left:0;color:var(--blue);font-weight:800;font-size:24px}
+  ul.clean li strong{color:var(--text);font-weight:800}
+
+  .vc-flow{display:flex;align-items:center;gap:6px;margin:16px 0;flex-wrap:wrap;justify-content:center}
+  .vc-node{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;padding:12px 18px;border-radius:10px;font-size:20px;font-weight:700;text-align:center;min-width:120px}
+  .vc-node.purple{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
+  .vc-node.green{background:linear-gradient(135deg,#15803d,#22c55e)}
+  .vc-node.orange{background:linear-gradient(135deg,#ea580c,#fb923c)}
+  .vc-node.gold{background:linear-gradient(135deg,#a16207,#eab308)}
+  .vc-node.cyan{background:linear-gradient(135deg,#0e7490,#06b6d4)}
+  .vc-node.red{background:linear-gradient(135deg,#991b1b,#ef4444)}
+  .vc-arrow{color:#475569;font-size:28px;font-weight:800}
+
+  .cat-card{background:var(--bg2);border:2px solid var(--border);border-radius:16px;padding:22px 26px;margin-bottom:20px;box-shadow:0 1px 4px rgba(15,23,42,.04)}
+  .cat-card.user-cat{border-color:var(--green);background:#f0fdf4}
+  .cat-card.missing-cat{border-color:var(--red);background:#fef2f2}
+  .cat-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .cat-name{font-size:32px;font-weight:800;color:var(--text)}
+  .cat-status{font-size:20px;font-weight:700;padding:4px 14px;border-radius:14px}
+  .cat-status.have{background:rgba(22,163,74,.18);color:var(--green)}
+  .cat-status.miss{background:rgba(220,38,38,.18);color:var(--red)}
+  .cat-status.partial{background:rgba(234,88,12,.18);color:var(--orange)}
+  .cat-desc{font-size:22px;color:var(--text2);line-height:1.6;margin-bottom:10px}
+  .cat-tickers{font-size:22px;color:var(--text);line-height:1.7}
+  .cat-tickers strong{color:var(--blue);font-weight:800}
+
+  .footer{text-align:center;padding:36px 0;font-size:20px;color:var(--text3);border-top:1px solid var(--border);margin-top:60px;line-height:1.7}
+
+  @media(max-width:900px){
+    .container{padding:0 16px 60px}
+    .hero{padding:48px 16px 36px}
+    .hero h1{font-size:32px}
+    .hero .sub{font-size:20px}
+    .section-title{font-size:26px}
+    .kpi-row{grid-template-columns:repeat(2,1fr)}
+    .kpi-value{font-size:28px}
+    .kpi-label,.kpi-sub{font-size:16px}
+    .insight-box{font-size:18px;padding:14px 16px}
+    .data-table{font-size:16px}
+    .data-table th,.data-table td{padding:8px}
+    .chart-title{font-size:22px}
+    .chart-subtitle{font-size:16px}
+    ul.clean li{font-size:18px}
+    .legend-item{font-size:16px}
+    .bull-box .box-title,.bear-box .box-title,.think-box .box-title{font-size:22px}
+    .bull-box .box-text,.bear-box .box-text,.think-box .box-text{font-size:18px}
+    .vc-node{font-size:16px;min-width:100px;padding:8px 12px}
+    .cat-name{font-size:24px}
+    .cat-status{font-size:16px}
+    .cat-desc,.cat-tickers{font-size:18px}
+    .pill{font-size:14px}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">KOREA EV BATTERY · VALUE CHAIN · 풀맵 + 수혜 강도 분석</div>
+  <h1>한국 2차전지 밸류체인 풀맵<br>사용자 보유 8사 vs 놓친 종목 체크</h1>
+  <div class="sub">사용자 인지 종목: 상신이디피·신흥에스이씨·동원시스템즈·상아프론테크·엘앤에프·LG에너지솔루션·삼성SDI·포스코퓨처엠 (8사)<br>13개 카테고리 · 50+ 상장사 정리 · CATL 1Q26 메시지 기반 수혜 강도 Tier S~C 분류</div>
+</div>
+
+<div class="container">
+
+<!-- ① 한 눈에 — 사용자 커버리지 -->
+<div class="section">
+  <div class="section-title">① 한 눈에 — 사용자 커버리지 진단</div>
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">밸류체인 카테고리</div>
+      <div class="kpi-value" style="color:var(--blue)">13개</div>
+      <div class="kpi-sub">셀 ~ 리사이클·ESS</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">사용자 보유</div>
+      <div class="kpi-value" style="color:var(--green)">3 / 13</div>
+      <div class="kpi-sub">셀 · 양극재 · 캔/부품</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">완전 미보유 카테고리</div>
+      <div class="kpi-value" style="color:var(--red)">10개</div>
+      <div class="kpi-sub">음극재·분리막·전해액·동박 등</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">정리한 상장사</div>
+      <div class="kpi-value" style="color:var(--purple)">50+</div>
+      <div class="kpi-sub">놓친 핵심 종목 ~30개</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">추가 검토 권장</div>
+      <div class="kpi-value" style="color:var(--orange)">Tier S+A</div>
+      <div class="kpi-sub">12~15개 종목</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">수혜 강도 매트릭스</div>
+      <div class="kpi-value" style="color:var(--gold)">★★★★★</div>
+      <div class="kpi-sub">CATL 1Q26 매핑</div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <strong>진단 한 줄 요약 —</strong> 사용자가 보유한 8사는 <strong>셀(LG엔솔·삼성SDI), 양극재(엘앤에프·포스코퓨처엠), 캔/부품(상신·신흥·동원·상아)</strong>의 3개 카테고리에 고르게 분산되어 있어 핵심 축은 잘 잡혀 있음. 그러나 <strong>음극재·분리막·전해액·동박·도전재·리튬/전구체·리사이클·장비·ESS 전력기기</strong>의 10개 카테고리는 사실상 미커버 상태. 특히 <strong>분리막(SKIET·WCP)·전해액(엔켐·동화기업)·동박(롯데에너지머티)·실리콘 음극(대주전자재료)·전력기기(LS일렉트릭·HD현대일렉트릭)</strong>은 CATL 컨콜의 5대 메시지 중 3개 이상에 직접 매칭되는 강한 수혜 후보. <strong>양극재 카테고리에서도 에코프로비엠·에코프로·LG화학·코스모신소재가 누락</strong>되어 있어 양극재 4사 중 절반만 커버 중.
+  </div>
+</div>
+
+<!-- ② 밸류체인 풀맵 다이어그램 -->
+<div class="section">
+  <div class="section-title">② 밸류체인 흐름 다이어그램 — 원재료 → 셀 → ESS</div>
+
+  <div class="chart-container">
+    <div class="chart-title">한국 2차전지 밸류체인 13개 카테고리</div>
+    <div class="chart-subtitle">원재료/소재 → 셀 → 응용 (EV·ESS·DC BBU)</div>
+
+    <div class="vc-flow">
+      <div class="vc-node gold">① 리튬·정제<br><span style="font-size:16px;font-weight:500">포스코홀딩스·강원에너지</span></div>
+      <div class="vc-arrow">→</div>
+      <div class="vc-node purple">② 전구체<br><span style="font-size:16px;font-weight:500">에코프로머티·LG화학</span></div>
+      <div class="vc-arrow">→</div>
+      <div class="vc-node">③ 양극재<br><span style="font-size:16px;font-weight:500">에코프로비엠·엘앤에프</span></div>
+    </div>
+    <div class="vc-flow">
+      <div class="vc-node">④ 음극재<br><span style="font-size:16px;font-weight:500">포스코퓨처엠·대주전자</span></div>
+      <div class="vc-arrow">+</div>
+      <div class="vc-node cyan">⑤ 분리막<br><span style="font-size:16px;font-weight:500">SKIET·WCP</span></div>
+      <div class="vc-arrow">+</div>
+      <div class="vc-node green">⑥ 전해액<br><span style="font-size:16px;font-weight:500">엔켐·동화기업</span></div>
+      <div class="vc-arrow">+</div>
+      <div class="vc-node orange">⑦ 도전재<br><span style="font-size:16px;font-weight:500">나노신소재</span></div>
+    </div>
+    <div class="vc-flow">
+      <div class="vc-node red">⑧ 동박<br><span style="font-size:16px;font-weight:500">롯데에너지·SKC</span></div>
+      <div class="vc-arrow">+</div>
+      <div class="vc-node orange">⑨ 캔/케이스<br><span style="font-size:16px;font-weight:500">상신·신흥·동원·상아</span></div>
+      <div class="vc-arrow">→</div>
+      <div class="vc-node green">⑩ 셀 메이커<br><span style="font-size:16px;font-weight:500">LG엔솔·삼성SDI</span></div>
+      <div class="vc-arrow">→</div>
+      <div class="vc-node">⑪ ESS 시스템<br><span style="font-size:16px;font-weight:500">LS일렉트릭·HD현대</span></div>
+    </div>
+    <div class="vc-flow">
+      <div class="vc-node purple">⑫ 장비<br><span style="font-size:16px;font-weight:500">피엔티·씨아이에스</span></div>
+      <div class="vc-arrow">⤴</div>
+      <div class="vc-node gold">⑬ 리사이클<br><span style="font-size:16px;font-weight:500">성일하이텍·새빗켐</span></div>
+    </div>
+
+    <div class="legend" style="margin-top:24px">
+      <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#15803d,#22c55e)"></span>사용자 보유 카테고리</div>
+      <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#1e3a8a,#2563eb)"></span>주요 카테고리</div>
+      <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#a16207,#eab308)"></span>업스트림(자원·리사이클)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#ea580c,#fb923c)"></span>핵심 부품</div>
+    </div>
+  </div>
+</div>
+
+<!-- ③ 카테고리별 상세 — 사용자 보유 + 누락 -->
+<div class="section">
+  <div class="section-title">③ 카테고리별 종목 풀맵 — 사용자 보유 vs 놓친 종목</div>
+
+  <div class="cat-card user-cat">
+    <div class="cat-head">
+      <div class="cat-name">⑩ 셀 메이커 (Cell)</div>
+      <div class="cat-status have">사용자 보유 — 2/3 커버</div>
+    </div>
+    <div class="cat-desc">EV·ESS용 리튬이온 배터리 셀 직접 제조. CATL·BYD·파나소닉과 글로벌 경쟁.</div>
+    <div class="cat-tickers">
+      <span class="pill green">✓ LG에너지솔루션 (373220.KS)</span>
+      <span class="pill green">✓ 삼성SDI (006400.KS)</span>
+      <span class="pill red">SK이노베이션 (096770.KS) — SK on 보유 모회사</span>
+    </div>
+  </div>
+
+  <div class="cat-card user-cat">
+    <div class="cat-head">
+      <div class="cat-name">③ 양극재 (Cathode Active Material)</div>
+      <div class="cat-status partial">사용자 보유 — 2/6 부분 커버</div>
+    </div>
+    <div class="cat-desc">셀 원가의 ~40% 차지. NCM·NCA·LFP·LMR 등. 메탈 가격 연동제로 GPM 안정성 확보.</div>
+    <div class="cat-tickers">
+      <span class="pill green">✓ 엘앤에프 (066970.KQ)</span>
+      <span class="pill green">✓ 포스코퓨처엠 (003670.KS)</span>
+      <span class="pill red">에코프로비엠 (247540.KQ) — 1Q 흑자전환</span>
+      <span class="pill red">에코프로 (086520.KQ) — 지주사·3사 합산</span>
+      <span class="pill red">LG화학 (051910.KS) — 첨단소재 부문</span>
+      <span class="pill red">코스모신소재 (005070.KS) — 양극재·MLCC</span>
+    </div>
+  </div>
+
+  <div class="cat-card user-cat">
+    <div class="cat-head">
+      <div class="cat-name">⑨ 캔 / 케이스 (Cell Housing)</div>
+      <div class="cat-status have">사용자 보유 — 4/4 풀 커버</div>
+    </div>
+    <div class="cat-desc">각형/원통형 캔, 캡어셈블리, 알루미늄 부품. ESS 비중 확대 시 가장 직접 수혜.</div>
+    <div class="cat-tickers">
+      <span class="pill green">✓ 상신이디피 (091580.KQ)</span>
+      <span class="pill green">✓ 신흥에스이씨 (243840.KQ)</span>
+      <span class="pill green">✓ 동원시스템즈 (014820.KS)</span>
+      <span class="pill green">✓ 상아프론테크 (089980.KQ)</span>
+    </div>
+  </div>
+
+  <div class="cat-card missing-cat">
+    <div class="cat-head">
+      <div class="cat-name">④ 음극재 (Anode Active Material)</div>
+      <div class="cat-status miss">완전 누락 (포스코퓨처엠만 부분 중복)</div>
+    </div>
+    <div class="cat-desc">인조흑연(메인) + 실리콘(차세대 고에너지). 4680·전고체 시 실리콘 비중 확대.</div>
+    <div class="cat-tickers">
+      <span class="pill red">대주전자재료 (078600.KQ) — 실리콘 음극재 핵심</span>
+      <span class="pill red">한솔케미칼 (014680.KS) — 실리콘 음극 바인더·과수</span>
+      <span class="pill red">나노신소재 (121600.KQ) — SCNT 음극도전재</span>
+      <span class="pill orange">포스코퓨처엠 (003670.KS) — 양극·음극 모두 (이미 보유)</span>
+    </div>
+  </div>
+
+  <div class="cat-card missing-cat">
+    <div class="cat-head">
+      <div class="cat-name">⑤ 분리막 (Separator)</div>
+      <div class="cat-status miss">완전 누락 — 핵심 카테고리 미커버</div>
+    </div>
+    <div class="cat-desc">셀 안전성 핵심. 풀가동 시 가장 빨리 발주 회복. 코팅 분리막(CCS) 비중 확대.</div>
+    <div class="cat-tickers">
+      <span class="pill red">SK아이이테크놀로지 / SKIET (361610.KS)</span>
+      <span class="pill red">WCP (393890.KQ) — 더블유씨피</span>
+      <span class="pill orange">대한유화 (006650.KS) — 분리막 원료 PE 공급</span>
+    </div>
+  </div>
+
+  <div class="cat-card missing-cat">
+    <div class="cat-head">
+      <div class="cat-name">⑥ 전해액 (Electrolyte) + 첨가제</div>
+      <div class="cat-status miss">완전 누락 — 5사 미커버</div>
+    </div>
+    <div class="cat-desc">셀 출하량과 가장 동행성 높은 소재. 수명·고온성능 차별화 핵심.</div>
+    <div class="cat-tickers">
+      <span class="pill red">엔켐 (348370.KQ) — 글로벌 전해액 1위 추격</span>
+      <span class="pill red">동화기업 (025900.KQ) — 동화일렉트로라이트</span>
+      <span class="pill red">솔브레인 (357780.KQ) — 전해액·반도체 케미칼</span>
+      <span class="pill red">천보 (278280.KQ) — LiPF6·LiFSI 첨가제</span>
+      <span class="pill red">후성 (093370.KS) — 전해액 첨가제·F 가스</span>
+    </div>
+  </div>
+
+  <div class="cat-card missing-cat">
+    <div class="cat-head">
+      <div class="cat-name">⑦ 도전재 (Conductive Additive)</div>
+      <div class="cat-status miss">완전 누락 — CNT 도전재가 핵심</div>
+    </div>
+    <div class="cat-desc">CNT 도전재는 4680·고출력 셀 필수 소재. 양극·음극 양쪽에 사용.</div>
+    <div class="cat-tickers">
+      <span class="pill red">나노신소재 (121600.KQ) — CNT/SCNT 도전재 글로벌 톱</span>
+      <span class="pill orange">동진쎄미켐 (005290.KQ) — CNT·일부 EV 소재</span>
+      <span class="pill orange">LG화학 (051910.KS) — 자체 CNT 도전재 (이미 양극재 중복)</span>
+    </div>
+  </div>
+
+  <div class="cat-card missing-cat">
+    <div class="cat-head">
+      <div class="cat-name">⑧ 동박 (Copper Foil) + 양극박</div>
+      <div class="cat-status miss">완전 누락 — 3사 미커버</div>
+    </div>
+    <div class="cat-desc">음극 집전체용 얇은 구리박. 셀 출하 회복 시 직접 동행.</div>
+    <div class="cat-tickers">
+      <span class="pill red">롯데에너지머티리얼즈 (020150.KS) — 구 일진머티리얼즈</span>
+      <span class="pill red">SKC (011790.KS) — SK넥실리스 보유</span>
+      <span class="pill red">솔루스첨단소재 (336370.KS) — 전지박·동박·OLED</span>
+      <span class="pill orange">동원시스템즈 (014820.KS) — 양극박 일부 (이미 보유)</span>
+    </div>
+  </div>
+
+  <div class="cat-card missing-cat">
+    <div class="cat-head">
+      <div class="cat-name">① 리튬·정제 + ② 전구체</div>
+      <div class="cat-status miss">완전 누락 — 자원 독립 트렌드 직접 매칭</div>
+    </div>
+    <div class="cat-desc">CATL "자원 독립" 메시지와 직접 연결. 광물 가격 변동성 헷지.</div>
+    <div class="cat-tickers">
+      <span class="pill red">포스코홀딩스 (005490.KS) — 아르헨티나 직접 채굴 + 정제</span>
+      <span class="pill red">강원에너지 (114190.KQ) — 황산리튬·수산화리튬</span>
+      <span class="pill red">에코프로머티 (450080.KS) — 전구체 (에코프로 자회사)</span>
+      <span class="pill red">코스모화학 (005420.KS) — 황산코발트 (코스모신소재 모회사)</span>
+    </div>
+  </div>
+
+  <div class="cat-card missing-cat">
+    <div class="cat-head">
+      <div class="cat-name">⑬ 리사이클링 (Battery Recycling)</div>
+      <div class="cat-status miss">완전 누락 — 2027~ 본격 사이클</div>
+    </div>
+    <div class="cat-desc">폐배터리 회수 → 리튬·니켈·코발트 재생. 향후 5~10년 핵심 성장 카테고리.</div>
+    <div class="cat-tickers">
+      <span class="pill red">성일하이텍 (365340.KQ) — 국내 1위 폐배터리 리사이클</span>
+      <span class="pill red">새빗켐 (107600.KQ) — 폐배터리 재활용·전구체 원료</span>
+    </div>
+  </div>
+
+  <div class="cat-card missing-cat">
+    <div class="cat-head">
+      <div class="cat-name">⑫ 장비 (Equipment)</div>
+      <div class="cat-status miss">완전 누락 — Capex 사이클 후행 수혜</div>
+    </div>
+    <div class="cat-desc">코팅·롤프레스·노칭·조립·활성화·검사 장비. 신규 캐파 발주 시 직접 수혜.</div>
+    <div class="cat-tickers">
+      <span class="pill red">피엔티 (137400.KQ) — 코팅·롤프레스 1위</span>
+      <span class="pill red">씨아이에스 (222080.KQ) — 코팅 장비</span>
+      <span class="pill red">하나기술 (299030.KQ) — 검사·조립 장비</span>
+      <span class="pill red">윤성에프엔씨 (372170.KQ) — 슬러리 믹싱 장비</span>
+      <span class="pill red">엠플러스 (259630.KQ) — 조립 공정 장비</span>
+      <span class="pill red">코윈테크 (282880.KQ) — 자동화·물류</span>
+      <span class="pill red">에이프로 (262260.KQ) — 활성화·충방전</span>
+      <span class="pill red">디이엔티 (079810.KQ) — 노칭 장비</span>
+      <span class="pill red">자비스 (254120.KQ) — X-ray 검사</span>
+    </div>
+  </div>
+
+  <div class="cat-card missing-cat">
+    <div class="cat-head">
+      <div class="cat-name">⑪ ESS 시스템 / 전력기기 (간접 수혜)</div>
+      <div class="cat-status miss">완전 누락 — DC BBU·AI Capex 직접 수혜</div>
+    </div>
+    <div class="cat-desc">ESS 셀이 PCS·변압기·EMS와 결합되어 시스템화. CATL "파워 일렉트로닉스 보강" 시사.</div>
+    <div class="cat-tickers">
+      <span class="pill red">LS일렉트릭 (010120.KS) — PCS·변압기·EMS</span>
+      <span class="pill red">LS에코에너지 (229640.KS) — 해외 변압기·전력기기</span>
+      <span class="pill red">HD현대일렉트릭 (267260.KS) — 변압기 글로벌 1위 추격</span>
+      <span class="pill red">효성중공업 (298040.KS) — 변압기·STATCOM·ESS</span>
+      <span class="pill orange">두산에너빌리티 (034020.KS) — SMR 연계 ESS</span>
+    </div>
+  </div>
+
+  <div class="cat-card missing-cat">
+    <div class="cat-head">
+      <div class="cat-name">기타 — 파우치 필름 / 부속 소재</div>
+      <div class="cat-status miss">완전 누락</div>
+    </div>
+    <div class="cat-desc">파우치형 셀 외장재, 분리막 PE 원료, 양극박 등.</div>
+    <div class="cat-tickers">
+      <span class="pill red">율촌화학 (008730.KQ) — 파우치 필름</span>
+      <span class="pill red">대한유화 (006650.KS) — 분리막용 PE</span>
+    </div>
+  </div>
+</div>
+
+<!-- ④ 수혜 강도 매트릭스 -->
+<div class="section">
+  <div class="section-title">④ 수혜 강도 매트릭스 — CATL 1Q26 5대 메시지 매핑</div>
+
+  <div class="insight-box purple">
+    <strong>매트릭스 로직 —</strong> CATL 컨콜 5대 메시지 ① <strong>ESS 비중 25%·DC BBU 1GW당 15~20GWh</strong> ② <strong>가동률 80~90% 풀가동·캐파 부족</strong> ③ <strong>메탈 연동 가격제로 GPM 안정</strong> ④ <strong>枧下窝·자원 자체 공급</strong> ⑤ <strong>파워 일렉트로닉스 역량 보강</strong>을 한국 종목별 "직접 매칭(★)" 강도로 평가. Tier S = 5개 메시지 중 3개 이상 직접 수혜, Tier A = 2개, Tier B = 1개, Tier C = 후행/제한적.
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th class="center">Tier</th>
+        <th>카테고리</th>
+        <th>핵심 종목</th>
+        <th>매칭되는 CATL 메시지</th>
+        <th class="center">사용자<br>보유</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tier-s">S ★★★★★</td>
+        <td><strong>캔 / 부품</strong></td>
+        <td>상신이디피 · 신흥에스이씨 · 동원시스템즈 · 상아프론테크</td>
+        <td>① ESS 비중↑ + ② 풀가동 캐파 부족 → 캔 발주 회복 선행 시그널</td>
+        <td class="center"><span style="color:var(--green);font-weight:800">✓ 4/4</span></td>
+      </tr>
+      <tr>
+        <td class="tier-s">S ★★★★★</td>
+        <td><strong>셀 (ESS 비중↑)</strong></td>
+        <td>LG에너지솔루션 · 삼성SDI</td>
+        <td>① ESS 비중 25%·DC BBU + ⑤ 파워 일렉트로닉스 (시스템화)</td>
+        <td class="center"><span style="color:var(--green);font-weight:800">✓ 2/2</span></td>
+      </tr>
+      <tr>
+        <td class="tier-s">S ★★★★★</td>
+        <td><strong>양극재 (메탈 연동)</strong></td>
+        <td>엘앤에프 · 에코프로비엠 · 포스코퓨처엠 · LG화학</td>
+        <td>② 풀가동 + ③ 메탈 연동 GPM 안정 (1Q26 흑자전환 검증)</td>
+        <td class="center"><span style="color:var(--orange);font-weight:800">2/4</span></td>
+      </tr>
+      <tr>
+        <td class="tier-s">S ★★★★★</td>
+        <td><strong>전력기기 / ESS 시스템</strong></td>
+        <td>LS일렉트릭 · HD현대일렉트릭 · 효성중공업</td>
+        <td>① DC BBU + ⑤ 파워 일렉트로닉스 (PCS·변압기·STATCOM)</td>
+        <td class="center"><span style="color:var(--red);font-weight:800">0/3</span></td>
+      </tr>
+      <tr>
+        <td class="tier-a">A ★★★★</td>
+        <td><strong>분리막</strong></td>
+        <td>SKIET · WCP</td>
+        <td>② 풀가동 캐파 부족 → 분리막 발주 회복 동행</td>
+        <td class="center"><span style="color:var(--red);font-weight:800">0/2</span></td>
+      </tr>
+      <tr>
+        <td class="tier-a">A ★★★★</td>
+        <td><strong>전해액</strong></td>
+        <td>엔켐 · 동화기업 · 솔브레인</td>
+        <td>② 풀가동 (셀 출하와 가장 강한 동행성)</td>
+        <td class="center"><span style="color:var(--red);font-weight:800">0/3</span></td>
+      </tr>
+      <tr>
+        <td class="tier-a">A ★★★★</td>
+        <td><strong>동박</strong></td>
+        <td>롯데에너지머티리얼즈 · SKC · 솔루스첨단소재</td>
+        <td>② 풀가동 + ③ 메탈 연동 (구리 가격 전가)</td>
+        <td class="center"><span style="color:var(--red);font-weight:800">0/3</span></td>
+      </tr>
+      <tr>
+        <td class="tier-a">A ★★★★</td>
+        <td><strong>실리콘 음극재</strong></td>
+        <td>대주전자재료 · 한솔케미칼</td>
+        <td>① 차량당 탑재량↑ + 4680/전고체 고에너지 셀 침투</td>
+        <td class="center"><span style="color:var(--red);font-weight:800">0/2</span></td>
+      </tr>
+      <tr>
+        <td class="tier-a">A ★★★★</td>
+        <td><strong>도전재 (CNT)</strong></td>
+        <td>나노신소재</td>
+        <td>① 4680/고출력 셀 + ② 풀가동 (CNT 첨가 비율↑)</td>
+        <td class="center"><span style="color:var(--red);font-weight:800">0/1</span></td>
+      </tr>
+      <tr>
+        <td class="tier-b">B ★★★</td>
+        <td><strong>전해액 첨가제</strong></td>
+        <td>천보 · 후성</td>
+        <td>② 풀가동 (LiPF6/LiFSI 첨가제 비중↑)</td>
+        <td class="center"><span style="color:var(--red);font-weight:800">0/2</span></td>
+      </tr>
+      <tr>
+        <td class="tier-b">B ★★★</td>
+        <td><strong>리튬·전구체</strong></td>
+        <td>포스코홀딩스 · 에코프로머티 · 강원에너지</td>
+        <td>④ 자원 자체 공급 트렌드 (한국 사업자도 동일 압박)</td>
+        <td class="center"><span style="color:var(--red);font-weight:800">0/3</span></td>
+      </tr>
+      <tr>
+        <td class="tier-b">B ★★★</td>
+        <td><strong>코스모신소재</strong></td>
+        <td>코스모신소재</td>
+        <td>③ 양극재 GPM 안정 (단, 규모 LG화학 대비 작음)</td>
+        <td class="center"><span style="color:var(--red);font-weight:800">0/1</span></td>
+      </tr>
+      <tr>
+        <td class="tier-c">C ★★</td>
+        <td><strong>장비</strong></td>
+        <td>피엔티 · 씨아이에스 · 하나기술 등</td>
+        <td>② 캐파 부족 → 신규 증설 발주 (후행, 12~18개월 시차)</td>
+        <td class="center"><span style="color:var(--red);font-weight:800">0/9</span></td>
+      </tr>
+      <tr>
+        <td class="tier-c">C ★★</td>
+        <td><strong>리사이클링</strong></td>
+        <td>성일하이텍 · 새빗켐</td>
+        <td>④ 자원 자체 공급 (단, 폐배터리 본격 회수는 2027~)</td>
+        <td class="center"><span style="color:var(--red);font-weight:800">0/2</span></td>
+      </tr>
+      <tr>
+        <td class="tier-c">C ★★</td>
+        <td><strong>기타 (파우치·PE)</strong></td>
+        <td>율촌화학 · 대한유화</td>
+        <td>② 풀가동 (단, 파우치는 각형 대체 압력으로 양면)</td>
+        <td class="center"><span style="color:var(--red);font-weight:800">0/2</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ⑤ 추가 검토 권장 — Tier S+A 12종 -->
+<div class="section">
+  <div class="section-title">⑤ 추가 검토 권장 — Tier S+A 12~15개 종목</div>
+
+  <div class="insight-box good">
+    <strong>가장 시급한 보충 영역 (Tier S 누락) —</strong>
+    ① <strong>양극재 추가 2사</strong> 에코프로비엠·LG화학 (포스코·엘앤에프와 함께 4사 풀세트 구성),
+    ② <strong>전력기기 3사</strong> LS일렉트릭·HD현대일렉트릭·효성중공업 (DC BBU 인프라 직접 수혜).
+  </div>
+
+  <div class="chart-container">
+    <div class="chart-title">Tier S+A 추가 검토 권장 12종 분포</div>
+    <div class="chart-subtitle">CATL 메시지 매칭 강도 + 사용자 미보유 종목</div>
+    <svg class="chart-svg" viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+      <!-- Grid -->
+      <line x1="120" y1="40"  x2="780" y2="40"  stroke="#e2e8f0" stroke-width="0.6"/>
+      <line x1="120" y1="100" x2="780" y2="100" stroke="#e2e8f0" stroke-width="0.6"/>
+      <line x1="120" y1="160" x2="780" y2="160" stroke="#e2e8f0" stroke-width="0.6"/>
+      <line x1="120" y1="220" x2="780" y2="220" stroke="#e2e8f0" stroke-width="0.6"/>
+      <line x1="120" y1="280" x2="780" y2="280" stroke="#e2e8f0" stroke-width="0.6"/>
+      <line x1="120" y1="320" x2="780" y2="320" stroke="#475569" stroke-width="1.4"/>
+
+      <!-- Y axis labels -->
+      <text x="112" y="46" font-size="14" fill="#94a3b8" text-anchor="end">★★★★★</text>
+      <text x="112" y="106" font-size="14" fill="#94a3b8" text-anchor="end">★★★★</text>
+      <text x="112" y="166" font-size="14" fill="#94a3b8" text-anchor="end">★★★</text>
+      <text x="112" y="226" font-size="14" fill="#94a3b8" text-anchor="end">★★</text>
+      <text x="112" y="286" font-size="14" fill="#94a3b8" text-anchor="end">★</text>
+
+      <!-- Tier S bars (Y=40, height=280) -->
+      <rect x="135" y="40" width="48" height="280" rx="6" fill="#ca8a04"/>
+      <text x="159" y="32" font-size="14" fill="#a16207" text-anchor="middle" font-weight="800">에코프로비엠</text>
+      <text x="159" y="335" font-size="12" fill="#475569" text-anchor="middle">247540</text>
+
+      <rect x="195" y="40" width="48" height="280" rx="6" fill="#ca8a04"/>
+      <text x="219" y="32" font-size="14" fill="#a16207" text-anchor="middle" font-weight="800">LG화학</text>
+      <text x="219" y="335" font-size="12" fill="#475569" text-anchor="middle">051910</text>
+
+      <rect x="255" y="40" width="48" height="280" rx="6" fill="#ca8a04"/>
+      <text x="279" y="32" font-size="14" fill="#a16207" text-anchor="middle" font-weight="800">LS일렉트릭</text>
+      <text x="279" y="335" font-size="12" fill="#475569" text-anchor="middle">010120</text>
+
+      <rect x="315" y="40" width="48" height="280" rx="6" fill="#ca8a04"/>
+      <text x="339" y="32" font-size="14" fill="#a16207" text-anchor="middle" font-weight="800">HD현대일렉</text>
+      <text x="339" y="335" font-size="12" fill="#475569" text-anchor="middle">267260</text>
+
+      <rect x="375" y="40" width="48" height="280" rx="6" fill="#ca8a04"/>
+      <text x="399" y="32" font-size="14" fill="#a16207" text-anchor="middle" font-weight="800">효성중공업</text>
+      <text x="399" y="335" font-size="12" fill="#475569" text-anchor="middle">298040</text>
+
+      <!-- Tier A bars (Y=100, height=220) -->
+      <rect x="435" y="100" width="48" height="220" rx="6" fill="#2563eb"/>
+      <text x="459" y="92" font-size="14" fill="#1e3a8a" text-anchor="middle" font-weight="800">SKIET</text>
+      <text x="459" y="335" font-size="12" fill="#475569" text-anchor="middle">361610</text>
+
+      <rect x="495" y="100" width="48" height="220" rx="6" fill="#2563eb"/>
+      <text x="519" y="92" font-size="14" fill="#1e3a8a" text-anchor="middle" font-weight="800">엔켐</text>
+      <text x="519" y="335" font-size="12" fill="#475569" text-anchor="middle">348370</text>
+
+      <rect x="555" y="100" width="48" height="220" rx="6" fill="#2563eb"/>
+      <text x="579" y="92" font-size="14" fill="#1e3a8a" text-anchor="middle" font-weight="800">동화기업</text>
+      <text x="579" y="335" font-size="12" fill="#475569" text-anchor="middle">025900</text>
+
+      <rect x="615" y="100" width="48" height="220" rx="6" fill="#2563eb"/>
+      <text x="639" y="92" font-size="14" fill="#1e3a8a" text-anchor="middle" font-weight="800">롯데에너지</text>
+      <text x="639" y="335" font-size="12" fill="#475569" text-anchor="middle">020150</text>
+
+      <rect x="675" y="100" width="48" height="220" rx="6" fill="#2563eb"/>
+      <text x="699" y="92" font-size="14" fill="#1e3a8a" text-anchor="middle" font-weight="800">대주전자</text>
+      <text x="699" y="335" font-size="12" fill="#475569" text-anchor="middle">078600</text>
+
+      <rect x="735" y="100" width="48" height="220" rx="6" fill="#2563eb"/>
+      <text x="759" y="92" font-size="14" fill="#1e3a8a" text-anchor="middle" font-weight="800">나노신소재</text>
+      <text x="759" y="335" font-size="12" fill="#475569" text-anchor="middle">121600</text>
+    </svg>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#ca8a04"></span>Tier S — 즉시 검토 (★★★★★)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#2563eb"></span>Tier A — 우선 검토 (★★★★)</div>
+    </div>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th class="center">우선순위</th>
+        <th>종목</th>
+        <th>코드</th>
+        <th>카테고리</th>
+        <th>핵심 투자 포인트 (CATL 매핑)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="tier-s">1</td><td><strong>에코프로비엠</strong></td><td>247540.KQ</td><td>양극재</td><td>1Q26 흑자전환 검증, NCM/NCA 글로벌 1위. 메탈 연동 GPM 안정의 한국 베스트 프록시</td></tr>
+      <tr><td class="tier-s">2</td><td><strong>LG화학</strong></td><td>051910.KS</td><td>양극재 + 도전재</td><td>첨단소재 부문 양극재 + 자체 CNT 도전재. 양극재 4사 풀세트 보완</td></tr>
+      <tr><td class="tier-s">3</td><td><strong>LS일렉트릭</strong></td><td>010120.KS</td><td>전력기기·PCS</td><td>DC BBU·ESS 시스템 + 변압기. CATL "파워 일렉트로닉스 보강" 한국 베스트 프록시</td></tr>
+      <tr><td class="tier-s">4</td><td><strong>HD현대일렉트릭</strong></td><td>267260.KS</td><td>변압기</td><td>북미 데이터센터·재생에너지 변압기 직접 수혜. ESS 시스템 시장 동행</td></tr>
+      <tr><td class="tier-s">5</td><td><strong>효성중공업</strong></td><td>298040.KS</td><td>변압기·STATCOM</td><td>변압기 + STATCOM(파워 컨트롤). 그리드 안정화 솔루션 직접 수혜</td></tr>
+      <tr><td class="tier-a">6</td><td><strong>SKIET</strong></td><td>361610.KS</td><td>분리막</td><td>풀가동 시 가장 빠른 가동률 회복. 코팅 분리막(CCS) 비중 확대</td></tr>
+      <tr><td class="tier-a">7</td><td><strong>WCP</strong></td><td>393890.KQ</td><td>분리막</td><td>SKIET 대비 코스닥 중소형. 삼성SDI 매출 비중 높아 동행성 강함</td></tr>
+      <tr><td class="tier-a">8</td><td><strong>엔켐</strong></td><td>348370.KQ</td><td>전해액</td><td>북미 전해액 1위 추격. LG엔솔·삼성SDI·SK on 모두 공급 (한국 셀 3사 풀커버)</td></tr>
+      <tr><td class="tier-a">9</td><td><strong>동화기업</strong></td><td>025900.KQ</td><td>전해액</td><td>동화일렉트로라이트 자회사. 엔켐 대비 안정형. 가구 사업 부문도 보유</td></tr>
+      <tr><td class="tier-a">10</td><td><strong>롯데에너지머티리얼즈</strong></td><td>020150.KS</td><td>동박</td><td>구 일진머티리얼즈. 글로벌 동박 톱3. 풀가동 시 출하 동행</td></tr>
+      <tr><td class="tier-a">11</td><td><strong>대주전자재료</strong></td><td>078600.KQ</td><td>실리콘 음극재</td><td>실리콘 음극재 글로벌 톱. 4680·전고체 고에너지 셀 침투 시 폭발적 성장</td></tr>
+      <tr><td class="tier-a">12</td><td><strong>나노신소재</strong></td><td>121600.KQ</td><td>CNT 도전재</td><td>CNT/SCNT 도전재 글로벌 톱. 4680·고출력 셀 + ESS 셀 모두 채택</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ⑥ 카테고리 분포 차트 -->
+<div class="section">
+  <div class="section-title">⑥ 사용자 보유 vs 미보유 — 카테고리별 분포</div>
+  <div class="chart-container">
+    <div class="chart-title">13개 카테고리별 종목 수 분포</div>
+    <div class="chart-subtitle">사용자 보유 8사 (녹색) vs 추가 검토 권장 (붉은 점선)</div>
+    <svg class="chart-svg" viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg">
+      <!-- Grid -->
+      <line x1="170" y1="40"  x2="780" y2="40"  stroke="#e2e8f0" stroke-width="0.6"/>
+      <line x1="170" y1="90"  x2="780" y2="90"  stroke="#e2e8f0" stroke-width="0.6"/>
+      <line x1="170" y1="140" x2="780" y2="140" stroke="#e2e8f0" stroke-width="0.6"/>
+      <line x1="170" y1="190" x2="780" y2="190" stroke="#e2e8f0" stroke-width="0.6"/>
+      <line x1="170" y1="240" x2="780" y2="240" stroke="#e2e8f0" stroke-width="0.6"/>
+      <line x1="170" y1="290" x2="780" y2="290" stroke="#e2e8f0" stroke-width="0.6"/>
+      <line x1="170" y1="340" x2="780" y2="340" stroke="#475569" stroke-width="1.4"/>
+
+      <text x="162" y="44" font-size="14" fill="#94a3b8" text-anchor="end">10</text>
+      <text x="162" y="94" font-size="14" fill="#94a3b8" text-anchor="end">8</text>
+      <text x="162" y="144" font-size="14" fill="#94a3b8" text-anchor="end">6</text>
+      <text x="162" y="194" font-size="14" fill="#94a3b8" text-anchor="end">4</text>
+      <text x="162" y="244" font-size="14" fill="#94a3b8" text-anchor="end">2</text>
+      <text x="162" y="294" font-size="14" fill="#94a3b8" text-anchor="end">0</text>
+
+      <!-- 카테고리별 막대 (X spacing 50) -->
+      <!-- 셀: 보유 2, 미보유 1 -->
+      <rect x="180" y="240" width="20" height="50" rx="3" fill="#16a34a"/>
+      <rect x="200" y="265" width="20" height="25" rx="3" fill="#dc2626"/>
+      <text x="200" y="310" font-size="13" fill="#475569" text-anchor="middle">셀</text>
+
+      <!-- 양극재: 보유 2, 미보유 4 -->
+      <rect x="240" y="240" width="20" height="50" rx="3" fill="#16a34a"/>
+      <rect x="260" y="190" width="20" height="100" rx="3" fill="#dc2626"/>
+      <text x="260" y="310" font-size="13" fill="#475569" text-anchor="middle">양극재</text>
+
+      <!-- 음극재: 보유 0, 미보유 3 -->
+      <rect x="320" y="215" width="20" height="75" rx="3" fill="#dc2626"/>
+      <text x="330" y="310" font-size="13" fill="#475569" text-anchor="middle">음극재</text>
+
+      <!-- 분리막: 미보유 2 -->
+      <rect x="370" y="240" width="20" height="50" rx="3" fill="#dc2626"/>
+      <text x="380" y="310" font-size="13" fill="#475569" text-anchor="middle">분리막</text>
+
+      <!-- 전해액: 미보유 5 -->
+      <rect x="410" y="165" width="20" height="125" rx="3" fill="#dc2626"/>
+      <text x="420" y="310" font-size="13" fill="#475569" text-anchor="middle">전해액</text>
+
+      <!-- 도전재: 미보유 2 -->
+      <rect x="450" y="240" width="20" height="50" rx="3" fill="#dc2626"/>
+      <text x="460" y="310" font-size="13" fill="#475569" text-anchor="middle">도전재</text>
+
+      <!-- 동박: 미보유 3 -->
+      <rect x="490" y="215" width="20" height="75" rx="3" fill="#dc2626"/>
+      <text x="500" y="310" font-size="13" fill="#475569" text-anchor="middle">동박</text>
+
+      <!-- 캔/부품: 보유 4 -->
+      <rect x="530" y="190" width="20" height="100" rx="3" fill="#16a34a"/>
+      <text x="540" y="310" font-size="13" fill="#475569" text-anchor="middle">캔/부품</text>
+
+      <!-- 리튬·전구체: 미보유 4 -->
+      <rect x="570" y="190" width="20" height="100" rx="3" fill="#dc2626"/>
+      <text x="580" y="310" font-size="13" fill="#475569" text-anchor="middle">리튬·전구체</text>
+
+      <!-- 리사이클: 미보유 2 -->
+      <rect x="610" y="240" width="20" height="50" rx="3" fill="#dc2626"/>
+      <text x="620" y="310" font-size="13" fill="#475569" text-anchor="middle">리사이클</text>
+
+      <!-- 장비: 미보유 9 -->
+      <rect x="650" y="65" width="20" height="225" rx="3" fill="#dc2626"/>
+      <text x="660" y="310" font-size="13" fill="#475569" text-anchor="middle">장비</text>
+
+      <!-- ESS 시스템: 미보유 5 -->
+      <rect x="690" y="165" width="20" height="125" rx="3" fill="#dc2626"/>
+      <text x="700" y="310" font-size="13" fill="#475569" text-anchor="middle">ESS 시스템</text>
+
+      <!-- 기타: 미보유 2 -->
+      <rect x="730" y="240" width="20" height="50" rx="3" fill="#dc2626"/>
+      <text x="740" y="310" font-size="13" fill="#475569" text-anchor="middle">기타</text>
+
+      <!-- 라벨 -->
+      <text x="475" y="370" font-size="14" fill="#475569" text-anchor="middle">카테고리 (좌→우: 셀 → 응용)</text>
+    </svg>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#16a34a"></span>사용자 보유 종목 (8사)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#dc2626"></span>미보유 / 추가 검토 권장 (~40사)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑦ 핵심 인사이트 -->
+<div class="section">
+  <div class="section-title">⑦ 핵심 인사이트 — Bull · Bear · Think Box</div>
+
+  <div class="bull-box">
+    <div class="box-title">▲ Bull Case — 사용자 보유 8사가 좋은 이유</div>
+    <div class="box-text">
+      ① <strong>핵심 축은 잘 잡혀 있음</strong> — 셀(2사) + 양극재(2사) + 캔(4사)은 CATL 컨콜에서 직접 매칭되는 Tier S 영역.<br>
+      ② <strong>캔 4사 풀커버는 한국 시장에서 드문 강점</strong> — "가동률 80~90%·캐파 부족" 시그널은 캔 발주 회복의 가장 빠른 선행 지표.<br>
+      ③ <strong>엘앤에프·포스코퓨처엠은 메탈 연동 GPM 검증의 양극재 베스트 프록시</strong>. 1Q26 흑자전환 흐름이 지속될 수 있는 한국 최우량 페어.<br>
+      ④ <strong>LG엔솔·삼성SDI는 ESS 비중 확대의 한국 직접 수혜</strong>. CATL ESS 25%까지의 길이 그대로 검증됨.
+    </div>
+  </div>
+
+  <div class="bear-box">
+    <div class="box-title">▼ Bear Case — 놓치고 있는 영역의 위험</div>
+    <div class="box-text">
+      ① <strong>전력기기 3사(LS일렉트릭·HD현대일렉트릭·효성중공업) 미커버는 가장 큰 빈틈</strong> — CATL "파워 일렉트로닉스 보강" 메시지의 한국 직접 수혜를 못 잡고 있음.<br>
+      ② <strong>분리막(SKIET·WCP) 미커버</strong> — 풀가동 시 가장 먼저 발주가 풀리는 소재인데 빠져 있음.<br>
+      ③ <strong>전해액(엔켐·동화기업) 미커버</strong> — 셀 출하와 동행성이 가장 강한 소재 카테고리.<br>
+      ④ <strong>동박(롯데에너지머티)·실리콘 음극(대주전자재료)·CNT 도전재(나노신소재)</strong> — 4680/고에너지 셀 사이클의 핵심인데 모두 누락.<br>
+      ⑤ <strong>양극재 4사 중 절반(에코프로비엠·LG화학) 누락</strong> — 가장 큰 카테고리에서 절반만 커버.
+    </div>
+  </div>
+
+  <div class="think-box">
+    <div class="box-title">◆ Think Box — 2차적 사고 (포트폴리오 보완 전략)</div>
+    <div class="box-text">
+      ① <strong>"어디까지 채울 것인가" 전략</strong> — 13개 카테고리 모두 채울 필요는 없음. <strong>Tier S+A 12종 중 5~7종 보완</strong>이 현실적. 가장 시급한 빈틈은 <strong>전력기기 1종 + 분리막 1종 + 전해액 1종 + 양극재 1종</strong> 추가 (= 12종 중 4종 보완).<br>
+      ② <strong>중복 회피</strong> — 사용자 보유 4사(상신·신흥·동원·상아)는 모두 캔/부품으로 카테고리 집중도 높음. 이미 Tier S 풀커버이므로 <strong>같은 영역 추가 매수보다는 다른 카테고리 분산</strong>이 효율적.<br>
+      ③ <strong>"한국 셀 3사 풀커버" 전략</strong> — LG엔솔·삼성SDI 보유 + SK이노베이션(SK on 모회사) 추가로 한국 셀 풀세트 구성 가능. 단, SK이노는 정유 노출이 커서 순수 배터리 익스포저는 희석.<br>
+      ④ <strong>"자원 독립" 트렌드</strong> — CATL 메시지 ④와 매칭되는 한국 종목은 포스코홀딩스(직접 채굴) + 에코프로머티(전구체) + 강원에너지(황산리튬). 단, 포스코홀딩스는 철강 노출이 크고, 강원에너지는 시총·유동성 작아 신중 필요.<br>
+      ⑤ <strong>장비 카테고리는 후행 — 1Q26 시점에는 비추</strong> — 신규 캐파 발주 사이클은 셀 메이커 흑자전환·증설 결정 후 12~18개월 시차. 2026 하반기~2027 진입 검토 권장.<br>
+      ⑥ <strong>리사이클(성일하이텍·새빗켐)도 후행</strong> — 폐배터리 본격 회수는 2027~2028. 지금 시점은 너무 이름.<br>
+      ⑦ <strong>"양극재 vs 셀" 가치사슬 이익 분배 변화</strong> — CATL 1Q26는 셀이 ESS·EV 둘 다 잘 됐지만, 한국 1Q26은 셀 적자·양극재 흑자전환이라는 분리. <strong>이익 분배가 양극재 → 셀로 회귀</strong>할 시점이 향후 1~2분기 내 변곡점.
+    </div>
+  </div>
+</div>
+
+<!-- ⑧ 결론 -->
+<div class="section">
+  <div class="section-title">⑧ 결론 — 사용자 보유 8사 평가 + 추가 보완 권장</div>
+
+  <div class="insight-box good">
+    <strong>최종 평가 —</strong> 사용자 보유 8사는 <strong>핵심 3축(셀·양극재·캔)을 안정적으로 커버</strong>하고 있어 한국 2차전지 익스포저의 기본 골격은 충분. 다만 <strong>13개 카테고리 중 10개 미커버</strong>로 다각화 측면에서 빈틈 존재. CATL 1Q26 5대 메시지 기준 <strong>가장 시급한 보완은 전력기기(LS일렉트릭·HD현대일렉트릭) + 분리막(SKIET) + 전해액(엔켐) + 양극재 추가(에코프로비엠·LG화학)</strong>의 4~5개 종목.
+  </div>
+
+  <ul class="clean">
+    <li><strong>가장 시급:</strong> LS일렉트릭(010120) — DC BBU·파워 일렉트로닉스 매칭, 한국 베스트 프록시</li>
+    <li><strong>그 다음:</strong> 에코프로비엠(247540) 또는 LG화학(051910) — 양극재 4사 풀세트 완성</li>
+    <li><strong>분리막 진입:</strong> SKIET(361610) 또는 WCP(393890) — 풀가동 시 가장 빠른 동행</li>
+    <li><strong>전해액 진입:</strong> 엔켐(348370) 또는 동화기업(025900) — 셀 출하와 가장 강한 동행성</li>
+    <li><strong>고에너지 셀 베팅:</strong> 대주전자재료(078600) + 나노신소재(121600) — 4680·전고체 침투 시 폭발</li>
+    <li><strong>해외 EV 익스포저:</strong> 동박(롯데에너지머티 020150) — 글로벌 셀 메이커 모두에 공급</li>
+    <li><strong>장비·리사이클:</strong> 2026 하반기~2027 진입 검토 권장 (지금은 후행 영역)</li>
+    <li><strong>중복 매수 비추:</strong> 사용자 보유 캔 4사는 이미 Tier S 풀커버 → 같은 영역 추가는 분산 효과 낮음</li>
+  </ul>
+</div>
+
+<div class="footer">
+  <strong>한국 2차전지 밸류체인 풀맵 — 사용자 보유 8사 vs 놓친 종목 + 수혜 강도 분석</strong><br>
+  본 리포트 작성: 2026.05.03 · CATL 1Q26 컨콜(2026.04.15) 메시지 매핑 기준<br>
+  본 자료는 한국 2차전지 밸류체인 종목 정리 및 수혜 강도 분석을 위한 투자 참고용 자료이며, 특정 종목의 매수·매도를 권유하지 않습니다.<br>
+  종목코드·사업 영역은 작성 시점 기준이며, 일부 회사명·합병 이력은 변경되었을 수 있어 최종 투자 판단 전 공식 공시 자료 확인을 권장합니다.<br>
+  최종 투자 판단의 책임은 투자자 본인에게 있습니다.
+</div>
+
+</div>
+</body>
+</html>
